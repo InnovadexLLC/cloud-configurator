@@ -1,13 +1,16 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'application'
+
+applicationName = 'cloud-config'
 
 sourceCompatibility = 1.7
 version = '1.0'
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Gradle Quickstart',
-                   'Implementation-Version': version,
-                   'Main-Class': 'com.sciul.cloud_configurator.App'
+        attributes 'Implementation-Title': 'Cloud Configurator',
+                'Implementation-Version': version,
+                'Main-Class': 'com.sciul.cloud_configurator.App'
     }
 }
 
@@ -18,8 +21,18 @@ repositories {
 dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     compile 'com.amazonaws:aws-java-sdk:1.9.5'
+    compile 'org.springframework:spring-context:4.0.6.RELEASE'
     testCompile group: 'junit', name: 'junit', version: '4.+'
 }
+
+mainClassName = "com.sciul.cloud_configurator.App"
+
+run {
+    if ( project.hasProperty("appArgs") ) {
+        args Eval.me(appArgs)
+    }
+}
+
 
 test {
     systemProperties 'property': 'value'
@@ -27,8 +40,8 @@ test {
 
 uploadArchives {
     repositories {
-       flatDir {
-           dirs 'repos'
-       }
+        flatDir {
+            dirs 'repos'
+        }
     }
 }
