@@ -1,16 +1,17 @@
 package com.sciul.cloud_configurator;
 
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.cloudformation.model.*;
 import org.slf4j.Logger;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
-import com.amazonaws.services.cloudformation.model.CreateStackRequest;
-import com.amazonaws.services.cloudformation.model.ListStacksRequest;
-import com.amazonaws.services.cloudformation.model.ListStacksResult;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class AwsProvider implements Provider {
   private static Logger logger = LoggerFactory.getLogger(AwsProvider.class);
 
   public AwsProvider() {
-    validate();
+    clt.setRegion(Region.getRegion(Regions.US_WEST_2));
   }
 
   public static boolean validate() {
@@ -33,8 +34,13 @@ public class AwsProvider implements Provider {
     return true;
   }
 
+  public DescribeStacksResult describeStacks(String[] args) {
+    return clt.describeStacks(new DescribeStacksRequest());
+  }
+
   public ListStacksResult listStacks(String[] args) {
     ListStacksRequest rq = new ListStacksRequest();
+    rq.setStackStatusFilters(new ArrayList<String>() {{ add("CREATE_COMPLETE"); }});
     ListStacksResult lst = clt.listStacks(rq);
     return lst;
   }

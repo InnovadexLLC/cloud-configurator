@@ -1,5 +1,6 @@
 package com.sciul.cloud_configurator;
 
+import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
 import com.amazonaws.services.cloudformation.model.ListStacksResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,10 @@ public class App {
       ListStacksResult lst = app.getProvider().listStacks(args);
 
       logger.debug("lst: {}", lst);
+
+      DescribeStacksResult dst = app.getProvider().describeStacks(args);
+
+      logger.debug("dst: {}", dst);
 
     } catch (RuntimeException e) {
       if (e.getCause() != null && e.getCause().getCause() != null) {
