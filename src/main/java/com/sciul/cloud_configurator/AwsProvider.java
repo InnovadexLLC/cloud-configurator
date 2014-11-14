@@ -22,6 +22,10 @@ public class AwsProvider implements Provider {
   private final AmazonCloudFormationClient clt = new AmazonCloudFormationClient();
   private static Logger logger = LoggerFactory.getLogger(AwsProvider.class);
 
+  public AwsProvider() {
+    validate();
+  }
+
   public static boolean validate() {
     if (!System.getenv().containsKey(ACCESS_KEY) || !System.getenv().containsKey(SECRET_KEY)) {
       return false;

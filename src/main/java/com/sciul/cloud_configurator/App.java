@@ -3,7 +3,13 @@ package com.sciul.cloud_configurator;
 import com.amazonaws.services.cloudformation.model.ListStacksResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
+@Configuration
+@ComponentScan
+@PropertySource("cloud-configure-app.properties")
 public class App {
 
   private Provider provider;
@@ -35,10 +41,6 @@ public class App {
 
   public static void main(String[] args) {
     try {
-
-      if (!AwsProvider.validate()) {
-        throw new RuntimeException("Unable to instantiate AwsProvider!");
-      }
 
       App app = new App(new AwsProvider());
 
