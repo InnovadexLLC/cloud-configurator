@@ -2,6 +2,7 @@ package com.sciul.cloud_configurator;
 
 import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
 import com.amazonaws.services.cloudformation.model.ListStacksResult;
+import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.ComponentScan;
@@ -43,7 +44,14 @@ public class App {
   public static void main(String[] args) {
     try {
 
-      App app = new App(new AwsProvider());
+      Options options = new Options() {{
+        addOption("r", "region", true, "aws region, example: us-west-2");
+      }};
+
+      CommandLineParser parser = new BasicParser();
+      CommandLine cmd = parser.parse( options, args);
+
+      App app = new App(new AwsProvider(cmd.getOptionValue("r")));
 
       //app.processJson(args[0]);
       ListStacksResult lst = app.getProvider().listStacks(args);
@@ -62,6 +70,8 @@ public class App {
         logger.error(e.getMessage());
       }
       System.exit(1);
+    } catch (ParseException e) {
+      logger.error("Error running Configurator App", e);
     }
   }
 }

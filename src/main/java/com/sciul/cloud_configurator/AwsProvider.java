@@ -6,6 +6,7 @@ import com.amazonaws.services.cloudformation.model.*;
 import org.slf4j.Logger;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * Created by sumeetrohatgi on 11/14/14.
  */
+@Component
 public class AwsProvider implements Provider {
   private static final String ACCESS_KEY = "AWS_ACCESS_KEY";
   private static final String SECRET_KEY = "AWS_SECRET_KEY";
@@ -24,6 +26,11 @@ public class AwsProvider implements Provider {
   private static Logger logger = LoggerFactory.getLogger(AwsProvider.class);
 
   public AwsProvider() {
+    clt.setRegion(Region.getRegion(Regions.US_WEST_2));
+  }
+
+  public AwsProvider(String region) {
+    logger.debug("passed in region: {}", region);
     clt.setRegion(Region.getRegion(Regions.US_WEST_2));
   }
 
@@ -35,7 +42,7 @@ public class AwsProvider implements Provider {
   }
 
   public void createStack(String environment) {
-    
+
   }
 
   public DescribeStacksResult describeStacks(String[] args) {
