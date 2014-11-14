@@ -14,37 +14,14 @@ import java.util.List;
 
 public class App {
 
-  private static final String ACCESS_KEY = "AWS_ACCESS_KEY";
-  private static final String SECRET_KEY = "AWS_SECRET_KEY";
-  private final AmazonCloudFormationClient clt = new AmazonCloudFormationClient();
+  private Provider provider;
 
-  public void App() {
-
+  public App() {
+    
   }
-
-  public void listStacks() {
-    ListStacksRequest rq = new ListStacksRequest();
-    ListStacksResult lst = clt.listStacks(rq);
-    System.out.println("lst: " + lst.getStackSummaries());
-  }
-
-  public void processJson(String path) {
-    CreateStackRequest crt = new CreateStackRequest();
-    String template = "";
-    try {
-      List<String> lines = Files.readAllLines(Paths.get(path), Charset.defaultCharset());
-      StringBuffer sbf = new StringBuffer();
-      for (String l : lines) {
-        sbf.append(l);
-      }
-      template = sbf.toString();
-      if (template.length() == 0) {
-        throw new RuntimeException("zero length file read from path: " + path);
-      }
-    } catch (IOException e) {
-      throw new RuntimeException("Unable to read file from path: " + path, e);
-    }
-    crt.setTemplateBody("");
+  
+  public App(Provider provider) {
+    this.provider = provider;
   }
 
   public static void main(String[] args) {
@@ -58,9 +35,10 @@ public class App {
         throw new RuntimeException("Usage: App <path to file>");
       }
 
-      App app = new App();
+      App app = new App(new AwsProvider());
+
       //app.processJson(args[0]);
-      app.listStacks();
+      app.provider.listStacks();
     } catch (RuntimeException e) {
       if (e.getCause() != null && e.getCause().getCause() != null) {
         e.printStackTrace();
