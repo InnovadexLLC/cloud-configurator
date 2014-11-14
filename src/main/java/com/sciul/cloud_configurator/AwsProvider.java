@@ -19,13 +19,26 @@ public class AwsProvider implements Provider {
   private static final String SECRET_KEY = "AWS_SECRET_KEY";
   private final AmazonCloudFormationClient clt = new AmazonCloudFormationClient();
 
-  public void listStacks() {
-    ListStacksRequest rq = new ListStacksRequest();
-    ListStacksResult lst = clt.listStacks(rq);
-    System.out.println("lst: " + lst.getStackSummaries());
+  public static boolean validate() {
+    if (!System.getenv().containsKey(ACCESS_KEY) || !System.getenv().containsKey(SECRET_KEY)) {
+      return false;
+    }
+    return true;
   }
 
-  public void processJson(String path) {
+  public ListStacksResult listStacks(String[] args) {
+    ListStacksRequest rq = new ListStacksRequest();
+    ListStacksResult lst = clt.listStacks(rq);
+    return lst;
+  }
+
+  public void processJson(String[] args) {
+    if (args.length != 1) {
+      throw new RuntimeException("Usage: processJson <path to file>");
+    }
+
+    String path = args[0];
+
     CreateStackRequest crt = new CreateStackRequest();
     String template = "";
     try {

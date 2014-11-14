@@ -1,20 +1,28 @@
 package com.sciul.cloud_configurator;
 
-import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
-import com.amazonaws.services.cloudformation.model.CreateStackRequest;
-import com.amazonaws.services.cloudformation.model.ListStacksRequest;
 import com.amazonaws.services.cloudformation.model.ListStacksResult;
-import org.apache.http.util.ExceptionUtils;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 public class App {
 
+  public Provider getProvider() {
+    return provider;
+  }
+
+  public void setProvider(Provider provider) {
+    this.provider = provider;
+  }
+
   private Provider provider;
+
+  public String getRequest() {
+    return request;
+  }
+
+  public void setRequest(String request) {
+    this.request = request;
+  }
+
+  private String request;
 
   public App() {
     
@@ -24,21 +32,21 @@ public class App {
     this.provider = provider;
   }
 
+
   public static void main(String[] args) {
     try {
-      if (!System.getenv().containsKey(ACCESS_KEY) || !System.getenv().containsKey(SECRET_KEY)) {
-        throw new RuntimeException("Please define aws api keys as env vars ("+ACCESS_KEY+" & "+SECRET_KEY+")!!");
-      }
 
-      System.out.println("args length: " + args.length);
-      if (args.length != 1) {
-        throw new RuntimeException("Usage: App <path to file>");
+      if (!AwsProvider.validate()) {
+        throw new RuntimeException("Unable to instantiate AwsProvider!");
       }
 
       App app = new App(new AwsProvider());
 
       //app.processJson(args[0]);
-      app.provider.listStacks();
+      ListStacksResult lst = app.getProvider().listStacks(args);
+
+      System.out.println("lst: " + lst);
+
     } catch (RuntimeException e) {
       if (e.getCause() != null && e.getCause().getCause() != null) {
         e.printStackTrace();
