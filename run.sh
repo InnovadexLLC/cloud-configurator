@@ -6,4 +6,6 @@ printf -v var "'%s', " "$@"
 # Remove trailing ", "
 var=${var%??}
 
+echo $var
+
 gradle run -PappArgs="[$var]"
