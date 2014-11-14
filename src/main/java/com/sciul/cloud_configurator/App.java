@@ -4,6 +4,9 @@ import com.amazonaws.services.cloudformation.model.ListStacksResult;
 
 public class App {
 
+  private Provider provider;
+  private String request;
+
   public Provider getProvider() {
     return provider;
   }
@@ -11,8 +14,6 @@ public class App {
   public void setProvider(Provider provider) {
     this.provider = provider;
   }
-
-  private Provider provider;
 
   public String getRequest() {
     return request;
@@ -22,11 +23,7 @@ public class App {
     this.request = request;
   }
 
-  private String request;
-
-  public App() {
-    
-  }
+  public App() {  }
   
   public App(Provider provider) {
     this.provider = provider;
