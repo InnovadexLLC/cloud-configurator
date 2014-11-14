@@ -34,6 +34,10 @@ public class AwsProvider implements Provider {
     return true;
   }
 
+  public void createStack(String environment) {
+    
+  }
+
   public DescribeStacksResult describeStacks(String[] args) {
     return clt.describeStacks(new DescribeStacksRequest());
   }
