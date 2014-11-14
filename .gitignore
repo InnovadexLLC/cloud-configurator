@@ -15,3 +15,10 @@ build/
 .idea/
 *.iml
 
+/bin
+
+.classpath
+
+.project
+
+.settings/org.eclipse.jdt.core.prefs
