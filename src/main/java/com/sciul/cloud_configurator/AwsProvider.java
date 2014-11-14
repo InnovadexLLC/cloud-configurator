@@ -1,9 +1,11 @@
 package com.sciul.cloud_configurator;
 
+import org.slf4j.Logger;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
 import com.amazonaws.services.cloudformation.model.CreateStackRequest;
 import com.amazonaws.services.cloudformation.model.ListStacksRequest;
 import com.amazonaws.services.cloudformation.model.ListStacksResult;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -18,6 +20,7 @@ public class AwsProvider implements Provider {
   private static final String ACCESS_KEY = "AWS_ACCESS_KEY";
   private static final String SECRET_KEY = "AWS_SECRET_KEY";
   private final AmazonCloudFormationClient clt = new AmazonCloudFormationClient();
+  private static Logger logger = LoggerFactory.getLogger(AwsProvider.class);
 
   public static boolean validate() {
     if (!System.getenv().containsKey(ACCESS_KEY) || !System.getenv().containsKey(SECRET_KEY)) {

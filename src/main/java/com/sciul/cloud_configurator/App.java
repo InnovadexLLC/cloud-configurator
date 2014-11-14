@@ -1,11 +1,14 @@
 package com.sciul.cloud_configurator;
 
 import com.amazonaws.services.cloudformation.model.ListStacksResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class App {
 
   private Provider provider;
   private String request;
+  private static Logger logger = LoggerFactory.getLogger(App.class);
 
   public Provider getProvider() {
     return provider;
@@ -42,16 +45,14 @@ public class App {
       //app.processJson(args[0]);
       ListStacksResult lst = app.getProvider().listStacks(args);
 
-      System.out.println("lst: " + lst);
+      logger.debug("lst: {}", lst);
 
     } catch (RuntimeException e) {
       if (e.getCause() != null && e.getCause().getCause() != null) {
-        e.printStackTrace();
+        logger.error("Error running Configurator App", e);
       }
       else {
-        System.err.println("*********** FAILED ***********");
-        System.err.println(e.getMessage());
-        System.err.println("******************************");
+        logger.error(e.getMessage());
       }
       System.exit(1);
     }
