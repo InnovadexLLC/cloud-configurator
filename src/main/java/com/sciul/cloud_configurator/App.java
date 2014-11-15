@@ -62,6 +62,10 @@ public class App {
         System.exit(0);
       }
 
+      if (!cmd.hasOption("c")) {
+        throw new RuntimeException("no command specified");
+      }
+
       switch(cmd.getOptionValue("c")) {
         case "update":
           logger.debug("update environment: {} for region: {}", cmd.getOptionValue("e"), cmd.getOptionValue("r"));
