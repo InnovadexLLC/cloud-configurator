@@ -90,6 +90,7 @@ public class App {
       System.exit(1);
     } catch (ParseException e) {
       logger.error("Error parsing Configurator App options", e);
+      System.exit(1);
     }
   }
 }
