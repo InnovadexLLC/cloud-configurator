@@ -9,7 +9,7 @@
   
   <logger name="com.sciul.cloud_configurator.App" level="DEBUG"/>
   <logger name="org.springframework" level="INFO"/>
-  
+
   <!--  logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory" level="INFO"/>
   <logger name="org.springframework.core.env.PropertySourcesPropertyResolver" level="INFO"/-->
   

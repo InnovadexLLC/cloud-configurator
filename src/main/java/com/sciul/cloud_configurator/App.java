@@ -16,6 +16,7 @@ public class App {
 
   private Provider provider;
   private String request;
+  private static CommandLineParser parser = new BasicParser();
   private static Logger logger = LoggerFactory.getLogger(App.class);
 
   public Provider getProvider() {
@@ -46,32 +47,28 @@ public class App {
 
       Options options = new Options() {{
         addOption("r", "region", true, "aws region, example: us-west-2");
+        addOption("e", "environment", true, "engineering environment, example: prod, dev, qa");
       }};
 
-      CommandLineParser parser = new BasicParser();
-      CommandLine cmd = parser.parse( options, args);
+      final CommandLine cmd = parser.parse( options, args);
 
-      App app = new App(new AwsProvider(cmd.getOptionValue("r")));
+      AwsProvider provider = new AwsProvider() {{
+        setRegion(cmd.getOptionValue("r"));
+      }};
 
-      //app.processJson(args[0]);
-      ListStacksResult lst = app.getProvider().listStacks(args);
+      App app = new App(provider);
 
-      logger.debug("lst: {}", lst);
+      app.getProvider().createStack(cmd.getOptionValue("e"));
 
       DescribeStacksResult dst = app.getProvider().describeStacks(args);
 
       logger.debug("dst: {}", dst);
 
     } catch (RuntimeException e) {
-      if (e.getCause() != null && e.getCause().getCause() != null) {
-        logger.error("Error running Configurator App", e);
-      }
-      else {
-        logger.error(e.getMessage());
-      }
+      logger.error("Error running Configurator App", e);
       System.exit(1);
     } catch (ParseException e) {
-      logger.error("Error running Configurator App", e);
+      logger.error("Error parsing Configurator App options", e);
     }
   }
 }

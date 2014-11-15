@@ -1,5 +1,6 @@
 package com.sciul.cloud_configurator;
 
+import com.amazonaws.services.cloudformation.model.CreateStackResult;
 import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
 import com.amazonaws.services.cloudformation.model.ListStacksResult;
 
@@ -10,5 +11,6 @@ interface Provider {
   ListStacksResult listStacks(String[] args);
   void processJson(String[] args);
   DescribeStacksResult describeStacks(String[] args);
+  CreateStackResult createStack(String environment);
 }
 
