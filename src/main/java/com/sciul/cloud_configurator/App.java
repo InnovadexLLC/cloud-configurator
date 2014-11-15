@@ -48,9 +48,28 @@ public class App {
       Options options = new Options() {{
         addOption("r", "region", true, "aws region, example: us-west-2");
         addOption("e", "environment", true, "engineering environment, example: prod, dev, qa");
+        addOption("c", "command", true, "command to run, example: update, list");
+        addOption("h", "help", false, "this help message");
       }};
 
       final CommandLine cmd = parser.parse( options, args);
+
+      if (cmd.hasOption("h")) {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp(80,
+            "run.sh -r <region> -c <command> [-e <environment>] [-h]",
+            "Configure your cloud environments", options, "");
+        System.exit(0);
+      }
+
+      switch(cmd.getOptionValue("c")) {
+        case "update":
+          logger.debug("update environment: {} for region: {}", cmd.getOptionValue("e"), cmd.getOptionValue("r"));
+          break;
+        case "list":
+          logger.debug("list environments for region: {}", cmd.getOptionValue("r"));
+          break;
+      }
 
       AwsProvider provider = new AwsProvider() {{
         setRegion(cmd.getOptionValue("r"));
