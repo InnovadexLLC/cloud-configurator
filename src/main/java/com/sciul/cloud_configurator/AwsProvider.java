@@ -57,6 +57,14 @@ public class AwsProvider implements Provider {
       throw new RuntimeException("illegal region value: " + region);
     }
     this.region = region;
+    Regions r = Regions.DEFAULT_REGION;
+    switch(region) {
+      case "us-west-2":
+        r = Regions.US_WEST_2;
+        break;
+      default:
+        throw new RuntimeException("illegal region: " + region);
+    }
     clt.setRegion(Region.getRegion(Regions.US_WEST_2));
   }
 
