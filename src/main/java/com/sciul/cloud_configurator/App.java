@@ -66,26 +66,24 @@ public class App {
         throw new RuntimeException("no command specified");
       }
 
-      switch(cmd.getOptionValue("c")) {
-        case "update":
-          logger.debug("update environment: {} for region: {}", cmd.getOptionValue("e"), cmd.getOptionValue("r"));
-          break;
-        case "list":
-          logger.debug("list environments for region: {}", cmd.getOptionValue("r"));
-          break;
-      }
-
       AwsProvider provider = new AwsProvider() {{
         setRegion(cmd.getOptionValue("r"));
       }};
 
       App app = new App(provider);
 
-      app.getProvider().createStack(cmd.getOptionValue("e"));
+      switch(cmd.getOptionValue("c")) {
+        case "update":
+          logger.debug("update environment: {} for region: {}", cmd.getOptionValue("e"), cmd.getOptionValue("r"));
+          app.getProvider().createStack(cmd.getOptionValue("e"));
+          break;
+        case "list":
+          logger.debug("list environments for region: {}", cmd.getOptionValue("r"));
+          DescribeStacksResult dst = app.getProvider().describeStacks(args);
+          logger.debug("dst: {}", dst);
+          break;
+      }
 
-      DescribeStacksResult dst = app.getProvider().describeStacks(args);
-
-      logger.debug("dst: {}", dst);
 
     } catch (RuntimeException e) {
       logger.error("Error running Configurator App", e);
