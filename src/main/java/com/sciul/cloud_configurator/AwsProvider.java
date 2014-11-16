@@ -1,17 +1,5 @@
 package com.sciul.cloud_configurator;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.cloudformation.model.*;
-import org.slf4j.Logger;
-import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +9,24 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
+import com.amazonaws.services.cloudformation.model.CreateStackRequest;
+import com.amazonaws.services.cloudformation.model.CreateStackResult;
+import com.amazonaws.services.cloudformation.model.DescribeStacksRequest;
+import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
+import com.amazonaws.services.cloudformation.model.ListStacksRequest;
+import com.amazonaws.services.cloudformation.model.ListStacksResult;
 
 /**
  * Created by sumeetrohatgi on 11/14/14.
@@ -40,11 +46,9 @@ public class AwsProvider implements Provider {
       credentials = new ProfileCredentialsProvider().getCredentials();
       clt = new AmazonCloudFormationClient(credentials);
     } catch (Exception e) {
-      throw new RuntimeException(
-          "Cannot load the credentials from the credential profiles file. " +
-              "Please make sure that your credentials file is at the correct " +
-              "location (~/.aws/credentials), and is in valid format.",
-          e);
+      throw new RuntimeException("Cannot load the credentials from the credential profiles file. "
+            + "Please make sure that your credentials file is at the correct "
+            + "location (~/.aws/credentials), and is in valid format.", e);
     }
   }
 
@@ -58,7 +62,7 @@ public class AwsProvider implements Provider {
     }
     this.region = region;
     Regions r = Regions.DEFAULT_REGION;
-    switch(region) {
+    switch (region) {
       case "us-west-2":
         r = Regions.US_WEST_2;
         break;
@@ -73,11 +77,14 @@ public class AwsProvider implements Provider {
       throw new RuntimeException("illegal environment name: " + environment);
     }
     try {
-      final String template = convertStreamToString(AwsProvider.class.getResourceAsStream("/templates/cf-template-1.json"));
-      CreateStackRequest crq = new CreateStackRequest() {{
-        setStackName(environment);
-        setTemplateBody(template);
-      }};
+      final String template =
+            convertStreamToString(AwsProvider.class.getResourceAsStream("/templates/cf-template-1.json"));
+      CreateStackRequest crq = new CreateStackRequest() {
+        {
+          setStackName(environment);
+          setTemplateBody(template);
+        }
+      };
 
       logger.debug("creating a new stack named: {}", environment);
       CreateStackResult crs = clt.createStack(crq);
@@ -91,13 +98,22 @@ public class AwsProvider implements Provider {
     }
   }
 
-  public DescribeStacksResult describeStacks(String[] args) {
-    return clt.describeStacks(new DescribeStacksRequest());
+  public DescribeStacksResult describeStacks(String environment) {
+
+    DescribeStacksRequest d = new DescribeStacksRequest();
+    if (environment != null && !environment.equalsIgnoreCase("")) {
+      d.setStackName(environment);
+    }
+    return clt.describeStacks(d);
   }
 
   public ListStacksResult listStacks(String[] args) {
     ListStacksRequest rq = new ListStacksRequest();
-    rq.setStackStatusFilters(new ArrayList<String>() {{ add("CREATE_COMPLETE"); }});
+    rq.setStackStatusFilters(new ArrayList<String>() {
+      {
+        add("CREATE_COMPLETE");
+      }
+    });
     ListStacksResult lst = clt.listStacks(rq);
     return lst;
   }

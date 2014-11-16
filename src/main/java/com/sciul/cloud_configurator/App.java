@@ -1,13 +1,18 @@
 package com.sciul.cloud_configurator;
 
-import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
-import com.amazonaws.services.cloudformation.model.ListStacksResult;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+
+import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
 
 @Configuration
 @ComponentScan
@@ -35,30 +40,31 @@ public class App {
     this.request = request;
   }
 
-  public App() {  }
-  
+  public App() {
+  }
+
   public App(Provider provider) {
     this.provider = provider;
   }
 
-
   public static void main(String[] args) {
     try {
 
-      Options options = new Options() {{
-        addOption("r", "region", true, "aws region, example: us-west-2");
-        addOption("e", "environment", true, "engineering environment, example: prod, dev, qa");
-        addOption("c", "command", true, "command to run, example: update, list");
-        addOption("h", "help", false, "this help message");
-      }};
+      Options options = new Options() {
+        {
+          addOption("r", "region", true, "aws region, example: us-west-2");
+          addOption("e", "environment", true, "engineering environment, example: prod, dev, qa");
+          addOption("c", "command", true, "command to run, example: update, list");
+          addOption("h", "help", false, "this help message");
+        }
+      };
 
-      final CommandLine cmd = parser.parse( options, args);
+      final CommandLine cmd = parser.parse(options, args);
 
       if (cmd.hasOption("h")) {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(80,
-            "run.sh -r <region> -c <command> [-e <environment>] [-h]",
-            "Configure your cloud environments", options, "");
+        formatter.printHelp(80, "run.sh -r <region> -c <command> [-e <environment>] [-h]",
+              "Configure your cloud environments", options, "");
         System.exit(0);
       }
 
@@ -66,24 +72,30 @@ public class App {
         throw new RuntimeException("no command specified");
       }
 
-      AwsProvider provider = new AwsProvider() {{
-        setRegion(cmd.getOptionValue("r"));
-      }};
+      AwsProvider provider = new AwsProvider() {
+        {
+          setRegion(cmd.getOptionValue("r"));
+        }
+      };
 
       App app = new App(provider);
 
-      switch(cmd.getOptionValue("c")) {
+      switch (cmd.getOptionValue("c")) {
         case "update":
           logger.debug("update environment: {} for region: {}", cmd.getOptionValue("e"), cmd.getOptionValue("r"));
           app.getProvider().createStack(cmd.getOptionValue("e"));
           break;
         case "list":
           logger.debug("list environments for region: {}", cmd.getOptionValue("r"));
-          DescribeStacksResult dst = app.getProvider().describeStacks(args);
-          logger.debug("dst: {}", dst);
+          if (cmd.getOptionValue("e") != null && !cmd.getOptionValue("e").equalsIgnoreCase("")) {
+            DescribeStacksResult dst = app.getProvider().describeStacks(cmd.getOptionValue("e"));
+            logger.debug("dst: {}", dst);
+          } else {
+            DescribeStacksResult dst = app.getProvider().describeStacks(null);
+            logger.debug("dst: {}", dst);
+          }
           break;
       }
-
 
     } catch (RuntimeException e) {
       logger.error("Error running Configurator App", e);
