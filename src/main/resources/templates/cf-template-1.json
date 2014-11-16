@@ -40,8 +40,8 @@
      "VPC" : {
       "Type" : "AWS::EC2::VPC",
       "Properties" : {
-        "CidrBlock" : "10.10.0.0/16",
-        "Tags" : [ { "Key" : "Name", "Value" : "testvpc" }, { "Key" : "Name1", "Value" : "test" } ] 
+        "CidrBlock" : "%IP_BLOCK%", /*"10.10.0.0/16",*/
+        "Tags" : [ { "Key" : "Name", "Value" : "%ENV%" }, { "Key" : "Name1", "Value" : "test" } ]
       }
       
     },
@@ -49,7 +49,7 @@
     "InternetGateway" : {
       "Type" : "AWS::EC2::InternetGateway",
       "Properties" : { 
-      "Tags" : [ { "Key" : "Name", "Value" : "testinternetgateway" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-InternetGateway" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
 
@@ -65,9 +65,9 @@
       "Type" : "AWS::EC2::Subnet",
       "Properties" : {
         "VpcId" : { "Ref" : "VPC" },
-        "CidrBlock" : "10.10.0.0/24",
+        "CidrBlock" : "%IP_SUBNET1%",
         "AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : "" } ] },
-      "Tags" : [ { "Key" : "Name", "Value" : "testpublicsubnet1" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-PublicSubnet1" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
 
@@ -75,9 +75,9 @@
       "Type" : "AWS::EC2::Subnet",
       "Properties" : {
         "VpcId" : { "Ref" : "VPC" },
-        "CidrBlock" : "10.10.1.0/24",
+        "CidrBlock" : "%IP_SUBNET2%",
         "AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : "" } ] },
-      "Tags" : [ { "Key" : "Name", "Value" : "testprivatesubnet1" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-PrivateSubnet1" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
 
@@ -85,7 +85,7 @@
       "Type" : "AWS::EC2::RouteTable",
       "Properties" : {
         "VpcId" : {"Ref" : "VPC"},
-      "Tags" : [ { "Key" : "Name", "Value" : "testPublicRouteTable" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-PublicRouteTable" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
 
@@ -93,7 +93,7 @@
       "Type" : "AWS::EC2::RouteTable",
       "Properties" : {
         "VpcId" : {"Ref" : "VPC"},
-      "Tags" : [ { "Key" : "Name", "Value" : "testPrivateouteTable" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-PrivateRouteTable" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
 
@@ -135,14 +135,14 @@
       "Type" : "AWS::EC2::NetworkAcl",
       "Properties" : {
         "VpcId" : {"Ref" : "VPC"},
-      "Tags" : [ { "Key" : "Name", "Value" : "testPublicSubnetAcl" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-PublicSubnetAcl" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
     "PrivateSubnetAcl" : {
       "Type" : "AWS::EC2::NetworkAcl",
       "Properties" : {
         "VpcId" : {"Ref" : "VPC"},
-      "Tags" : [ { "Key" : "Name", "Value" : "testPrivateSubnetAcl" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-PrivateSubnetAcl" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
 
@@ -226,7 +226,7 @@
                       { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "NATInstanceType" }, "Arch" ] } ] },
         "SubnetId" : { "Ref" : "PublicSubnet1" },
         "SourceDestCheck" : "false",
-        "DisableApiTermination" : "true",
+        "DisableApiTermination" : "%DELETE_PROTECTION%",
         "SecurityGroupIds" : [ { "Ref" : "NATSecurityGroup" } ],
         "Tags" : [ 
           { "Key" : "Name", "Value" : { "Fn::Join" : ["", [
@@ -253,7 +253,7 @@
           { "IpProtocol" : "icmp", "FromPort" : "-1", "ToPort" : "-1", "SourceSecurityGroupId" : { "Ref" : "PrivateSG" } }
         ]
         ,
-      "Tags" : [ { "Key" : "Name", "Value" : "testNATSecurityGroup" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-NAT-SG" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
 
@@ -267,7 +267,7 @@
           { "IpProtocol" : "tcp", "FromPort" : "3389", "ToPort" : "3389", "SourceSecurityGroupId" : { "Ref" : "BastionSG" } },
           { "IpProtocol" : "icmp", "FromPort" : "-1", "ToPort" : "-1", "SourceSecurityGroupId" : { "Ref" : "BastionSG" } }
         ],
-      "Tags" : [ { "Key" : "Name", "Value" : "testPrivateSG" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-Private-SG" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
 	
@@ -281,7 +281,7 @@
           { "IpProtocol" : "tcp", "FromPort" : "3389", "ToPort" : "3389", "CidrIp" : { "Ref" : "CorporateCidrIp" } },
           { "IpProtocol" : "icmp", "FromPort" : "-1", "ToPort" : "-1", "CidrIp" : { "Ref" : "CorporateCidrIp" } }
         ],
-      "Tags" : [ { "Key" : "Name", "Value" : "testBastionSG" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-Bastion-SG" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
 
@@ -310,7 +310,7 @@
 	   { "IpProtocol" : "udp", "FromPort" : "137", "ToPort" : "139", "SourceSecurityGroupId" : { "Ref" : "DomainMemberSG" } },
 	   { "IpProtocol" : "tcp", "FromPort" : "1024", "ToPort" : "65535", "SourceSecurityGroupId" : { "Ref" : "DomainMemberSG" } }
         ],
-      "Tags" : [ { "Key" : "Name", "Value" : "testDomainControllerSG" }, { "Key" : "Name1", "Value" : "test" } ]
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-DomainController-SG" }, { "Key" : "Name1", "Value" : "test" } ]
       }
     },
     
@@ -320,7 +320,7 @@
         "VpcId" : { "Ref" : "VPC" },
         "GroupDescription" : "Domain Members",
         "SecurityGroupIngress" : [],
-      "Tags" : [ { "Key" : "Name", "Value" : "testDomainMemberSG" }, { "Key" : "Name1", "Value" : "test" } ] 
+      "Tags" : [ { "Key" : "Name", "Value" : "%ENV%-DomainMemberSG" }, { "Key" : "Name1", "Value" : "test" } ]
       }     
     }
 
