@@ -76,9 +76,13 @@ public class AwsProvider implements Provider {
     if (environment == null || environment.length() == 0) {
       throw new RuntimeException("illegal environment name: " + environment);
     }
+
     try {
       final String template =
-            convertStreamToString(AwsProvider.class.getResourceAsStream("/templates/cf-template-1.json"));
+            convertStreamToString(AwsProvider.class.getResourceAsStream("/templates/cf-template-1.json"), environment);
+
+      //logger.debug("template: {}", template);
+
       CreateStackRequest crq = new CreateStackRequest() {
         {
           setStackName(environment);
@@ -118,12 +122,18 @@ public class AwsProvider implements Provider {
     return lst;
   }
 
-  public static String convertStreamToString(InputStream in) {
+  public static String convertStreamToString(InputStream in, String environment) {
     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
     StringBuilder stringbuilder = new StringBuilder();
     String line = null;
     try {
       while ((line = reader.readLine()) != null) {
+        line = line.replaceAll("%ENV%", environment);
+        line = line.replaceAll("%IP_BLOCK%", "10.0.0.0/16");
+        line = line.replaceAll("%IP_SUBNET1%", "10.1.0.0/24");
+        line = line.replaceAll("%IP_SUBNET2%", "10.2.0.0/24");
+        line = line.replaceAll("%DELETE_PROTECTION%", "false");
+
         stringbuilder.append(line + "\n");
       }
       in.close();

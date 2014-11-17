@@ -40,7 +40,7 @@
      "VPC" : {
       "Type" : "AWS::EC2::VPC",
       "Properties" : {
-        "CidrBlock" : "%IP_BLOCK%", /*"10.10.0.0/16",*/
+        "CidrBlock" : "%IP_BLOCK%",
         "Tags" : [ { "Key" : "Name", "Value" : "%ENV%" }, { "Key" : "Name1", "Value" : "test" } ]
       }
       
