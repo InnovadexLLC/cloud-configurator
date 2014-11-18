@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CloudConfiguratorImpl implements CloudConfiguratorApp {
 
   @Autowired
@@ -68,9 +71,8 @@ public class CloudConfiguratorImpl implements CloudConfiguratorApp {
           break;
       }
 
-    } catch (ParseException | RuntimeException e) {
-      logger.error("Unable to create VPC", e);
-      System.exit(1);
+    } catch (ParseException e) {
+      throw new RuntimeException("Unable to parse command line options", e);
     }
   }
 

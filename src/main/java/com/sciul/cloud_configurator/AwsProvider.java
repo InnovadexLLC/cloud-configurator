@@ -11,6 +11,8 @@ import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
 import com.amazonaws.services.cloudformation.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -21,12 +23,15 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by sumeetrohatgi on 11/14/14.
  */
 @Component
+@PropertySource("classpath:cloud-configure-app.properties")
 public class AwsProvider implements Provider {
   private static final String ACCESS_KEY = "AWS_ACCESS_KEY";
   private static final String SECRET_KEY = "AWS_SECRET_KEY";
@@ -36,10 +41,22 @@ public class AwsProvider implements Provider {
   private AmazonCloudFormationClient clt;
   private String region;
 
+  // TODO(sumeetrohatgi): convert the following to property file...
+  private Map<String, String> templateVars = new HashMap<String, String>() {{
+    put("ENV", "");
+    put("DELETE_PROTECTION", "false");
+    put("IP_BLOCK", "10.0.0.0/16");
+    put("IP_SUBNET1", "10.1.0.0/24");
+    put("IP_SUBNET2", "10.2.0.0/24");
+  }};
+
   public AwsProvider() {
     try {
+
       credentials = new ProfileCredentialsProvider().getCredentials();
+
       clt = new AmazonCloudFormationClient(credentials);
+
     } catch (Exception e) {
       throw new RuntimeException("Cannot load the credentials from the credential profiles file. "
           + "Please make sure that your credentials file is at the correct "
@@ -71,6 +88,9 @@ public class AwsProvider implements Provider {
     if (environment == null || environment.length() == 0) {
       throw new RuntimeException("illegal environment name: " + environment);
     }
+
+    templateVars.put("ENV", environment);
+
     try {
       final String template =
           convertStreamToString(AwsProvider.class.getResourceAsStream("/templates/cf-template-1.json"));
@@ -113,19 +133,26 @@ public class AwsProvider implements Provider {
     return lst;
   }
 
-  public static String convertStreamToString(InputStream in) {
+  public String convertStreamToString(InputStream in) {
     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
     StringBuilder stringbuilder = new StringBuilder();
     String line = null;
     try {
       while ((line = reader.readLine()) != null) {
-        stringbuilder.append(line + "\n");
+        stringbuilder.append(processLine(line) + "\n");
       }
       in.close();
     } catch (IOException e) {
       throw new RuntimeException("unable to read file!", e);
     }
     return stringbuilder.toString();
+  }
+
+  private String processLine(String line) {
+    for (Map.Entry<String, String> entry : templateVars.entrySet()) {
+      line = line.replaceAll("%" + entry.getKey() + "%", entry.getValue());
+    }
+    return line;
   }
 
   public void processJson(String[] args) {
