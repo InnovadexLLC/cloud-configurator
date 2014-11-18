@@ -10,7 +10,7 @@ public class Properties {
   private String appName;
 
   @Value("${vpc.naming}")
-  private String vpcNameing;
+  private String vpcNaming;
 
   @Value("${subnet.naming}")
   private String subnetNaming;
@@ -44,12 +44,12 @@ public class Properties {
     this.appName = appName;
   }
 
-  public String getVpcNameing() {
-    return vpcNameing;
+  public String getVpcNaming() {
+    return vpcNaming;
   }
 
-  public void setVpcNameing(String vpcNameing) {
-    this.vpcNameing = vpcNameing;
+  public void setVpcNaming(String vpcNaming) {
+    this.vpcNaming = vpcNaming;
   }
 
   public String getSubnetNaming() {
