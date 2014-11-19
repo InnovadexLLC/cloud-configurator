@@ -57,7 +57,7 @@ public class App {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp(80, "run.sh -r <region> -c <command> [-e <environment>] [-h]",
             "Configure your cloud environments", options, "");
-        System.exit(0);
+        return;
       }
 
       if (!cmd.hasOption("c")) {
