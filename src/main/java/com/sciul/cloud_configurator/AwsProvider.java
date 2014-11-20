@@ -46,8 +46,8 @@ public class AwsProvider implements Provider {
     put("ENV", "");
     put("DELETE_PROTECTION", "false");
     put("IP_BLOCK", "10.0.0.0/16");
-    put("IP_SUBNET1", "10.1.0.0/24");
-    put("IP_SUBNET2", "10.2.0.0/24");
+    put("IP_SUBNET1", "10.0.1.0/24");
+    put("IP_SUBNET2", "10.0.2.0/24");
   }};
 
   public AwsProvider() {
