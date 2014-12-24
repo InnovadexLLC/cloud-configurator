@@ -1,6 +1,7 @@
 package com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl;
 
 import com.amazonaws.util.json.JSONObject;
+import com.sciul.cloud_configurator.Provider;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -15,6 +16,42 @@ public class Dns implements Resource {
   private String domain = "";
   private int ttl;
   private ResourceList resourceList;
+
+  public String getHostedZoneName() {
+    return hostedZoneName;
+  }
+
+  public RecordSets getRecordSets() {
+    return recordSets;
+  }
+
+  public void setRecordSets(RecordSets recordSets) {
+    this.recordSets = recordSets;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public String getDomain() {
+    return domain;
+  }
+
+  public void setDomain(String domain) {
+    this.domain = domain;
+  }
+
+  public int getTtl() {
+    return ttl;
+  }
+
+  public void setTtl(int ttl) {
+    this.ttl = ttl;
+  }
 
   public Dns(String hostedZoneName, ResourceList resourceList) {
     if (hostedZoneName.endsWith(".")) {
@@ -50,19 +87,8 @@ public class Dns implements Resource {
   }
 
   @Override
-  public JsonObject toJson() {
-    return
-        Json.createObjectBuilder()
-            .add("HostedZoneName", hostedZoneName)
-            .add("RecordSets",
-                Json.createArrayBuilder()
-                    .add(Json.createObjectBuilder()
-                             .add("Name",domain)
-                             .add("Type", type)
-                             .add("TTL",ttl)
-                    )
-             )
-            .build();
+  public JsonObject toJson(Provider provider) {
+    return provider.createDNS(this);
   }
 
 }

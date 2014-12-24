@@ -1,5 +1,6 @@
 package com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl;
 
+import com.sciul.cloud_configurator.Provider;
 import com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl.Resource;
 import com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl.ResourceList;
 
@@ -32,15 +33,29 @@ public class VPC implements Resource {
     return resourceList;
   }
 
+  public String getDefaultTenancy() {
+    return defaultTenancy;
+  }
+
+  public boolean isDnsSupport() {
+    return dnsSupport;
+  }
+
+  public boolean isDnsHostname() {
+    return dnsHostname;
+  }
+
+  public String getCidrBlock() {
+    return cidrBlock;
+  }
+
+  public void setCidrBlock(String cidrBlock) {
+    this.cidrBlock = cidrBlock;
+  }
+
   @Override
-  public JsonObject toJson() {
-    return
-        Json.createObjectBuilder()
-            .add("CidrBlock", cidrBlock)
-            .add("InstanceTenancy", defaultTenancy)
-            .add("EnableDnsSupport", dnsSupport)
-            .add("EnableDnsHostnames", dnsHostname)
-            .build();
+  public JsonObject toJson(Provider provider) {
+    return provider.createVPC(this);
   }
 
 }

@@ -9,14 +9,17 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
 import com.amazonaws.services.cloudformation.model.*;
+import com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl.Dns;
 import com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl.Resource;
 import com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl.ResourceList;
+import com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl.VPC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.json.Json;
+import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.util.ArrayList;
 
@@ -68,12 +71,14 @@ public class AwsProvider implements Provider {
     clt.setRegion(Region.getRegion(Regions.US_WEST_2));
   }
 
+
+
   private String toJson(Template template) {
     ResourceList resourceList = template.generateResourceList();
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     int i = 0;
     for (Resource resource : resourceList.resources()) {
-      jsonObjectBuilder.add("arbitrary" + i, resource.toJson());
+      jsonObjectBuilder.add("arbitrary" + i, resource.toJson(this));
       i++;
     }
 
@@ -101,6 +106,33 @@ public class AwsProvider implements Provider {
     } catch (AmazonClientException ae) {
       throw new RuntimeException("client error", ae);
     }
+  }
+
+  @Override
+  public JsonObject createVPC(VPC vpc) {
+    return
+        Json.createObjectBuilder()
+            .add("CidrBlock", vpc.getCidrBlock())
+            .add("InstanceTenancy", vpc.getDefaultTenancy())
+            .add("EnableDnsSupport", vpc.isDnsSupport())
+            .add("EnableDnsHostnames", vpc.isDnsHostname())
+            .build();
+  }
+
+  @Override
+  public JsonObject createDNS(Dns dns) {
+    return
+        Json.createObjectBuilder()
+            .add("HostedZoneName", dns.getHostedZoneName())
+            .add("RecordSets",
+                Json.createArrayBuilder()
+                    .add(Json.createObjectBuilder()
+                            .add("Name",dns.getDomain())
+                            .add("Type", dns.getType())
+                            .add("TTL",dns.getTtl())
+                    )
+            )
+            .build();
   }
 
   public DescribeStacksResult describeStacks(String environment) {
