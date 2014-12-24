@@ -2,8 +2,12 @@ package com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
+ * Captures cloud building intent in as neutral terms
+ * as possible.
+ *
  * Created by sumeetrohatgi on 12/23/14.
  */
 public class ResourceList {
@@ -29,7 +33,8 @@ public class ResourceList {
     return this;
   }
 
-  public String toJson() {
-    return "";
+  public List<Resource> resources() {
+    return ll;
   }
+
 }

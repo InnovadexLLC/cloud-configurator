@@ -18,8 +18,8 @@ public class Template {
     this.domain = domain;
   }
 
-  public ResourceList generate() {
-    ResourceList resourceList = ResourceList.start()
+  public ResourceList generateResourceList() {
+    return ResourceList.start()
          .dns("sciul.com.").recordSetA("sciul.com.")
          .next()
          .dns("sciul.com.").recordSetCNAME("api.sciul.com.")
@@ -27,16 +27,10 @@ public class Template {
          .vpc("10.0.0.0/16")
          .next()
          .end();
-
-    return resourceList;
   }
 
   public String getName() {
     return name;
-  }
-
-  public String toJson() {
-    return generate().toJson();
   }
 }
 

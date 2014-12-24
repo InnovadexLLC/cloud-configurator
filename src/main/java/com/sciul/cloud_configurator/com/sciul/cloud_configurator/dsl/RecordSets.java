@@ -10,4 +10,11 @@ public class RecordSets {
     return resourceList;
   }
 
+  public ResourceList getResourceList() {
+    return resourceList;
+  }
+
+  public void setResourceList(ResourceList resourceList) {
+    this.resourceList = resourceList;
+  }
 }

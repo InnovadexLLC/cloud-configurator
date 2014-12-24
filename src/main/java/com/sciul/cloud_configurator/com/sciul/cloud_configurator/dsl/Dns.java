@@ -1,5 +1,10 @@
 package com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl;
 
+import com.amazonaws.util.json.JSONObject;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+
 /**
  * Created by sumeetrohatgi on 12/23/14.
  */
@@ -19,6 +24,7 @@ public class Dns implements Resource {
     }
 
     this.resourceList = resourceList;
+    recordSets.setResourceList(resourceList);
   }
 
   public RecordSets recordSetA(String domain) {
@@ -44,8 +50,19 @@ public class Dns implements Resource {
   }
 
   @Override
-  public String toJson() {
-    return null;
+  public JsonObject toJson() {
+    return
+        Json.createObjectBuilder()
+            .add("HostedZoneName", hostedZoneName)
+            .add("RecordSets",
+                Json.createArrayBuilder()
+                    .add(Json.createObjectBuilder()
+                             .add("Name",domain)
+                             .add("Type", type)
+                             .add("TTL",ttl)
+                    )
+             )
+            .build();
   }
 
 }

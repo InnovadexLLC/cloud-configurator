@@ -9,23 +9,16 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
 import com.amazonaws.services.cloudformation.model.*;
+import com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl.Resource;
+import com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl.ResourceList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by sumeetrohatgi on 11/14/14.
@@ -75,15 +68,29 @@ public class AwsProvider implements Provider {
     clt.setRegion(Region.getRegion(Regions.US_WEST_2));
   }
 
+  private String toJson(Template template) {
+    ResourceList resourceList = template.generateResourceList();
+    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    int i = 0;
+    for (Resource resource : resourceList.resources()) {
+      jsonObjectBuilder.add("arbitrary" + i, resource.toJson());
+      i++;
+    }
+
+    return jsonObjectBuilder.build().toString();
+  }
+
   public CreateStackResult createStack(final Template template) {
 
     try {
       CreateStackRequest crq = new CreateStackRequest() {
         {
           setStackName(template.getName());
-          setTemplateBody(template.toJson());
+          setTemplateBody(toJson(template));
         }
       };
+
+      logger.debug("template: {}", crq.getTemplateBody());
 
       CreateStackResult crs = null; //clt.createStack(crq);
 

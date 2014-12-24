@@ -45,6 +45,7 @@ public class App {
       Options options = new Options() {
         {
           addOption("c", "command", true, "command to run, example: update, list");
+          addOption("r", "region", true, "aws region");
           addOption("h", "help", false, "this help message");
         }
       };
@@ -53,13 +54,17 @@ public class App {
 
       if (cmd.hasOption("h")) {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(80, "run.sh -c <command> [-f <json-file>] [-h]",
+        formatter.printHelp(80, "run.sh -c <command> -c <update|list> -r <region> [-h]",
             "Configure your cloud environment", options, "");
         return;
       }
 
       if (!cmd.hasOption("c")) {
         throw new RuntimeException("no command specified");
+      }
+
+      if (!cmd.hasOption("r")) {
+        throw new RuntimeException("no region specified");
       }
 
       provider.setRegion(cmd.getOptionValue("r"));
