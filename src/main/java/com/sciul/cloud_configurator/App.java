@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
-import org.springframework.stereotype.Component;
 
 @Configuration
 @ComponentScan
@@ -17,6 +16,7 @@ public class App {
   private static Logger logger = LoggerFactory.getLogger(App.class);
 
   private CommandLineParser parser = new BasicParser();
+
   @Autowired
   AwsProvider provider;
 
@@ -44,8 +44,6 @@ public class App {
 
       Options options = new Options() {
         {
-          addOption("r", "region", true, "aws region, example: us-west-2");
-          addOption("e", "environment", true, "engineering environment, example: prod, dev, qa");
           addOption("c", "command", true, "command to run, example: update, list");
           addOption("h", "help", false, "this help message");
         }
@@ -55,8 +53,8 @@ public class App {
 
       if (cmd.hasOption("h")) {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(80, "run.sh -r <region> -c <command> [-e <environment>] [-h]",
-            "Configure your cloud environments", options, "");
+        formatter.printHelp(80, "run.sh -c <command> [-f <json-file>] [-h]",
+            "Configure your cloud environment", options, "");
         return;
       }
 
@@ -68,8 +66,7 @@ public class App {
 
       switch (cmd.getOptionValue("c")) {
         case "update":
-          logger.debug("update environment: {} for region: {}", cmd.getOptionValue("e"), cmd.getOptionValue("r"));
-          provider.createStack(cmd.getOptionValue("e"));
+          provider.createStack(new Template("SCI-QA", "us-west-2","sciul.com"));
           logger.debug("****************Stack Creation Started****************");
           break;
         case "list":

@@ -10,9 +10,7 @@ import com.amazonaws.services.cloudformation.model.ListStacksResult;
 interface Provider {
   ListStacksResult listStacks(String[] args);
 
-  void processJson(String[] args);
-
   DescribeStacksResult describeStacks(String environment);
 
-  CreateStackResult createStack(String environment);
+  CreateStackResult createStack(Template template);
 }

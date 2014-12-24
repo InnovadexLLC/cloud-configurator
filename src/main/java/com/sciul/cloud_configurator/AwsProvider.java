@@ -41,15 +41,6 @@ public class AwsProvider implements Provider {
   private AmazonCloudFormationClient clt;
   private String region;
 
-  // TODO(sumeetrohatgi): convert the following to property file...
-  private Map<String, String> templateVars = new HashMap<String, String>() {{
-    put("ENV", "");
-    put("DELETE_PROTECTION", "false");
-    put("IP_BLOCK", "10.0.0.0/16");
-    put("IP_SUBNET1", "10.0.1.0/24");
-    put("IP_SUBNET2", "10.0.2.0/24");
-  }};
-
   public AwsProvider() {
     try {
 
@@ -84,25 +75,17 @@ public class AwsProvider implements Provider {
     clt.setRegion(Region.getRegion(Regions.US_WEST_2));
   }
 
-  public CreateStackResult createStack(final String environment) {
-    if (environment == null || environment.length() == 0) {
-      throw new RuntimeException("illegal environment name: " + environment);
-    }
-
-    templateVars.put("ENV", environment);
+  public CreateStackResult createStack(final Template template) {
 
     try {
-      final String template =
-          convertStreamToString(AwsProvider.class.getResourceAsStream("/templates/cf-template-1.json"));
       CreateStackRequest crq = new CreateStackRequest() {
         {
-          setStackName(environment);
-          setTemplateBody(template);
+          setStackName(template.getName());
+          setTemplateBody(template.toJson());
         }
       };
 
-      logger.debug("creating a new stack named: {}", environment);
-      CreateStackResult crs = clt.createStack(crq);
+      CreateStackResult crs = null; //clt.createStack(crq);
 
       logger.debug("stack create result: {}", crs);
       return crs;
@@ -131,53 +114,6 @@ public class AwsProvider implements Provider {
     });
     ListStacksResult lst = clt.listStacks(rq);
     return lst;
-  }
-
-  public String convertStreamToString(InputStream in) {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-    StringBuilder stringbuilder = new StringBuilder();
-    String line = null;
-    try {
-      while ((line = reader.readLine()) != null) {
-        stringbuilder.append(processLine(line) + "\n");
-      }
-      in.close();
-    } catch (IOException e) {
-      throw new RuntimeException("unable to read file!", e);
-    }
-    return stringbuilder.toString();
-  }
-
-  private String processLine(String line) {
-    for (Map.Entry<String, String> entry : templateVars.entrySet()) {
-      line = line.replaceAll("%" + entry.getKey() + "%", entry.getValue());
-    }
-    return line;
-  }
-
-  public void processJson(String[] args) {
-    if (args.length != 1) {
-      throw new RuntimeException("Usage: processJson <path to file>");
-    }
-
-    String path = args[0];
-
-    CreateStackRequest crt = new CreateStackRequest();
-    String template = "";
-    try {
-      List<String> lines = Files.readAllLines(Paths.get(path), Charset.defaultCharset());
-      StringBuffer sbf = new StringBuffer();
-      for (String l : lines) {
-        sbf.append(l);
-      }
-      template = sbf.toString();
-      if (template.length() == 0) {
-        throw new RuntimeException("zero length file read from path: " + path);
-      }
-    } catch (IOException e) {
-      throw new RuntimeException("Unable to read file from path: " + path, e);
-    }
-    crt.setTemplateBody("");
   }
 
 }
