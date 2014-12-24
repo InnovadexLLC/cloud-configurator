@@ -3,6 +3,8 @@ package com.sciul.cloud_configurator.dsl;
 import com.sciul.cloud_configurator.Provider;
 
 import javax.json.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by sumeetrohatgi on 12/23/14.
@@ -13,6 +15,7 @@ public class VPC implements Resource {
   private final boolean dnsHostname;
   private String cidrBlock;
   private ResourceList resourceList;
+  private Map<String, String> tags = new HashMap<>();
 
   public VPC(String ciderBlock, ResourceList resourceList) {
     this(ciderBlock, true, true, resourceList);
@@ -53,6 +56,12 @@ public class VPC implements Resource {
   @Override
   public JsonObject toJson(Provider provider) {
     return provider.createVPC(this);
+  }
+
+  @Override
+  public VPC tag(String name, String value) {
+    tags.put(name, value);
+    return this;
   }
 
 }

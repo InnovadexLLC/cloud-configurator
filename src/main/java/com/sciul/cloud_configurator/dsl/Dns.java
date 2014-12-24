@@ -3,6 +3,8 @@ package com.sciul.cloud_configurator.dsl;
 import com.sciul.cloud_configurator.Provider;
 
 import javax.json.JsonObject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by sumeetrohatgi on 12/23/14.
@@ -13,6 +15,7 @@ public class Dns implements Resource {
   private String type = null;
   private String domain = "";
   private int ttl;
+  private Map<String, String> tags = new HashMap<>();
   private ResourceList resourceList;
 
   public String getHostedZoneName() {
@@ -87,6 +90,12 @@ public class Dns implements Resource {
   @Override
   public JsonObject toJson(Provider provider) {
     return provider.createDNS(this);
+  }
+
+  @Override
+  public Dns tag(String name, String value) {
+    tags.put(name, value);
+    return this;
   }
 
 }

@@ -9,10 +9,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
 import com.amazonaws.services.cloudformation.model.*;
-import com.sciul.cloud_configurator.dsl.Dns;
-import com.sciul.cloud_configurator.dsl.Resource;
-import com.sciul.cloud_configurator.dsl.ResourceList;
-import com.sciul.cloud_configurator.dsl.VPC;
+import com.sciul.cloud_configurator.dsl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.PropertySource;
@@ -130,6 +127,22 @@ public class AwsProvider implements Provider {
                             .add("Name",dns.getDomain())
                             .add("Type", dns.getType())
                             .add("TTL",dns.getTtl())
+                    )
+            )
+            .build();
+  }
+
+  @Override
+  public JsonObject createSubnet(Subnet subnet) {
+    return
+        Json.createObjectBuilder()
+            .add("CidrBlock", subnet.getCidrBlock())
+            .add("AvailabilityZone", subnet.getAvailabilityZone())
+            .add("Tags",
+                Json.createArrayBuilder()
+                    .add(Json.createObjectBuilder()
+                            .add("Name", "PartOf")
+                            .add("Value", "SCI-QA")
                     )
             )
             .build();

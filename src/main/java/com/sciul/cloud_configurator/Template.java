@@ -20,13 +20,19 @@ public class Template {
 
   public ResourceList generateResourceList() {
     return ResourceList.start()
-         .dns("sciul.com.").recordSetA("sciul.com.")
-         .next()
-         .dns("sciul.com.").recordSetCNAME("api.sciul.com.")
-         .next()
-         .vpc("10.0.0.0/16")
-         .next()
-         .end();
+          .dns("sciul.com.")
+          .tag("Name", env)
+          .recordSetA("sciul.com.")
+        .next()
+          .dns("sciul.com.")
+          .tag("Name", env)
+          .recordSetCNAME("api.sciul.com.")
+        .next()
+          .vpc("10.0.0.0/16")
+        .next()
+          .subnet("10.0.12.0/24", "us-west-2b")
+        .next()
+        .end();
   }
 
   public String getName() {

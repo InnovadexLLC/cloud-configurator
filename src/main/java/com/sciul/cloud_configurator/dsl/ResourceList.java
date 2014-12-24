@@ -29,6 +29,12 @@ public class ResourceList {
     return vpc;
   }
 
+  public Subnet subnet(String cidrBlock, String availabilityZone) {
+    Subnet sn = new Subnet(cidrBlock, availabilityZone, this);
+    ll.add(sn);
+    return sn;
+  }
+
   public ResourceList end() {
     return this;
   }

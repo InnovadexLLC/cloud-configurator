@@ -9,4 +9,5 @@ import javax.json.JsonObject;
  */
 public interface Resource {
   JsonObject toJson(Provider provider);
+  Resource tag(String name, String value);
 }
