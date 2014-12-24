@@ -1,4 +1,4 @@
-package com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl;
+package com.sciul.cloud_configurator.dsl;
 
 import com.sciul.cloud_configurator.Provider;
 

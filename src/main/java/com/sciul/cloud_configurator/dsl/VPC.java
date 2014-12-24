@@ -1,11 +1,8 @@
-package com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl;
+package com.sciul.cloud_configurator.dsl;
 
 import com.sciul.cloud_configurator.Provider;
-import com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl.Resource;
-import com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl.ResourceList;
 
 import javax.json.*;
-import java.util.Map;
 
 /**
  * Created by sumeetrohatgi on 12/23/14.

@@ -1,9 +1,7 @@
-package com.sciul.cloud_configurator.com.sciul.cloud_configurator.dsl;
+package com.sciul.cloud_configurator.dsl;
 
-import com.amazonaws.util.json.JSONObject;
 import com.sciul.cloud_configurator.Provider;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 
 /**
