@@ -3,11 +3,13 @@ cloud-configurator
 
 A language parser program for configuring cloud environments.
 
-## provider ##
+## Provider ##
 
 An abstraction that allows same program to be used across multiple cloud providers.
 
-## example program ##
+## Template ##
+
+A dsl defined for writing and managing cloud configuration
 
     cloud defaults {
       provider: "aws",
