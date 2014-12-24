@@ -9,10 +9,9 @@ import java.util.Map;
 /**
  * Created by sumeetrohatgi on 12/24/14.
  */
-public class Subnet implements Resource {
+public class Subnet extends Resource {
   private String cidrBlock, availabilityZone;
   private ResourceList resourceList;
-  private Map<String, String> tags = new HashMap<>();
 
   public Subnet(String cidrBlock, String availabilityZone, ResourceList resourceList) {
     setCidrBlock(cidrBlock);

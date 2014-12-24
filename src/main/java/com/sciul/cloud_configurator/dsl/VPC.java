@@ -9,13 +9,12 @@ import java.util.Map;
 /**
  * Created by sumeetrohatgi on 12/23/14.
  */
-public class VPC implements Resource {
+public class VPC extends Resource {
   private final String defaultTenancy = "default";
   private final boolean dnsSupport;
   private final boolean dnsHostname;
   private String cidrBlock;
   private ResourceList resourceList;
-  private Map<String, String> tags = new HashMap<>();
 
   public VPC(String ciderBlock, ResourceList resourceList) {
     this(ciderBlock, true, true, resourceList);

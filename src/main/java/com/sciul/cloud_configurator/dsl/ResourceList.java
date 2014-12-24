@@ -13,6 +13,8 @@ import java.util.List;
 public class ResourceList {
   private ArrayList<Resource> ll = new ArrayList<>();
 
+  private ResourceList() {}
+
   public static ResourceList start() {
     return new ResourceList();
   }

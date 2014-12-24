@@ -9,13 +9,12 @@ import java.util.Map;
 /**
  * Created by sumeetrohatgi on 12/23/14.
  */
-public class Dns implements Resource {
+public class Dns extends Resource {
   private final String hostedZoneName;
   private RecordSets recordSets = new RecordSets();
   private String type = null;
   private String domain = "";
   private int ttl;
-  private Map<String, String> tags = new HashMap<>();
   private ResourceList resourceList;
 
   public String getHostedZoneName() {
