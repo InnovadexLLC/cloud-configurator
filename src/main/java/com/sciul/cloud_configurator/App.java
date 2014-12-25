@@ -20,7 +20,7 @@ public class App {
   private CommandLineParser parser = new BasicParser();
 
   @Autowired
-  AwsProvider provider;
+  Provider provider;
 
   public static void main(String[] args) {
     try {
