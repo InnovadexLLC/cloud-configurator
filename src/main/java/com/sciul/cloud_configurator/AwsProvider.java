@@ -185,6 +185,17 @@ public class AwsProvider implements Provider {
             .build();
   }
 
+  @Override
+  public JsonObject createAcl(Acl acl) {
+    return
+        Json.createObjectBuilder()
+            .add("Type", "AWS::EC2::NetworkAcl")
+            .add("Properties", Json.createObjectBuilder()
+                .add("VpcId", Json.createObjectBuilder().add("Ref", acl.getVpcName()))
+                .add("Tags", getTagBuilder(acl)))
+            .build();
+  }
+
   private JsonArrayBuilder getTagBuilder(Resource resource) {
     JsonArrayBuilder tagArrayBuilder = Json.createArrayBuilder();
 

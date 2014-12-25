@@ -26,4 +26,6 @@ public interface Provider {
   JsonObject createInternetGateway(InternetGateway internetGateway);
 
   JsonObject createDHCPOptions(DHCPOptions dhcpOptions);
+
+  JsonObject createAcl(Acl acl);
 }

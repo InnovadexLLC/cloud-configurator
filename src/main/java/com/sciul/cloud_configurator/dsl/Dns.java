@@ -44,34 +44,21 @@ public class Dns extends Resource {
   }
 
   public Dns(String name, String hostedZoneName, String refer, ResourceList resourceList) {
+    String envName = resourceList.tags.get("Name");
+
     this.hostedZoneName = hostedZoneName;
 
-    this.refer = refer;
+    this.refer = envName + "-" + refer + name.toUpperCase();
     this.resourceList = resourceList;
     setName("DNS-" + name);
-    recordSets.setResourceList(resourceList);
-  }
-
-  public RecordSets recordSetA(String domain) {
-    return recordSetA(domain, 300);
-  }
-
-  public RecordSets recordSetA(String domain, int ttl) {
-    type = "A";
-    this.domain = domain;
-    this.ttl = ttl;
-    return recordSets;
-  }
-
-  public RecordSets recordSetCNAME(String domain) {
-    return recordSetCNAME(domain, 300);
-  }
-
-  public RecordSets recordSetCNAME(String domain, int ttl) {
     type = "CNAME";
-    this.domain = domain;
-    this.ttl = ttl;
-    return recordSets;
+    String envPrefix = envName.substring(envName.indexOf('-') + 1);
+    this.domain = envPrefix + "-" + name.toLowerCase() + "." + hostedZoneName;
+    this.ttl = 300;
+  }
+
+  public ResourceList next() {
+    return resourceList;
   }
 
   @Override

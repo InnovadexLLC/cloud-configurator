@@ -23,13 +23,13 @@ public class Template {
     String zoneA = region + "a";
     String zoneB = region + "b";
 
+    String envPrefix = env.substring(env.indexOf('-') + 1) + "-";
+
     return ResourceList
         .start(name, null)
-        .dns("APP", webDomain, env + "-ELB-APP")
-        .recordSetCNAME("qa-apps." + webDomain)
+        .dns("APP", webDomain, "ELB")
         .next()
-        .dns("API", apiDomain, env + "-ELB-API")
-        .recordSetCNAME("qa-api." + apiDomain)
+        .dns("API", apiDomain, "ELB")
         .next()
         .vpc("10.0.0.0/16", region)
         .subnet("ELB", zoneA, "10.0.12.0/24")
