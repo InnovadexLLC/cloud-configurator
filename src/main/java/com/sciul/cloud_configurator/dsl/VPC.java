@@ -15,13 +15,13 @@ public class VPC extends Resource {
   private final boolean dnsHostname;
   private final String cidrBlock;
 
-  public VPC(String name, String ciderBlock, ResourceList resourceList) {
-    this(name, ciderBlock, true, true, resourceList);
+  public VPC(String ciderBlock, ResourceList resourceList) {
+    this(ciderBlock, true, true, resourceList);
   }
 
-  public VPC(String name, String ciderBlock, boolean dnsSupport, boolean dnsHostname,
+  public VPC(String ciderBlock, boolean dnsSupport, boolean dnsHostname,
              ResourceList resourceList) {
-    setName(name);
+    setName(resourceList.tags.get("Name") + "-VPC");
     this.cidrBlock = ciderBlock;
     this.dnsSupport = dnsSupport;
     this.dnsHostname = dnsHostname;

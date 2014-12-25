@@ -14,10 +14,10 @@ public class Subnet extends Resource {
   private VPC vpc;
 
   public Subnet(String name, String cidrBlock, String availabilityZone, VPC vpc) {
-    setName(name);
     setCidrBlock(cidrBlock);
     setAvailabilityZone(availabilityZone);
     setVPC(vpc);
+    setName(vpc.resourceList.tags.get("Name") + "-SUBNET-" + name + "-" + availabilityZone);
   }
 
   @Override

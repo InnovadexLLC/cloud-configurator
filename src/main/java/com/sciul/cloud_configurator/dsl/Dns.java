@@ -47,7 +47,7 @@ public class Dns extends Resource {
     this.hostedZoneName = hostedZoneName;
 
     this.refer = refer;
-    setName(name);
+    setName(resourceList.tags.get("Name") + "-DNS-" + name);
     this.resourceList = resourceList;
     recordSets.setResourceList(resourceList);
   }

@@ -32,8 +32,8 @@ public class ResourceList {
     return dns;
   }
 
-  public VPC vpc(String name, String ciderBlock) {
-    VPC vpc = new VPC(name, ciderBlock, this);
+  public VPC vpc(String ciderBlock) {
+    VPC vpc = new VPC(ciderBlock, this);
     ll.add(vpc);
     return vpc;
   }
