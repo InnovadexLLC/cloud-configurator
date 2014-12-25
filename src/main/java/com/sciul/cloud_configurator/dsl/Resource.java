@@ -4,7 +4,9 @@ import com.sciul.cloud_configurator.Provider;
 
 import javax.json.JsonObject;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Resources required by a typical cloud.
@@ -13,6 +15,7 @@ import java.util.Map;
  */
 public abstract class Resource {
   protected Map<String, String> tags = new HashMap<>();
+  protected ResourceList resourceList;
 
   /**
    * visitor design pattern method, allows a provider
@@ -30,4 +33,20 @@ public abstract class Resource {
    * @return <code>this</code>
    */
   public abstract Resource tag(String name, String value);
+
+  /**
+   * read all tags on a given resource;
+   * inherits tags from <code>ResourceList</code>
+   * @return
+   */
+  public Set<Map.Entry<String, String>> tags() {
+    Map<String, String> myTags = new HashMap<>();
+
+    if (resourceList != null && resourceList.tags != null) {
+      myTags.putAll(resourceList.tags);
+    }
+
+    myTags.putAll(tags);
+    return myTags.entrySet();
+  }
 }

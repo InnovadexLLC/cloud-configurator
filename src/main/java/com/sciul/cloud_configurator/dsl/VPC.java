@@ -14,7 +14,6 @@ public class VPC extends Resource {
   private final boolean dnsSupport;
   private final boolean dnsHostname;
   private String cidrBlock;
-  private ResourceList resourceList;
 
   public VPC(String ciderBlock, ResourceList resourceList) {
     this(ciderBlock, true, true, resourceList);
@@ -26,6 +25,12 @@ public class VPC extends Resource {
     this.dnsSupport = dnsSupport;
     this.dnsHostname = dnsHostname;
     this.resourceList = resourceList;
+  }
+
+  public VPC subnet(String zone, String ciderBlock) {
+    Subnet subnet = new Subnet(ciderBlock, zone, this);
+    resourceList.add(subnet);
+    return this;
   }
 
   public ResourceList next() {

@@ -2,7 +2,9 @@ package com.sciul.cloud_configurator.dsl;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Captures cloud building intent in as neutral terms
@@ -12,11 +14,15 @@ import java.util.List;
  */
 public class ResourceList {
   private ArrayList<Resource> ll = new ArrayList<>();
+  Map<String, String> tags = new HashMap<>();
 
   private ResourceList() {}
 
-  public static ResourceList start() {
-    return new ResourceList();
+  public static ResourceList start(String name, Map<String, String> tags) {
+    ResourceList resourceList = new ResourceList();
+    resourceList.tags.put("Name", name);
+    if ( tags != null ) resourceList.tags.putAll(tags);
+    return resourceList;
   }
 
   public Dns dns(String hostedZoneName) {
@@ -31,18 +37,16 @@ public class ResourceList {
     return vpc;
   }
 
-  public Subnet subnet(String cidrBlock, String availabilityZone) {
-    Subnet sn = new Subnet(cidrBlock, availabilityZone, this);
-    ll.add(sn);
-    return sn;
-  }
-
   public ResourceList end() {
     return this;
   }
 
   public List<Resource> resources() {
     return ll;
+  }
+
+  void add(Resource resource) {
+    ll.add(resource);
   }
 
 }

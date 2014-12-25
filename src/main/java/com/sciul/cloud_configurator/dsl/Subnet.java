@@ -11,16 +11,13 @@ import java.util.Map;
  */
 public class Subnet extends Resource {
   private String cidrBlock, availabilityZone;
-  private ResourceList resourceList;
+  private VPC vpc;
 
-  public Subnet(String cidrBlock, String availabilityZone, ResourceList resourceList) {
+  public Subnet(String cidrBlock, String availabilityZone, VPC vpc) {
     setCidrBlock(cidrBlock);
     setAvailabilityZone(availabilityZone);
-    setResourceList(resourceList);
-  }
-
-  public ResourceList next() {
-    return resourceList;
+    setVPC(vpc);
+    resourceList = vpc.resourceList;
   }
 
   @Override
@@ -34,7 +31,6 @@ public class Subnet extends Resource {
     return this;
   }
 
-
   public String getAvailabilityZone() {
     return availabilityZone;
   }
@@ -43,12 +39,12 @@ public class Subnet extends Resource {
     this.availabilityZone = availabilityZone;
   }
 
-  public ResourceList getResourceList() {
-    return resourceList;
+  public VPC getVPC() {
+    return vpc;
   }
 
-  public void setResourceList(ResourceList resourceList) {
-    this.resourceList = resourceList;
+  public void setVPC(VPC vpc) {
+    this.vpc = vpc;
   }
 
   public String getCidrBlock() {

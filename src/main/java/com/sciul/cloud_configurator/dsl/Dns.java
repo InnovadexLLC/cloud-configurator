@@ -15,7 +15,6 @@ public class Dns extends Resource {
   private String type = null;
   private String domain = "";
   private int ttl;
-  private ResourceList resourceList;
 
   public String getHostedZoneName() {
     return hostedZoneName;

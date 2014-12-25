@@ -19,18 +19,19 @@ public class Template {
   }
 
   public ResourceList generateResourceList() {
-    return ResourceList.start()
-          .dns("sciul.com.")
-          .tag("Name", env)
-          .recordSetA("sciul.com.")
+    return ResourceList
+        .start("SCI-QA", null)
+          .dns("ulclearview.com")
+          .recordSetCNAME("qa-apps.ulclearview.com")
         .next()
           .dns("sciul.com.")
-          .tag("Name", env)
-          .recordSetCNAME("api.sciul.com.")
+          .recordSetCNAME("qa-api.sciul.com")
         .next()
           .vpc("10.0.0.0/16")
-        .next()
-          .subnet("10.0.12.0/24", "us-west-2b")
+          .subnet("us-west-2a", "10.0.12.0/24")
+          .subnet("us-west-2b", "10.0.13.0/24")
+          .subnet("us-west-2a", "10.0.51.0/24")
+          .subnet("us-west-2b", "10.0.52.0/24")
         .next()
         .end();
   }

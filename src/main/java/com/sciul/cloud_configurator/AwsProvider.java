@@ -16,9 +16,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by sumeetrohatgi on 11/14/14.
@@ -109,10 +111,15 @@ public class AwsProvider implements Provider {
   public JsonObject createVPC(VPC vpc) {
     return
         Json.createObjectBuilder()
-            .add("CidrBlock", vpc.getCidrBlock())
-            .add("InstanceTenancy", vpc.getDefaultTenancy())
-            .add("EnableDnsSupport", vpc.isDnsSupport())
-            .add("EnableDnsHostnames", vpc.isDnsHostname())
+            .add("Type", "AWS::EC2::VPC")
+            .add("Properties",
+                Json.createObjectBuilder()
+                    .add("CidrBlock", vpc.getCidrBlock())
+                    .add("InstanceTenancy", vpc.getDefaultTenancy())
+                    .add("EnableDnsSupport", vpc.isDnsSupport() + "")
+                    .add("EnableDnsHostnames", vpc.isDnsHostname() + "")
+                    .add("Tags", getTagBuilder(vpc))
+            )
             .build();
   }
 
@@ -120,15 +127,19 @@ public class AwsProvider implements Provider {
   public JsonObject createDNS(Dns dns) {
     return
         Json.createObjectBuilder()
-            .add("HostedZoneName", dns.getHostedZoneName())
-            .add("RecordSets",
-                Json.createArrayBuilder()
-                    .add(Json.createObjectBuilder()
-                            .add("Name",dns.getDomain())
-                            .add("Type", dns.getType())
-                            .add("TTL",dns.getTtl())
+            .add("Type", "AWS::Route53::RecordSetGroup")
+            .add("Properties",
+                Json.createObjectBuilder()
+                    .add("HostedZoneName", dns.getHostedZoneName())
+                    .add("RecordSets",
+                        Json.createArrayBuilder()
+                            .add(Json.createObjectBuilder()
+                                    .add("Name", dns.getDomain())
+                                    .add("Type", dns.getType())
+                                    .add("TTL", dns.getTtl())
+                            )
                     )
-            )
+                    .add("Tags", getTagBuilder(dns)))
             .build();
   }
 
@@ -136,16 +147,23 @@ public class AwsProvider implements Provider {
   public JsonObject createSubnet(Subnet subnet) {
     return
         Json.createObjectBuilder()
-            .add("CidrBlock", subnet.getCidrBlock())
-            .add("AvailabilityZone", subnet.getAvailabilityZone())
-            .add("Tags",
-                Json.createArrayBuilder()
-                    .add(Json.createObjectBuilder()
-                            .add("Name", "PartOf")
-                            .add("Value", "SCI-QA")
-                    )
-            )
+            .add("Type", "AWS::EC2::Subnet")
+            .add("Properties", Json.createObjectBuilder()
+                .add("CidrBlock", subnet.getCidrBlock())
+                .add("AvailabilityZone", subnet.getAvailabilityZone())
+                .add("Tags", getTagBuilder(subnet)))
             .build();
+  }
+
+  private JsonArrayBuilder getTagBuilder(Resource resource) {
+    JsonObjectBuilder tagBuilder = Json.createObjectBuilder();
+
+    for (Map.Entry<String, String> tag : resource.tags()) {
+      tagBuilder
+          .add("Key", tag.getKey())
+          .add("Value", tag.getValue());
+    }
+    return Json.createArrayBuilder().add(tagBuilder);
   }
 
   public DescribeStacksResult describeStacks(String environment) {
