@@ -72,12 +72,18 @@ public class AwsProvider implements Provider {
 
   public String generateStackTemplate(final Template template) {
     ResourceList resourceList = template.generateResourceList();
-    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    JsonObjectBuilder resourceBuilder = Json.createObjectBuilder();
+
     for (Resource resource : resourceList.resources()) {
-      jsonObjectBuilder.add(resource.getName(), resource.toJson(this));
+      resourceBuilder.add(resource.getName(), resource.toJson(this));
     }
 
-    return jsonObjectBuilder.build().toString();
+    JsonObjectBuilder mainBuilder = Json
+        .createObjectBuilder()
+        .add("AWSTemplateFormatVersion","2010-09-09")
+        .add("Resources", resourceBuilder);
+
+    return mainBuilder.build().toString();
   }
 
   public CreateStackResult createStack(final Template template) {
@@ -121,18 +127,23 @@ public class AwsProvider implements Provider {
 
   @Override
   public JsonObject createDNS(Dns dns) {
+    String hostedDomain = dns.getHostedZoneName().endsWith(".")?dns.getHostedZoneName(): dns.getHostedZoneName() + ".";
+    String domainName = dns.getDomain().endsWith(".")?dns.getDomain(): dns.getDomain() + ".";
+
     return
         Json.createObjectBuilder()
             .add("Type", "AWS::Route53::RecordSetGroup")
             .add("Properties",
                 Json.createObjectBuilder()
-                    .add("HostedZoneName", dns.getHostedZoneName())
+                    .add("HostedZoneName", hostedDomain)
                     .add("RecordSets",
                         Json.createArrayBuilder()
                             .add(Json.createObjectBuilder()
-                                    .add("Name", dns.getDomain())
+                                    .add("Name", domainName)
                                     .add("Type", dns.getType())
                                     .add("TTL", dns.getTtl())
+                                    .add("ResourceRecords", Json.createArrayBuilder()
+                                        .add(Json.createObjectBuilder().add("Ref",dns.getRefer())))
                             )
                     )
                     .add("Tags", getTagBuilder(dns)))
@@ -147,6 +158,7 @@ public class AwsProvider implements Provider {
             .add("Properties", Json.createObjectBuilder()
                 .add("CidrBlock", subnet.getCidrBlock())
                 .add("AvailabilityZone", subnet.getAvailabilityZone())
+                .add("VpcId", Json.createObjectBuilder().add("Ref", subnet.getVPC().getName()))
                 .add("Tags", getTagBuilder(subnet)))
             .build();
   }
