@@ -5,6 +5,8 @@ import com.sciul.cloud_configurator.Provider;
 import javax.json.JsonObject;
 
 /**
+ * Captures DNS entries required for setting up a new environment
+ *
  * Created by sumeetrohatgi on 12/23/14.
  */
 public class Dns extends Resource {
@@ -13,10 +15,13 @@ public class Dns extends Resource {
   private String type = null;
   private String domain;
   private int ttl;
+  private final String refer;
 
   public String getHostedZoneName() {
     return hostedZoneName;
   }
+
+  public String getRefer() { return refer; }
 
   public RecordSets getRecordSets() {
     return recordSets;
@@ -30,10 +35,6 @@ public class Dns extends Resource {
     return type;
   }
 
-  public void setType(String type) {
-    this.type = type;
-  }
-
   public String getDomain() {
     return domain;
   }
@@ -42,13 +43,10 @@ public class Dns extends Resource {
     return ttl;
   }
 
-  public Dns(String name, String hostedZoneName, ResourceList resourceList) {
-    if (hostedZoneName.endsWith(".")) {
-      this.hostedZoneName = hostedZoneName;
-    } else {
-      this.hostedZoneName = hostedZoneName + ".";
-    }
+  public Dns(String name, String hostedZoneName, String refer, ResourceList resourceList) {
+    this.hostedZoneName = hostedZoneName;
 
+    this.refer = refer;
     setName(name);
     this.resourceList = resourceList;
     recordSets.setResourceList(resourceList);
