@@ -20,6 +20,7 @@ public class ResourceList {
 
   public static ResourceList start(String name, Map<String, String> tags) {
     ResourceList resourceList = new ResourceList();
+    name = name.toUpperCase();
     resourceList.tags.put("Name", name);
     resourceList.tags.put("BelongsTo", name);
     if ( tags != null ) resourceList.tags.putAll(tags);
@@ -32,8 +33,8 @@ public class ResourceList {
     return dns;
   }
 
-  public VPC vpc(String ciderBlock) {
-    VPC vpc = new VPC(ciderBlock, this);
+  public VPC vpc(String ciderBlock, String region) {
+    VPC vpc = new VPC(ciderBlock, region, this);
     ll.add(vpc);
     return vpc;
   }

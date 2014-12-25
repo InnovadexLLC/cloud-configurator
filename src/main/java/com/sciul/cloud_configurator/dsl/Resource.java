@@ -23,8 +23,8 @@ public abstract class Resource {
   }
 
   public void setName(String name) {
-    this.name = name;
-    tags.put("Name", name);
+    this.name = resourceList.tags.get("Name") + "-" + name.toUpperCase();
+    tags.put("Name", this.name);
   }
 
   /**

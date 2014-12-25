@@ -25,13 +25,13 @@ public class Template {
 
     return ResourceList
         .start(name, null)
-        .dns("APP", webDomain, "SCI-QA-ELB-APP")
+        .dns("APP", webDomain, env + "-ELB-APP")
         .recordSetCNAME("qa-apps." + webDomain)
         .next()
-        .dns("API", apiDomain, "SCI-QA-ELB-API")
+        .dns("API", apiDomain, env + "-ELB-API")
         .recordSetCNAME("qa-api." + apiDomain)
         .next()
-        .vpc("10.0.0.0/16")
+        .vpc("10.0.0.0/16", region)
         .subnet("ELB", zoneA, "10.0.12.0/24")
         .subnet("ELB", zoneB, "10.0.13.0/24")
         .subnet("APP", zoneA, "10.0.51.0/24")

@@ -163,6 +163,28 @@ public class AwsProvider implements Provider {
             .build();
   }
 
+  @Override
+  public JsonObject createInternetGateway(InternetGateway internetGateway) {
+    return
+        Json.createObjectBuilder()
+            .add("Type", "AWS::EC2::InternetGateway")
+            .add("Properties", Json.createObjectBuilder()
+                .add("Tags", getTagBuilder(internetGateway)))
+            .build();
+  }
+
+  @Override
+  public JsonObject createDHCPOptions(DHCPOptions dhcpOptions) {
+    return
+        Json.createObjectBuilder()
+            .add("Type", "AWS::EC2::DHCPOptions")
+            .add("Properties", Json.createObjectBuilder()
+                .add("DomainName", dhcpOptions.getDomainName())
+                .add("DomainNameServers", Json.createArrayBuilder().add("AmazonProvidedDNS"))
+                .add("Tags", getTagBuilder(dhcpOptions)))
+            .build();
+  }
+
   private JsonArrayBuilder getTagBuilder(Resource resource) {
     JsonArrayBuilder tagArrayBuilder = Json.createArrayBuilder();
 

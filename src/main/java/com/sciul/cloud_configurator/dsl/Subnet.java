@@ -17,7 +17,7 @@ public class Subnet extends Resource {
     setCidrBlock(cidrBlock);
     setAvailabilityZone(availabilityZone);
     setVPC(vpc);
-    setName(vpc.resourceList.tags.get("Name") + "-SUBNET-" + name + "-" + availabilityZone);
+    setName("SUBNET-" + name + "-" + availabilityZone);
   }
 
   @Override
