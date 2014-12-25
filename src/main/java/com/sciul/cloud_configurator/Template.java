@@ -9,13 +9,14 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:cloud-configure-app.properties")
 public class Template {
 
-  private String env, name, region, domain;
+  private String env, name, region, apiDomain, webDomain;
 
-  public Template(String env, String region, String domain) {
+  public Template(String env, String region, String apiDomain, String webDomain) {
     this.env = env;
     this.name = env;
     this.region = region;
-    this.domain = domain;
+    this.apiDomain = apiDomain;
+    this.webDomain = webDomain;
   }
 
   public ResourceList generateResourceList() {
@@ -24,11 +25,11 @@ public class Template {
 
     return ResourceList
         .start(name, null)
-        .dns("DNS-APP", "ulclearview.com", "APP-ELB")
-        .recordSetCNAME("qa-apps.ulclearview.com")
+        .dns("DNS-APP", webDomain, "APP-ELB")
+        .recordSetCNAME("qa-apps." + webDomain)
         .next()
-        .dns("DNS-API", "sciul.com", "API-ELB")
-        .recordSetCNAME("qa-api.sciul.com")
+        .dns("DNS-API", apiDomain, "API-ELB")
+        .recordSetCNAME("qa-api." + apiDomain)
         .next()
         .vpc("VPC", "10.0.0.0/16")
         .subnet("ELB-2A", zoneA, "10.0.12.0/24")

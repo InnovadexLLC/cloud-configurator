@@ -48,6 +48,9 @@ public class App {
         {
           addOption("c", "command", true, "command to run, example: update, list");
           addOption("r", "region", true, "aws region");
+          addOption("a", "api domain", true, "api hosted on this domain");
+          addOption("w", "web domain", true, "webapp hosted on this domain");
+          addOption("p", "prefix", true, "environment prefix");
           addOption("f", "file", true, "file to read input/ write output");
           addOption("h", "help", false, "this help message");
         }
@@ -57,7 +60,7 @@ public class App {
 
       if (cmd.hasOption("h")) {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(80, "run.sh -c <command> -c <update|list|generate> [-f <filename>]-r <region> [-h]",
+        formatter.printHelp(80, "run.sh -c <update|list|generate> -r <region> -p <prefix> -w <web domain> -a <api domain> [-f <filename>] [-h]",
             "Configure your cloud environment", options, "");
         return;
       }
@@ -70,11 +73,30 @@ public class App {
         throw new RuntimeException("no region specified");
       }
 
-      provider.setRegion(cmd.getOptionValue("r"));
+      if (!cmd.hasOption("p")) {
+        throw new RuntimeException("no prefix specified");
+      }
+
+      if (!cmd.hasOption("a")) {
+        throw new RuntimeException("no api domain specified");
+      }
+
+      if (!cmd.hasOption("w")) {
+        throw new RuntimeException("no web domain specified");
+      }
+
+      String region = cmd.getOptionValue("r");
+      String prefix = cmd.getOptionValue("p");
+      String webDomain = cmd.getOptionValue("w");
+      String apiDomain = cmd.getOptionValue("a");
+
+      Template template = new Template(prefix, region, apiDomain, webDomain);
+
+      provider.setRegion(region);
 
       switch (cmd.getOptionValue("c")) {
         case "generate":
-          String template = provider.generateStackTemplate(new Template("SCI-QA", "us-west-2","sciul.com"));
+          String templateBody = provider.generateStackTemplate(template);
           if (!cmd.hasOption("f")) {
             logger.debug("generated template: {}", template);
             break;
@@ -85,7 +107,7 @@ public class App {
           try {
             writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(cmd.getOptionValue("f")), "utf-8"));
-            writer.write(template);
+            writer.write(templateBody);
           } catch (IOException ex) {
             throw new RuntimeException("unable to write to file");
           } finally {
@@ -99,9 +121,11 @@ public class App {
           break;
 
         case "update":
-          provider.createStack(new Template("SCI-QA", "us-west-2","sciul.com"));
+          provider.createStack(template);
+
           logger.debug("****************Stack Creation Started****************");
           break;
+
         case "list":
           logger.debug("list environments for region: {}", cmd.getOptionValue("r"));
           DescribeStacksResult dst = null;
