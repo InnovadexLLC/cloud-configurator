@@ -26,8 +26,8 @@ public class ResourceList {
     return resourceList;
   }
 
-  public Dns dns(String name, String hostedZoneName) {
-    Dns dns = new Dns(name, hostedZoneName, this);
+  public Dns dns(String name, String hostedZoneName, String refer) {
+    Dns dns = new Dns(name, hostedZoneName, refer, this);
     ll.add(dns);
     return dns;
   }
