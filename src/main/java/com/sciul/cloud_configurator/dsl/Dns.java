@@ -48,11 +48,11 @@ public class Dns extends Resource {
 
     this.hostedZoneName = hostedZoneName;
 
-    this.refer = envName + "-" + refer + name.toUpperCase();
+    this.refer = envName + "-" + refer + "-" + name.toUpperCase();
     this.resourceList = resourceList;
     setName("DNS-" + name);
     type = "CNAME";
-    String envPrefix = envName.substring(envName.indexOf('-') + 1);
+    String envPrefix = envName.substring(envName.indexOf('-') + 1).toLowerCase();
     this.domain = envPrefix + "-" + name.toLowerCase() + "." + hostedZoneName;
     this.ttl = 300;
   }
