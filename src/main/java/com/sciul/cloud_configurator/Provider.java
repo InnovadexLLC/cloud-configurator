@@ -22,4 +22,6 @@ public interface Provider {
   JsonObject createVPC(VPC vpc);
   JsonObject createDNS(Dns dns);
   JsonObject createSubnet(Subnet subnet);
+  void setRegion(String region);
+  String generateStackTemplate(Template template);
 }
