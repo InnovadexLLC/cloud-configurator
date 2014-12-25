@@ -19,21 +19,24 @@ public class Template {
   }
 
   public ResourceList generateResourceList() {
+    String zoneA = region + "a";
+    String zoneB = region + "b";
+
     return ResourceList
-        .start("SCI-QA", null)
-        .dns("SCI-QA-DNS-APP", "ulclearview.com")
+        .start(name, null)
+        .dns("DNS-APP", "ulclearview.com", "APP-ELB")
         .recordSetCNAME("qa-apps.ulclearview.com")
         .next()
-        .dns("SCI-QA-DNS-API", "sciul.com.")
+        .dns("DNS-API", "sciul.com", "API-ELB")
         .recordSetCNAME("qa-api.sciul.com")
         .next()
-        .vpc("SCI-QA-VPC", "10.0.0.0/16")
-        .subnet("SCI-QA-ELB-2A", "us-west-2a", "10.0.12.0/24")
-        .subnet("SCI-QA-ELB-2B", "us-west-2b", "10.0.13.0/24")
-        .subnet("SCI-QA-APP-2A", "us-west-2a", "10.0.51.0/24")
-        .subnet("SCI-QA-APP-2B", "us-west-2b", "10.0.52.0/24")
-        .subnet("SCI-QA-DB-2A", "us-west-2a", "10.0.91.0/24")
-        .subnet("SCI-QA-DB-2B", "us-west-2b", "10.0.92.0/24")
+        .vpc("VPC", "10.0.0.0/16")
+        .subnet("ELB-2A", zoneA, "10.0.12.0/24")
+        .subnet("ELB-2B", zoneB, "10.0.13.0/24")
+        .subnet("APP-2A", zoneA, "10.0.51.0/24")
+        .subnet("APP-2B", zoneB, "10.0.52.0/24")
+        .subnet("DB-2A", zoneA, "10.0.91.0/24")
+        .subnet("DB-2B", zoneB, "10.0.92.0/24")
         .next()
         .end();
   }
