@@ -13,11 +13,11 @@ public class Subnet extends Resource {
   private String cidrBlock, availabilityZone;
   private VPC vpc;
 
-  public Subnet(String cidrBlock, String availabilityZone, VPC vpc) {
+  public Subnet(String name, String cidrBlock, String availabilityZone, VPC vpc) {
+    setName(name);
     setCidrBlock(cidrBlock);
     setAvailabilityZone(availabilityZone);
     setVPC(vpc);
-    resourceList = vpc.resourceList;
   }
 
   @Override
@@ -45,6 +45,7 @@ public class Subnet extends Resource {
 
   public void setVPC(VPC vpc) {
     this.vpc = vpc;
+    resourceList = vpc.resourceList;
   }
 
   public String getCidrBlock() {

@@ -21,17 +21,19 @@ public class Template {
   public ResourceList generateResourceList() {
     return ResourceList
         .start("SCI-QA", null)
-          .dns("ulclearview.com")
-          .recordSetCNAME("qa-apps.ulclearview.com")
+        .dns("SCI-QA-DNS-APP", "ulclearview.com")
+        .recordSetCNAME("qa-apps.ulclearview.com")
         .next()
-          .dns("sciul.com.")
-          .recordSetCNAME("qa-api.sciul.com")
+        .dns("SCI-QA-DNS-API", "sciul.com.")
+        .recordSetCNAME("qa-api.sciul.com")
         .next()
-          .vpc("10.0.0.0/16")
-          .subnet("us-west-2a", "10.0.12.0/24")
-          .subnet("us-west-2b", "10.0.13.0/24")
-          .subnet("us-west-2a", "10.0.51.0/24")
-          .subnet("us-west-2b", "10.0.52.0/24")
+        .vpc("SCI-QA-VPC", "10.0.0.0/16")
+        .subnet("SCI-QA-ELB-2A", "us-west-2a", "10.0.12.0/24")
+        .subnet("SCI-QA-ELB-2B", "us-west-2b", "10.0.13.0/24")
+        .subnet("SCI-QA-APP-2A", "us-west-2a", "10.0.51.0/24")
+        .subnet("SCI-QA-APP-2B", "us-west-2b", "10.0.52.0/24")
+        .subnet("SCI-QA-DB-2A", "us-west-2a", "10.0.91.0/24")
+        .subnet("SCI-QA-DB-2B", "us-west-2b", "10.0.92.0/24")
         .next()
         .end();
   }

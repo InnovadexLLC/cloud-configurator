@@ -21,18 +21,19 @@ public class ResourceList {
   public static ResourceList start(String name, Map<String, String> tags) {
     ResourceList resourceList = new ResourceList();
     resourceList.tags.put("Name", name);
+    resourceList.tags.put("BelongsTo", name);
     if ( tags != null ) resourceList.tags.putAll(tags);
     return resourceList;
   }
 
-  public Dns dns(String hostedZoneName) {
-    Dns dns = new Dns(hostedZoneName, this);
+  public Dns dns(String name, String hostedZoneName) {
+    Dns dns = new Dns(name, hostedZoneName, this);
     ll.add(dns);
     return dns;
   }
 
-  public VPC vpc(String ciderBlock) {
-    VPC vpc = new VPC(ciderBlock, this);
+  public VPC vpc(String name, String ciderBlock) {
+    VPC vpc = new VPC(name, ciderBlock, this);
     ll.add(vpc);
     return vpc;
   }

@@ -22,3 +22,5 @@ build/
 .project
 
 .settings/org.eclipse.jdt.core.prefs
+
+cfn-template.json

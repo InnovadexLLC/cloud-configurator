@@ -13,22 +13,23 @@ public class VPC extends Resource {
   private final String defaultTenancy = "default";
   private final boolean dnsSupport;
   private final boolean dnsHostname;
-  private String cidrBlock;
+  private final String cidrBlock;
 
-  public VPC(String ciderBlock, ResourceList resourceList) {
-    this(ciderBlock, true, true, resourceList);
+  public VPC(String name, String ciderBlock, ResourceList resourceList) {
+    this(name, ciderBlock, true, true, resourceList);
   }
 
-  public VPC(String ciderBlock, boolean dnsSupport, boolean dnsHostname,
+  public VPC(String name, String ciderBlock, boolean dnsSupport, boolean dnsHostname,
              ResourceList resourceList) {
+    setName(name);
     this.cidrBlock = ciderBlock;
     this.dnsSupport = dnsSupport;
     this.dnsHostname = dnsHostname;
     this.resourceList = resourceList;
   }
 
-  public VPC subnet(String zone, String ciderBlock) {
-    Subnet subnet = new Subnet(ciderBlock, zone, this);
+  public VPC subnet(String name, String zone, String ciderBlock) {
+    Subnet subnet = new Subnet(name, ciderBlock, zone, this);
     resourceList.add(subnet);
     return this;
   }
@@ -51,10 +52,6 @@ public class VPC extends Resource {
 
   public String getCidrBlock() {
     return cidrBlock;
-  }
-
-  public void setCidrBlock(String cidrBlock) {
-    this.cidrBlock = cidrBlock;
   }
 
   @Override

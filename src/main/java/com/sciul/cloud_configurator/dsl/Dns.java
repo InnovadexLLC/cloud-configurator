@@ -3,8 +3,6 @@ package com.sciul.cloud_configurator.dsl;
 import com.sciul.cloud_configurator.Provider;
 
 import javax.json.JsonObject;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by sumeetrohatgi on 12/23/14.
@@ -13,7 +11,7 @@ public class Dns extends Resource {
   private final String hostedZoneName;
   private RecordSets recordSets = new RecordSets();
   private String type = null;
-  private String domain = "";
+  private String domain;
   private int ttl;
 
   public String getHostedZoneName() {
@@ -40,25 +38,18 @@ public class Dns extends Resource {
     return domain;
   }
 
-  public void setDomain(String domain) {
-    this.domain = domain;
-  }
-
   public int getTtl() {
     return ttl;
   }
 
-  public void setTtl(int ttl) {
-    this.ttl = ttl;
-  }
-
-  public Dns(String hostedZoneName, ResourceList resourceList) {
+  public Dns(String name, String hostedZoneName, ResourceList resourceList) {
     if (hostedZoneName.endsWith(".")) {
       this.hostedZoneName = hostedZoneName;
     } else {
       this.hostedZoneName = hostedZoneName + ".";
     }
 
+    setName(name);
     this.resourceList = resourceList;
     recordSets.setResourceList(resourceList);
   }

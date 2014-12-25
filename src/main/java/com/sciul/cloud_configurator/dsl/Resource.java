@@ -16,6 +16,16 @@ import java.util.Set;
 public abstract class Resource {
   protected Map<String, String> tags = new HashMap<>();
   protected ResourceList resourceList;
+  protected String name;
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+    tags.put("Name", name);
+  }
 
   /**
    * visitor design pattern method, allows a provider

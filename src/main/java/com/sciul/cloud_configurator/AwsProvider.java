@@ -70,15 +70,11 @@ public class AwsProvider implements Provider {
     clt.setRegion(Region.getRegion(Regions.US_WEST_2));
   }
 
-
-
-  private String toJson(Template template) {
+  public String generateStackTemplate(final Template template) {
     ResourceList resourceList = template.generateResourceList();
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-    int i = 0;
     for (Resource resource : resourceList.resources()) {
-      jsonObjectBuilder.add("arbitrary" + i, resource.toJson(this));
-      i++;
+      jsonObjectBuilder.add(resource.getName(), resource.toJson(this));
     }
 
     return jsonObjectBuilder.build().toString();
@@ -90,7 +86,7 @@ public class AwsProvider implements Provider {
       CreateStackRequest crq = new CreateStackRequest() {
         {
           setStackName(template.getName());
-          setTemplateBody(toJson(template));
+          setTemplateBody(generateStackTemplate(template));
         }
       };
 
@@ -156,14 +152,16 @@ public class AwsProvider implements Provider {
   }
 
   private JsonArrayBuilder getTagBuilder(Resource resource) {
-    JsonObjectBuilder tagBuilder = Json.createObjectBuilder();
+    JsonArrayBuilder tagArrayBuilder = Json.createArrayBuilder();
 
     for (Map.Entry<String, String> tag : resource.tags()) {
-      tagBuilder
-          .add("Key", tag.getKey())
-          .add("Value", tag.getValue());
+      tagArrayBuilder
+          .add(Json.createObjectBuilder()
+              .add("Key", tag.getKey())
+              .add("Value", tag.getValue()));
     }
-    return Json.createArrayBuilder().add(tagBuilder);
+
+    return tagArrayBuilder;
   }
 
   public DescribeStacksResult describeStacks(String environment) {

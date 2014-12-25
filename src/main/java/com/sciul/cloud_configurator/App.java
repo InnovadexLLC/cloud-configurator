@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 
+import java.io.*;
+
 @Configuration
 @ComponentScan
 @PropertySource("classpath:cloud-configure-app.properties")
@@ -46,6 +48,7 @@ public class App {
         {
           addOption("c", "command", true, "command to run, example: update, list");
           addOption("r", "region", true, "aws region");
+          addOption("f", "file", true, "file to read input/ write output");
           addOption("h", "help", false, "this help message");
         }
       };
@@ -54,7 +57,7 @@ public class App {
 
       if (cmd.hasOption("h")) {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(80, "run.sh -c <command> -c <update|list> -r <region> [-h]",
+        formatter.printHelp(80, "run.sh -c <command> -c <update|list|generate> [-f <filename>]-r <region> [-h]",
             "Configure your cloud environment", options, "");
         return;
       }
@@ -70,6 +73,31 @@ public class App {
       provider.setRegion(cmd.getOptionValue("r"));
 
       switch (cmd.getOptionValue("c")) {
+        case "generate":
+          String template = provider.generateStackTemplate(new Template("SCI-QA", "us-west-2","sciul.com"));
+          if (!cmd.hasOption("f")) {
+            logger.debug("generated template: {}", template);
+            break;
+          }
+
+          Writer writer = null;
+
+          try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(cmd.getOptionValue("f")), "utf-8"));
+            writer.write(template);
+          } catch (IOException ex) {
+            throw new RuntimeException("unable to write to file");
+          } finally {
+            try {
+              writer.close();
+              logger.info("wrote template to file: {}", cmd.getOptionValue("f"));
+            } catch (Exception ex) {
+              throw new RuntimeException("unable to write to file");
+            }
+          }
+          break;
+
         case "update":
           provider.createStack(new Template("SCI-QA", "us-west-2","sciul.com"));
           logger.debug("****************Stack Creation Started****************");
