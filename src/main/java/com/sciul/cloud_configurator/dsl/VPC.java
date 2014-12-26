@@ -25,11 +25,11 @@ public class VPC extends Resource {
     this.resourceList = resourceList;
     setName("VPC");
 
-    resourceList.add(new DHCPOptions("DHCPOptions", region + ".compute.internal", resourceList));
-    InternetGateway gw1 = new InternetGateway("InternetGateway", resourceList);
+    resourceList.add(new DHCPOptions("DPT", region + ".compute.internal", resourceList));
+    InternetGateway gw1 = new InternetGateway("IGW", resourceList);
     resourceList.add(gw1);
-    resourceList.add(new VPCGatewayAttachment("GW1", getName(), gw1.getName(), resourceList));
-    resourceList.add(new NetworkAcl("Acl", getName(), resourceList));
+    resourceList.add(new VPCGatewayAttachment("VPC-GW", getName(), gw1.getName(), resourceList));
+    resourceList.add(new NetworkAcl("ACL", getName(), resourceList));
   }
 
   public String getDefaultTenancy() {

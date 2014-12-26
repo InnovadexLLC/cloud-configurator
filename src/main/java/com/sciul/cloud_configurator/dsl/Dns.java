@@ -11,7 +11,6 @@ import javax.json.JsonObject;
  */
 public class Dns extends Resource {
   private final String hostedZoneName;
-  private RecordSets recordSets = new RecordSets();
   private String type = null;
   private String domain;
   private int ttl;
@@ -22,14 +21,6 @@ public class Dns extends Resource {
   }
 
   public String getRefer() { return refer; }
-
-  public RecordSets getRecordSets() {
-    return recordSets;
-  }
-
-  public void setRecordSets(RecordSets recordSets) {
-    this.recordSets = recordSets;
-  }
 
   public String getType() {
     return type;

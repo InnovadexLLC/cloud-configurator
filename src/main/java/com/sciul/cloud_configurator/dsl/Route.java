@@ -21,7 +21,7 @@ public class Route extends Resource {
     setName(name);
 
     destinationCidrBlock = "0.0.0.0/0";
-    vpcGatewayAttachmentId = resourceList.getName() + "-GW1";
+    vpcGatewayAttachmentId = resourceList.getName() + "-VPC-GW";
     this.routeTableId = routeTableId;
 
     if (gatewayId != null) {

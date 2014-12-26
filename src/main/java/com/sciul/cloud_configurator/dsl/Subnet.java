@@ -41,7 +41,7 @@ public class Subnet extends Resource {
     String instanceId = null;
 
     if (publicConnected) {
-      gatewayId = "";
+      gatewayId = resourceList.getName() + "-IGW";
     } else {
       instanceId = "";
     }
