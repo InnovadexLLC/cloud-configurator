@@ -18,6 +18,10 @@ public class ResourceList {
 
   private ResourceList() {}
 
+  public String getName() {
+    return tags.get("Name");
+  }
+
   /**
    * starting to define the template
    *

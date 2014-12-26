@@ -8,13 +8,34 @@ import javax.json.JsonObject;
  * Created by sumeetrohatgi on 12/25/14.
  */
 public class Route extends Resource {
-  private String destinationCidrBlock;
-  private String routeTableId;
-  private String idType;
-  private String idValue;
-  private String vpcGatewayAttachmentId;
-  private boolean dependsOn;
-  private String dependOnId;
+  private final String destinationCidrBlock;
+  private final String routeTableId;
+  private final String idType;
+  private final String idValue;
+  private final String vpcGatewayAttachmentId;
+  private final boolean dependsOn;
+  private final String dependOnId;
+
+  public Route(String name, String routeTableId, String gatewayId, String instanceId, ResourceList resourceList) {
+    this.resourceList = resourceList;
+    setName(name);
+
+    destinationCidrBlock = "0.0.0.0/0";
+    vpcGatewayAttachmentId = resourceList.getName() + "-GW1";
+    this.routeTableId = routeTableId;
+
+    if (gatewayId != null) {
+      idType = "GatewayId";
+      idValue = gatewayId;
+      dependsOn = true;
+      dependOnId = vpcGatewayAttachmentId;
+    } else {
+      dependsOn = false;
+      dependOnId = null;
+      idType = "InstanceId";
+      idValue = instanceId;
+    }
+  }
 
   @Override
   public JsonObject toJson(Provider provider) {

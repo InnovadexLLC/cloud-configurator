@@ -40,8 +40,8 @@ public class VPC extends Resource {
    * @param ciderBlock example: 10.0.1.0/24
    * @return
    */
-  public VPC subnet(String name, String zone, String ciderBlock) {
-    Subnet subnet = new Subnet(name, ciderBlock, zone, this);
+  public VPC subnet(String name, String zone, String ciderBlock, boolean publicConnected) {
+    Subnet subnet = new Subnet(name, ciderBlock, zone, publicConnected, this);
     resourceList.add(subnet);
     return this;
   }

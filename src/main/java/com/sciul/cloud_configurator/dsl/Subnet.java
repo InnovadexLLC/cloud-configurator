@@ -13,24 +13,42 @@ public class Subnet extends Resource {
   private String cidrBlock, availabilityZone;
   private VPC vpc;
 
-  public Subnet(String name, String cidrBlock, String availabilityZone, VPC vpc) {
+  public Subnet(String name, String cidrBlock, String availabilityZone, boolean publicConnected, VPC vpc) {
     setCidrBlock(cidrBlock);
     setAvailabilityZone(availabilityZone);
     setVPC(vpc);
-    setName("SUBNET-" + name + "-" + availabilityZone);
+    name = "SUBNET-" + name;
+    setName(name + "-" + availabilityZone);
 
-    RouteTable rt = new RouteTable("RTB-" + name, vpc.getName(), resourceList);
+    // a new route table
+    RouteTable rt = new RouteTable(name + "-RTB", vpc.getName(), resourceList);
+
+    // associated with the vpc
     SubnetRouteTableAssociation rta =
-        new SubnetRouteTableAssociation(getName() + "-RTA", rt.getName(), vpc.getName(), resourceList);
+        new SubnetRouteTableAssociation(name + "-RTB" + "-RTA", rt.getName(), vpc.getName(), resourceList);
 
     String envName = resourceList.tags.get("Name");
 
+    // with a default acl
     SubnetNetworkAclAssociation naa =
-        new SubnetNetworkAclAssociation(getName() + "-ACL", getName(), envName + "-ACL", resourceList);
+        new SubnetNetworkAclAssociation(name + "-RTB" + "-ACL", getName(), envName + "-ACL", resourceList);
+
+    // a new route
+    String gatewayId = null;
+    String instanceId = null;
+
+    if (publicConnected) {
+      gatewayId = "";
+    } else {
+      instanceId = "";
+    }
+
+    Route route = new Route(name + "-RTB" + "-E", rt.getName(), gatewayId, instanceId, resourceList);
 
     resourceList.add(rt);
     resourceList.add(rta);
     resourceList.add(naa);
+    resourceList.add(route);
   }
 
   @Override
