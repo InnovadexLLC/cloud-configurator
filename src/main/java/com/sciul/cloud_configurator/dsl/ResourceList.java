@@ -26,6 +26,16 @@ public class ResourceList {
    * starting to define the template
    *
    * @param name of the environment
+   * @return
+   */
+  public static ResourceList start(String name) {
+    return start(name, null);
+  }
+
+  /**
+   * starting to define the template
+   *
+   * @param name of the environment
    * @param tags master tags
    * @return
    */
@@ -43,13 +53,12 @@ public class ResourceList {
    *
    * @param name unique dsl entry name
    * @param hostedZoneName main domain name
-   * @param refer unique name referred to in template (typically load balancer)
    * @return
    */
-  public Dns dns(String name, String hostedZoneName, String refer) {
-    Dns dns = new Dns(name, hostedZoneName, refer, this);
+  public ResourceList dns(String loadBalancer, String name, String hostedZoneName) {
+    Dns dns = new Dns(name, hostedZoneName, loadBalancer, this);
     ll.add(dns);
-    return dns;
+    return this;
   }
 
   /**
@@ -59,10 +68,28 @@ public class ResourceList {
    * @param region example: us-west-2
    * @return
    */
-  public VPC vpc(String ciderBlock, String region) {
+  public ResourceList vpc(String ciderBlock, String region) {
     VPC vpc = new VPC(ciderBlock, region, this);
     ll.add(vpc);
-    return vpc;
+    return this;
+  }
+
+  public ResourceList subnet(String name, String zone, String ciderBlock) {
+    return subnet(name, zone, ciderBlock, false);
+  }
+
+  /**
+   * define a subnet on a VPC
+   *
+   * @param name unique subnet name
+   * @param zone availability zone
+   * @param ciderBlock example: 10.0.1.0/24
+   * @return
+   */
+  public ResourceList subnet(String name, String zone, String ciderBlock, boolean publicConnected) {
+    Subnet subnet = new Subnet(name, ciderBlock, zone, publicConnected, "VPC", this);
+    ll.add(subnet);
+    return this;
   }
 
   /**

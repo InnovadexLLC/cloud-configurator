@@ -158,7 +158,7 @@ public class AwsProvider implements Provider {
             .add("Properties", Json.createObjectBuilder()
                 .add("CidrBlock", subnet.getCidrBlock())
                 .add("AvailabilityZone", subnet.getAvailabilityZone())
-                .add("VpcId", Json.createObjectBuilder().add("Ref", subnet.getVPC().getName()))
+                .add("VpcId", Json.createObjectBuilder().add("Ref", subnet.getVpcName()))
                 .add("Tags", getTagBuilder(subnet)))
             .build();
   }

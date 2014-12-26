@@ -11,21 +11,24 @@ import java.util.Map;
  */
 public class Subnet extends Resource {
   private String cidrBlock, availabilityZone;
-  private VPC vpc;
+  private final String vpcName;
 
-  public Subnet(String name, String cidrBlock, String availabilityZone, boolean publicConnected, VPC vpc) {
+  public Subnet(String name, String cidrBlock, String availabilityZone,
+                boolean publicConnected, String vpcName, ResourceList resourceList) {
+    this.resourceList = resourceList;
+    this.vpcName = vpcName;
+
     setCidrBlock(cidrBlock);
     setAvailabilityZone(availabilityZone);
-    setVPC(vpc);
     name = "SUBNET-" + name;
     setName(name + "-" + availabilityZone);
 
     // a new route table
-    RouteTable rt = new RouteTable(name + "-RTB", vpc.getName(), resourceList);
+    RouteTable rt = new RouteTable(name + "-RTB", vpcName, resourceList);
 
     // associated with the vpc
     SubnetRouteTableAssociation rta =
-        new SubnetRouteTableAssociation(name + "-RTB" + "-RTA", rt.getName(), vpc.getName(), resourceList);
+        new SubnetRouteTableAssociation(name + "-RTB" + "-RTA", rt.getName(), vpcName, resourceList);
 
     String envName = resourceList.tags.get("Name");
 
@@ -70,20 +73,15 @@ public class Subnet extends Resource {
     this.availabilityZone = availabilityZone;
   }
 
-  public VPC getVPC() {
-    return vpc;
-  }
-
-  public void setVPC(VPC vpc) {
-    this.vpc = vpc;
-    resourceList = vpc.resourceList;
-  }
-
   public String getCidrBlock() {
     return cidrBlock;
   }
 
   public void setCidrBlock(String cidrBlock) {
     this.cidrBlock = cidrBlock;
+  }
+
+  public String getVpcName() {
+    return vpcName;
   }
 }
