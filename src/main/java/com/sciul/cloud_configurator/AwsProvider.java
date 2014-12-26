@@ -249,6 +249,19 @@ public class AwsProvider implements Provider {
         .build();
   }
 
+  @Override
+  public JsonObject createSubnetRouteTableAssociation(SubnetRouteTableAssociation association) {
+    return Json.createObjectBuilder()
+        .add("Type", "AWS::EC2::SubnetRouteTableAssociation")
+        .add("Properties", Json.createObjectBuilder()
+            .add("RouteTableId", Json.createObjectBuilder()
+                .add("Ref", association.getRouteTableId()))
+            .add("SubnetId", Json.createObjectBuilder()
+                .add("Ref", association.getSubnetId()))
+            .add("Tags", getTagBuilder(association)))
+        .build();
+  }
+
   private JsonArrayBuilder getTagBuilder(Resource resource) {
     JsonArrayBuilder tagArrayBuilder = Json.createArrayBuilder();
 

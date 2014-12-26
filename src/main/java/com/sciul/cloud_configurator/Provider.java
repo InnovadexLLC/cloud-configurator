@@ -17,11 +17,15 @@ public interface Provider {
 
   CreateStackResult createStack(Template template);
 
-  JsonObject createVPC(VPC vpc);
-  JsonObject createDNS(Dns dns);
-  JsonObject createSubnet(Subnet subnet);
   void setRegion(String region);
+
   String generateStackTemplate(Template template);
+
+  JsonObject createVPC(VPC vpc);
+
+  JsonObject createDNS(Dns dns);
+
+  JsonObject createSubnet(Subnet subnet);
 
   JsonObject createInternetGateway(InternetGateway internetGateway);
 
@@ -36,4 +40,6 @@ public interface Provider {
   JsonObject createSubnetNetworkAclAssociation(SubnetNetworkAclAssociation subnetNetworkAclAssociation);
 
   JsonObject createVPCGatewayAttachment(VPCGatewayAttachment vpcGatewayAttachment);
+
+  JsonObject createSubnetRouteTableAssociation(SubnetRouteTableAssociation association);
 }
