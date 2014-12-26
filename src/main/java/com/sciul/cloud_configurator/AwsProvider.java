@@ -186,13 +186,13 @@ public class AwsProvider implements Provider {
   }
 
   @Override
-  public JsonObject createAcl(Acl acl) {
+  public JsonObject createAcl(NetworkAcl networkAcl) {
     return
         Json.createObjectBuilder()
             .add("Type", "AWS::EC2::NetworkAcl")
             .add("Properties", Json.createObjectBuilder()
-                .add("VpcId", Json.createObjectBuilder().add("Ref", acl.getVpcName()))
-                .add("Tags", getTagBuilder(acl)))
+                .add("VpcId", Json.createObjectBuilder().add("Ref", networkAcl.getVpcName()))
+                .add("Tags", getTagBuilder(networkAcl)))
             .build();
   }
 
@@ -204,6 +204,22 @@ public class AwsProvider implements Provider {
             .add("Properties", Json.createObjectBuilder()
                 .add("VpcId", Json.createObjectBuilder().add("Ref", routeTable.getVpcName()))
                 .add("Tags", getTagBuilder(routeTable)))
+            .build();
+  }
+
+  @Override
+  public JsonObject createNetworkAclEntry(NetworkAclEntry networkAclEntry) {
+    return
+        Json.createObjectBuilder()
+            .add("Type", "AWS::EC2::NetworkAclEntry")
+            .add("Properties", Json.createObjectBuilder()
+                .add("CidrBlock", networkAclEntry.getCidrBlock())
+                .add("Egress", networkAclEntry.isEgress())
+                .add("Protocol", networkAclEntry.getProtocol())
+                .add("RuleAction", networkAclEntry.getRuleAction())
+                .add("RuleNumber", networkAclEntry.getRuleNumber())
+                .add("NetworkAclId", Json.createObjectBuilder().add("Ref", networkAclEntry.getNetworkAclId()))
+                .add("Tags", getTagBuilder(networkAclEntry)))
             .build();
   }
 

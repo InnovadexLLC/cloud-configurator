@@ -3,8 +3,6 @@ package com.sciul.cloud_configurator.dsl;
 import com.sciul.cloud_configurator.Provider;
 
 import javax.json.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by sumeetrohatgi on 12/23/14.
@@ -29,7 +27,7 @@ public class VPC extends Resource {
 
     resourceList.add(new DHCPOptions("DHCPOptions", region + ".compute.internal", resourceList));
     resourceList.add(new InternetGateway("InternetGateway", resourceList));
-    resourceList.add(new Acl("Acl", getName(), resourceList));
+    resourceList.add(new NetworkAcl("Acl", getName(), resourceList));
   }
 
   public VPC subnet(String name, String zone, String ciderBlock) {

@@ -7,14 +7,17 @@ import javax.json.JsonObject;
 /**
  * Created by sumeetrohatgi on 12/25/14.
  */
-public class Acl extends Resource {
+public class NetworkAcl extends Resource {
 
   private String vpcName;
 
-  public Acl(String name, String vpcName, ResourceList resourceList) {
+  public NetworkAcl(String name, String vpcName, ResourceList resourceList) {
     this.resourceList = resourceList;
     setName(name);
     this.vpcName = vpcName;
+
+    resourceList.add(new NetworkAclEntry("IN", "0.0.0.0/0", "-1", "allow", "100", getName(), false, resourceList));
+    resourceList.add(new NetworkAclEntry("OUT", "0.0.0.0/0", "-1", "allow", "100", getName(), true, resourceList));
   }
 
   @Override
@@ -23,7 +26,7 @@ public class Acl extends Resource {
   }
 
   @Override
-  public Acl tag(String name, String value) {
+  public NetworkAcl tag(String name, String value) {
     tags.put(name, value);
     return this;
   }

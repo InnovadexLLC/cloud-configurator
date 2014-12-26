@@ -27,7 +27,9 @@ public interface Provider {
 
   JsonObject createDHCPOptions(DHCPOptions dhcpOptions);
 
-  JsonObject createAcl(Acl acl);
+  JsonObject createAcl(NetworkAcl networkAcl);
 
   JsonObject createRouteTable(RouteTable routeTable);
+
+  JsonObject createNetworkAclEntry(NetworkAclEntry networkAclEntry);
 }
