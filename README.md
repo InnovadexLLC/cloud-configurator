@@ -1,11 +1,13 @@
 cloud-configurator
 ==================
 
-A language parser program for configuring cloud environments. Philosophy is that convention triumphs over configuration.
+A language parser program for configuring cloud environments. Preference is convention over configuration.
 
 ## Provider ##
 
-An abstraction that allows same program to be used across multiple cloud providers. For now, AWSProvider is the only one that's provided in the source code.
+An abstraction that allows same program to be used across multiple cloud providers.
+
+For now, AWSProvider is the only one that's provided in the source code. It uses AWS's excellent [CloudFormation](http://aws.amazon.com/cloudformation/) service.
 
 ## Template ##
 
