@@ -3,13 +3,17 @@ cloud-configurator
 
 A language parser program for configuring cloud environments. Preference is convention over configuration.
 
-## Provider ##
+## use case ##
+
+Build out AWS environments using a web service. We couple this with [Chef](https://www.chef.io/chef/choose-your-version/) to **completely** automate our entire development workflow.
+
+## provider ##
 
 An abstraction that allows same program to be used across multiple cloud providers.
 
 For now, AWSProvider is the only one that's provided in the source code. It uses AWS's excellent [CloudFormation](http://aws.amazon.com/cloudformation/) service.
 
-## Template ##
+## template ##
 
 A dsl defined for writing and managing cloud configuration. An example dsl is provided below. When the dsl is executed, it creates a new VPC with *seven* subnets and *four* security groups.
 
