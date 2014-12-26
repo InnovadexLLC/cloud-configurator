@@ -11,6 +11,7 @@ An abstraction that allows same program to be used across multiple cloud provide
 
 A dsl defined for writing and managing cloud configuration. An example dsl is provided below. When the dsl is executed, it creates a new VPC with *seven* subnets and *four* security groups.
 
+```java
     String zoneA = region + "a";
     String zoneB = region + "b";
 
@@ -27,3 +28,4 @@ A dsl defined for writing and managing cloud configuration. An example dsl is pr
         .subnet("DB", zoneB, "10.0.92.0/24")
         .subnet("NAT", zoneB, "10.0.0.0/24", true)
         .end();
+```
