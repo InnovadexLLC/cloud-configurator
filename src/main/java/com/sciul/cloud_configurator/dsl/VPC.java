@@ -29,6 +29,7 @@ public class VPC extends Resource {
 
     resourceList.add(new DHCPOptions("DHCPOptions", region + ".compute.internal", resourceList));
     resourceList.add(new InternetGateway("InternetGateway", resourceList));
+    resourceList.add(new Acl("Acl", getName(), resourceList));
   }
 
   public VPC subnet(String name, String zone, String ciderBlock) {

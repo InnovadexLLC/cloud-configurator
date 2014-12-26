@@ -11,6 +11,12 @@ public class Acl extends Resource {
 
   private String vpcName;
 
+  public Acl(String name, String vpcName, ResourceList resourceList) {
+    this.resourceList = resourceList;
+    setName(name);
+    this.vpcName = vpcName;
+  }
+
   @Override
   public JsonObject toJson(Provider provider) {
     return provider.createAcl(this);
