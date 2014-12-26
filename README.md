@@ -13,23 +13,24 @@ A dsl defined for writing and managing cloud configuration. An example dsl is pr
 
 ```java
 
-    public ResourceList defineEnvTemplate(String region, String webDomain, String apiDomain) {
+public ResourceList defineEnvTemplate(String name, String region, String webDomain, String apiDomain) {
 
-        String zoneA = region + "a";
-        String zoneB = region + "b";
+    String zoneA = region + "a";
 
-        return ResourceList
-            .start(name)
-            .dns("ELB", "APP", webDomain)
-            .dns("ELB", "API", apiDomain)
-            .vpc("10.0.0.0/16", region)
-            .subnet("ELB", zoneA, "10.0.12.0/24")
-            .subnet("ELB", zoneB, "10.0.13.0/24")
-            .subnet("APP", zoneA, "10.0.51.0/24")
-            .subnet("APP", zoneB, "10.0.52.0/24")
-            .subnet("DB", zoneA, "10.0.91.0/24")
-            .subnet("DB", zoneB, "10.0.92.0/24")
-            .subnet("NAT", zoneB, "10.0.0.0/24", true)
-            .end();
-    }
+    String zoneB = region + "b";
+
+    return ResourceList
+        .start(name)                            // name of the environment
+        .dns("ELB", "APP", webDomain)
+        .dns("ELB", "API", apiDomain)
+        .vpc("10.0.0.0/16", region)
+        .subnet("ELB", zoneA, "10.0.12.0/24")
+        .subnet("ELB", zoneB, "10.0.13.0/24")
+        .subnet("APP", zoneA, "10.0.51.0/24")
+        .subnet("APP", zoneB, "10.0.52.0/24")
+        .subnet("DB", zoneA, "10.0.91.0/24")
+        .subnet("DB", zoneB, "10.0.92.0/24")
+        .subnet("NAT", zoneB, "10.0.0.0/24", /* isPubliclyAccessible */ true)
+        .end();
+}
 ```
