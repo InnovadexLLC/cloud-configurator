@@ -13,6 +13,8 @@ public class Route extends Resource {
   private String idType;
   private String idValue;
   private String vpcGatewayAttachmentId;
+  private boolean dependsOn;
+  private String dependOnId;
 
   @Override
   public JsonObject toJson(Provider provider) {
@@ -41,7 +43,11 @@ public class Route extends Resource {
     return idValue;
   }
 
-  public String getVpcGatewayAttachmentId() {
-    return vpcGatewayAttachmentId;
+  public boolean isDependsOn() {
+    return dependsOn;
+  }
+
+  public String getDependOnId() {
+    return dependOnId;
   }
 }

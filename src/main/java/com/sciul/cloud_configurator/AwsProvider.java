@@ -273,8 +273,8 @@ public class AwsProvider implements Provider {
             .add(route.getIdType(), Json.createObjectBuilder()
                 .add("Ref", route.getIdValue())));
 
-    if (route.getIdType().equals("GatewayId")) {
-      jsonObjectBuilder.add("DependsOn", route.getVpcGatewayAttachmentId());
+    if (route.isDependsOn()) {
+      jsonObjectBuilder.add("DependsOn", route.getDependOnId());
     }
 
     return jsonObjectBuilder.build();
