@@ -13,16 +13,16 @@ A dsl defined for writing and managing cloud configuration. An example dsl is pr
 
 ```java
 
-public ResourceList defineEnvTemplate(String name, String region, String webDomain, String apiDomain) {
+public ResourceList defineEnv(String name, String region, String webDomain, String apiDomain) {
 
     String zoneA = region + "a";
 
     String zoneB = region + "b";
 
     return ResourceList
-        .start(name)                            // name of the environment
-        .dns("ELB", "APP", webDomain)
-        .dns("ELB", "API", apiDomain)
+        .start(name)  // name of the environment
+        .dns("ELB", "APP", webDomain) // CNAME to load balancer
+        .dns("ELB", "API", apiDomain) // CNAME to load balancer
         .vpc("10.0.0.0/16", region)
         .subnet("ELB", zoneA, "10.0.12.0/24")
         .subnet("ELB", zoneB, "10.0.13.0/24")
