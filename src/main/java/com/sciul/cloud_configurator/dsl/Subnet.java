@@ -22,8 +22,11 @@ public class Subnet extends Resource {
     RouteTable rt = new RouteTable("RTB-" + name, vpc.getName(), resourceList);
     SubnetRouteTableAssociation rta =
         new SubnetRouteTableAssociation(getName() + "-RTA", rt.getName(), vpc.getName(), resourceList);
+
+    String envName = resourceList.tags.get("Name");
+
     SubnetNetworkAclAssociation naa =
-        new SubnetNetworkAclAssociation(getName() + "-ACL", getName(), "SCI-QA-ACL", resourceList);
+        new SubnetNetworkAclAssociation(getName() + "-ACL", getName(), envName + "-ACL", resourceList);
 
     resourceList.add(rt);
     resourceList.add(rta);
