@@ -20,6 +20,8 @@ public class Subnet extends Resource {
     setName("SUBNET-" + name + "-" + availabilityZone);
 
     resourceList.add(new RouteTable("RTB-" + name, vpc.getName(), resourceList));
+
+    resourceList.add(new SubnetNetworkAclAssociation(name + "-SUBNET-ACL", getName(), "SCI-QA-ACL", resourceList));
   }
 
   @Override

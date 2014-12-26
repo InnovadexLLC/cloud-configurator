@@ -223,6 +223,19 @@ public class AwsProvider implements Provider {
             .build();
   }
 
+  @Override
+  public JsonObject createSubnetNetworkAclAssociation(SubnetNetworkAclAssociation subnetNetworkAclAssociation) {
+    return Json.createObjectBuilder()
+        .add("Type", "AWS::EC2::SubnetNetworkAclAssociation")
+        .add("Properties", Json.createObjectBuilder()
+            .add("SubnetId", Json.createObjectBuilder()
+                .add("Ref", subnetNetworkAclAssociation.getSubnetId()))
+            .add("NetworkAclId", Json.createObjectBuilder()
+                .add("Ref", subnetNetworkAclAssociation.getNetworkAclId()))
+            .add("Tags", getTagBuilder(subnetNetworkAclAssociation)))
+        .build();
+  }
+
   private JsonArrayBuilder getTagBuilder(Resource resource) {
     JsonArrayBuilder tagArrayBuilder = Json.createArrayBuilder();
 

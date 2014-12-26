@@ -32,4 +32,6 @@ public interface Provider {
   JsonObject createRouteTable(RouteTable routeTable);
 
   JsonObject createNetworkAclEntry(NetworkAclEntry networkAclEntry);
+
+  JsonObject createSubnetNetworkAclAssociation(SubnetNetworkAclAssociation subnetNetworkAclAssociation);
 }
