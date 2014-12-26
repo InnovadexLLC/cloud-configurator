@@ -19,12 +19,15 @@ public class Subnet extends Resource {
     setVPC(vpc);
     setName("SUBNET-" + name + "-" + availabilityZone);
 
-    RouteTable rta = new RouteTable("RTB-" + name, vpc.getName(), resourceList);
+    RouteTable rt = new RouteTable("RTB-" + name, vpc.getName(), resourceList);
+    SubnetRouteTableAssociation rta =
+        new SubnetRouteTableAssociation(getName() + "-RTA", rt.getName(), vpc.getName(), resourceList);
+    SubnetNetworkAclAssociation naa =
+        new SubnetNetworkAclAssociation(getName() + "-ACL", getName(), "SCI-QA-ACL", resourceList);
+
+    resourceList.add(rt);
     resourceList.add(rta);
-
-    resourceList.add(new SubnetRouteTableAssociation(getName() + "-RTA", rta.getName(), vpc.getName(), resourceList));
-
-    resourceList.add(new SubnetNetworkAclAssociation(getName() + "-ACL", getName(), "SCI-QA-ACL", resourceList));
+    resourceList.add(naa);
   }
 
   @Override

@@ -32,12 +32,25 @@ public class VPC extends Resource {
     resourceList.add(new NetworkAcl("Acl", getName(), resourceList));
   }
 
+  /**
+   * define a subnet on a VPC
+   *
+   * @param name unique subnet name
+   * @param zone availability zone
+   * @param ciderBlock example: 10.0.1.0/24
+   * @return
+   */
   public VPC subnet(String name, String zone, String ciderBlock) {
     Subnet subnet = new Subnet(name, ciderBlock, zone, this);
     resourceList.add(subnet);
     return this;
   }
 
+  /**
+   * dsl method
+   *
+   * @return
+   */
   public ResourceList next() {
     return resourceList;
   }

@@ -18,6 +18,13 @@ public class ResourceList {
 
   private ResourceList() {}
 
+  /**
+   * starting to define the template
+   *
+   * @param name of the environment
+   * @param tags master tags
+   * @return
+   */
   public static ResourceList start(String name, Map<String, String> tags) {
     ResourceList resourceList = new ResourceList();
     name = name.toUpperCase();
@@ -27,18 +34,38 @@ public class ResourceList {
     return resourceList;
   }
 
+  /**
+   * define dns entry; we assume for now that its a CNAME
+   *
+   * @param name unique dsl entry name
+   * @param hostedZoneName main domain name
+   * @param refer unique name referred to in template (typically load balancer)
+   * @return
+   */
   public Dns dns(String name, String hostedZoneName, String refer) {
     Dns dns = new Dns(name, hostedZoneName, refer, this);
     ll.add(dns);
     return dns;
   }
 
+  /**
+   * define a vpc, only one per template for now
+   *
+   * @param ciderBlock example: 10.0.0.0/16
+   * @param region example: us-west-2
+   * @return
+   */
   public VPC vpc(String ciderBlock, String region) {
     VPC vpc = new VPC(ciderBlock, region, this);
     ll.add(vpc);
     return vpc;
   }
 
+  /**
+   * indicate that the template is finished
+   *
+   * @return
+   */
   public ResourceList end() {
     return this;
   }

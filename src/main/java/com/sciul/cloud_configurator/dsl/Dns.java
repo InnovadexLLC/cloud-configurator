@@ -57,6 +57,10 @@ public class Dns extends Resource {
     this.ttl = 300;
   }
 
+  /** dsl method
+   *
+   * @return
+   */
   public ResourceList next() {
     return resourceList;
   }
