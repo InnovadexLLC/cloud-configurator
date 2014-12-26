@@ -196,6 +196,17 @@ public class AwsProvider implements Provider {
             .build();
   }
 
+  @Override
+  public JsonObject createRouteTable(RouteTable routeTable) {
+    return
+        Json.createObjectBuilder()
+            .add("Type", "AWS::EC2::RouteTable")
+            .add("Properties", Json.createObjectBuilder()
+                .add("VpcId", Json.createObjectBuilder().add("Ref", routeTable.getVpcName()))
+                .add("Tags", getTagBuilder(routeTable)))
+            .build();
+  }
+
   private JsonArrayBuilder getTagBuilder(Resource resource) {
     JsonArrayBuilder tagArrayBuilder = Json.createArrayBuilder();
 

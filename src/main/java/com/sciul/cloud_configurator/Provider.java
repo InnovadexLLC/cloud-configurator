@@ -28,4 +28,6 @@ public interface Provider {
   JsonObject createDHCPOptions(DHCPOptions dhcpOptions);
 
   JsonObject createAcl(Acl acl);
+
+  JsonObject createRouteTable(RouteTable routeTable);
 }

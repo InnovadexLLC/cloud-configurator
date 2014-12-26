@@ -18,6 +18,8 @@ public class Subnet extends Resource {
     setAvailabilityZone(availabilityZone);
     setVPC(vpc);
     setName("SUBNET-" + name + "-" + availabilityZone);
+
+    resourceList.add(new RouteTable("RTB-" + name, vpc.getName(), resourceList));
   }
 
   @Override
