@@ -7,6 +7,10 @@ A language parser program for configuring cloud environments. Preference is conv
 
 Build out AWS environments using a web service. We couple this with [Chef](https://www.chef.io/chef/choose-your-version/) to **completely** automate our entire development workflow.
 
+## status ##
+
+Still under development. `read as NOT READY!`
+
 ## provider ##
 
 An abstraction that allows same program to be used across multiple cloud providers.
