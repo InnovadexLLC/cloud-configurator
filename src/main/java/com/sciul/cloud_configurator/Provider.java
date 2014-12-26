@@ -42,4 +42,6 @@ public interface Provider {
   JsonObject createVPCGatewayAttachment(VPCGatewayAttachment vpcGatewayAttachment);
 
   JsonObject createSubnetRouteTableAssociation(SubnetRouteTableAssociation association);
+
+  JsonObject createRoute(Route route);
 }
