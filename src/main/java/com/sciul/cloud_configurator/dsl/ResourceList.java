@@ -93,6 +93,16 @@ public class ResourceList {
   }
 
   /**
+   * define a new load balancer
+   *
+   * @param name
+   * @return
+   */
+  public ResourceList elb(String name) {
+    return this;
+  }
+
+  /**
    * indicate that the template is finished
    *
    * @return

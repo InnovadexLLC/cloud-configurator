@@ -11,6 +11,8 @@ import java.util.Set;
 /**
  * Resources required by a typical cloud.
  *
+ * Purposefully shying away from using a parent-child relationship.
+ *
  * Created by sumeetrohatgi on 12/23/14.
  */
 public abstract class Resource {
