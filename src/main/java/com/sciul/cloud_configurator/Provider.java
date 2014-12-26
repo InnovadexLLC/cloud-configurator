@@ -34,4 +34,6 @@ public interface Provider {
   JsonObject createNetworkAclEntry(NetworkAclEntry networkAclEntry);
 
   JsonObject createSubnetNetworkAclAssociation(SubnetNetworkAclAssociation subnetNetworkAclAssociation);
+
+  JsonObject createVPCGatewayAttachment(VPCGatewayAttachment vpcGatewayAttachment);
 }

@@ -236,6 +236,19 @@ public class AwsProvider implements Provider {
         .build();
   }
 
+  @Override
+  public JsonObject createVPCGatewayAttachment(VPCGatewayAttachment vpcGatewayAttachment) {
+    return Json.createObjectBuilder()
+        .add("Type", "AWS::EC2::VPCGatewayAttachment")
+        .add("Properties", Json.createObjectBuilder()
+            .add("VpcId", Json.createObjectBuilder()
+                .add("Ref", vpcGatewayAttachment.getVpcId()))
+            .add("InternetGatewayId", Json.createObjectBuilder()
+                .add("Ref", vpcGatewayAttachment.getInternetGatewayId()))
+            .add("Tags", getTagBuilder(vpcGatewayAttachment)))
+        .build();
+  }
+
   private JsonArrayBuilder getTagBuilder(Resource resource) {
     JsonArrayBuilder tagArrayBuilder = Json.createArrayBuilder();
 
