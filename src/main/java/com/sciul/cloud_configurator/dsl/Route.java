@@ -12,7 +12,6 @@ public class Route extends Resource {
   private final String routeTableId;
   private final String idType;
   private final String idValue;
-  private final String vpcGatewayAttachmentId;
   private final boolean dependsOn;
   private final String dependOnId;
 
@@ -21,7 +20,7 @@ public class Route extends Resource {
     setName(name);
 
     destinationCidrBlock = "0.0.0.0/0";
-    vpcGatewayAttachmentId = resourceList.getName() + "-VPC-GW";
+    String vpcGatewayAttachmentId = resourceList.getName() + "-VPC-GW";
     this.routeTableId = routeTableId;
 
     if (gatewayId != null) {
