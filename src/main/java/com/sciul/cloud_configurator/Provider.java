@@ -44,4 +44,6 @@ public interface Provider {
   JsonObject createSubnetRouteTableAssociation(SubnetRouteTableAssociation association);
 
   JsonObject createRoute(Route route);
+
+  JsonObject createVPCDHCPOptionsAssociation(VPCDHCPOptionsAssociation association);
 }

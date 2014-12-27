@@ -25,10 +25,18 @@ public class VPC extends Resource {
     this.resourceList = resourceList;
     setName("VPC");
 
-    resourceList.add(new DHCPOptions("DPT", region + ".compute.internal", resourceList));
-    InternetGateway gw1 = new InternetGateway("IGW", resourceList);
-    resourceList.add(gw1);
-    resourceList.add(new VPCGatewayAttachment("VPC-GW", getName(), gw1.getName(), resourceList));
+    DHCPOptions dhcpOptions = new DHCPOptions("DPT", region + ".compute.internal", resourceList);
+    resourceList.add(dhcpOptions);
+
+    VPCDHCPOptionsAssociation association = new VPCDHCPOptionsAssociation("VPC-DPT-E", getName(),
+        dhcpOptions.getName(), resourceList);
+
+    resourceList.add(association);
+
+    InternetGateway gw = new InternetGateway("IGW", resourceList);
+    resourceList.add(gw);
+
+    resourceList.add(new VPCGatewayAttachment("VPC-GW", getName(), gw.getName(), resourceList));
     resourceList.add(new NetworkAcl("ACL", getName(), resourceList));
   }
 

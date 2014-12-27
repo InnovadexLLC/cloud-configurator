@@ -280,6 +280,18 @@ public class AwsProvider implements Provider {
     return jsonObjectBuilder.build();
   }
 
+  @Override
+  public JsonObject createVPCDHCPOptionsAssociation(VPCDHCPOptionsAssociation association) {
+    return Json.createObjectBuilder()
+        .add("Type", "AWS::EC2::VPCDHCPOptionsAssociation")
+        .add("Properties", Json.createObjectBuilder()
+            .add("VpcId", Json.createObjectBuilder()
+                .add("Ref", association.getVpcId()))
+            .add("DhcpOptionsId", Json.createObjectBuilder()
+                .add("Ref", association.getDhcpOptionsId())))
+        .build();
+  }
+
   private JsonArrayBuilder getTagBuilder(Resource resource) {
     JsonArrayBuilder tagArrayBuilder = Json.createArrayBuilder();
 
