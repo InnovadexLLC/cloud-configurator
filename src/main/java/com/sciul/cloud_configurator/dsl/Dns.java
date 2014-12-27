@@ -35,7 +35,7 @@ public class Dns extends Resource {
   }
 
   public Dns(String name, String hostedZoneName, String refer, ResourceList resourceList) {
-    String envName = resourceList.tags.get("Name");
+    String envName = resourceList.getName();
 
     this.hostedZoneName = hostedZoneName;
 

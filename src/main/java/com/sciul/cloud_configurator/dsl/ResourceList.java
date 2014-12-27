@@ -1,6 +1,9 @@
 package com.sciul.cloud_configurator.dsl;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +17,9 @@ import java.util.Map;
  */
 public class ResourceList {
   private ArrayList<Resource> ll = new ArrayList<>();
-  Map<String, String> tags = new HashMap<>();
+  private Map<String, String> tags = new HashMap<>();
+  private static Logger logger = LoggerFactory.getLogger(ResourceList.class);
+
 
   private ResourceList() {}
 
@@ -74,22 +79,37 @@ public class ResourceList {
     return this;
   }
 
-  public ResourceList subnet(String name, String zone, String ciderBlock) {
-    return subnet(name, zone, ciderBlock, false);
+  public ResourceList subnet(String name, String ciderBlock, String ... zone) {
+    return subnet(name, ciderBlock, false, zone);
   }
 
   /**
    * define a subnet on a VPC
-   *
-   * @param name unique subnet name
-   * @param zone availability zone
-   * @param ciderBlock example: 10.0.1.0/24
+   * @param name
+   * @param ciderBlock
+   * @param isPublicConnected
+   * @param zone
    * @return
    */
-  public ResourceList subnet(String name, String zone, String ciderBlock, boolean publicConnected) {
-    Subnet subnet = new Subnet(name, ciderBlock, zone, publicConnected, getName() + "-VPC", this);
-    ll.add(subnet);
+  public ResourceList subnet(String name, String ciderBlock, boolean isPublicConnected, String ... zone) {
+    for (String z : zone) {
+      Subnet subnet = new Subnet(name, ciderBlock, z, isPublicConnected, getName() + "-VPC", this);
+      ciderBlock = incrementCidrBlock(ciderBlock);
+      ll.add(subnet);
+    }
     return this;
+  }
+
+  private String incrementCidrBlock(String cidrBlock) {
+    String[] components = cidrBlock.split("\\.|/");
+    if (components.length != 5) {
+      logger.debug("components: {}, length: {}", (String[])components, components.length);
+      throw new RuntimeException("incorrect cidrBlock passed in, unable to parse!");
+    }
+
+    int index = Integer.parseInt(components[4]) / 8 - 1;
+    components[index] = String.valueOf(Integer.parseInt(components[index]) + 1);
+    return String.format("%s.%s.%s.%s/%s", components[0], components[1], components[2], components[3], components[4]);
   }
 
   /**
@@ -113,6 +133,15 @@ public class ResourceList {
 
   public List<Resource> resources() {
     return ll;
+  }
+
+  /**
+   * shallow copy of tags
+   *
+   * @return
+   */
+  public Map<String, String> getTags() {
+    return new HashMap<>(tags);
   }
 
   void add(Resource resource) {

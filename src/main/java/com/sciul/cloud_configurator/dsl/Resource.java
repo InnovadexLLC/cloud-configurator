@@ -25,7 +25,7 @@ public abstract class Resource {
   }
 
   public void setName(String name) {
-    this.name = resourceList.tags.get("Name") + "-" + name.toUpperCase();
+    this.name = resourceList.getName() + "-" + name.toUpperCase();
     tags.put("Name", this.name);
   }
 
@@ -52,12 +52,7 @@ public abstract class Resource {
    * @return
    */
   public Set<Map.Entry<String, String>> tags() {
-    Map<String, String> myTags = new HashMap<>();
-
-    if (resourceList != null && resourceList.tags != null) {
-      myTags.putAll(resourceList.tags);
-    }
-
+    Map<String, String> myTags = resourceList.getTags();
     myTags.putAll(tags);
     return myTags.entrySet();
   }

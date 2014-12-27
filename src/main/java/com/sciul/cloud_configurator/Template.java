@@ -28,13 +28,10 @@ public class Template {
         .dns("ELB", "APP", webDomain)
         .dns("ELB", "API", apiDomain)
         .vpc("10.0.0.0/16", region)
-        .subnet("ELB", zoneA, "10.0.12.0/24")
-        .subnet("ELB", zoneB, "10.0.13.0/24")
-        .subnet("APP", zoneA, "10.0.51.0/24")
-        .subnet("APP", zoneB, "10.0.52.0/24")
-        .subnet("DB", zoneA, "10.0.91.0/24")
-        .subnet("DB", zoneB, "10.0.92.0/24")
-        .subnet("NAT", zoneB, "10.0.0.0/24", true)
+        .subnet("ELB", "10.0.12.0/24", zoneA, zoneB)
+        .subnet("APP", "10.0.51.0/24", zoneA, zoneB)
+        .subnet("DB", "10.0.91.0/24", zoneA, zoneB)
+        .subnet("NAT", "10.0.0.0/24", true, zoneB)
         .end();
   }
 
