@@ -87,7 +87,7 @@ public class ResourceList {
    * @return
    */
   public ResourceList subnet(String name, String zone, String ciderBlock, boolean publicConnected) {
-    Subnet subnet = new Subnet(name, ciderBlock, zone, publicConnected, "VPC", this);
+    Subnet subnet = new Subnet(name, ciderBlock, zone, publicConnected, getName() + "-VPC", this);
     ll.add(subnet);
     return this;
   }
