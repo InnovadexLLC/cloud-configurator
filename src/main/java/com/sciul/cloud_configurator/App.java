@@ -92,7 +92,7 @@ public class App {
 
       //Template template = new Template(prefix, region, apiDomain, webDomain);
 
-      Template template = new Template(prefix, webDomain, "", apiDomain, "", "C*", "MQ", "ES");
+      Template template = new Template(prefix, region, webDomain, "", apiDomain, "", "C*", "MQ", "ES");
 
       provider.setRegion(region);
 

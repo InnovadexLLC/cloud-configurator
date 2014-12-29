@@ -36,7 +36,7 @@ public class Template {
     apiKeyFile = null;
   }
 
-  public Template(String applicationName, String webDomain, String webKeyFile,
+  public Template(String applicationName, String region, String webDomain, String webKeyFile,
                   String apiDomain, String apiKeyFile, String ... dataServices) {
     this.applicationName = applicationName;
     this.apiDomain = apiDomain;
@@ -44,6 +44,7 @@ public class Template {
     this.webKeyFile = webKeyFile;
     this.apiKeyFile = apiKeyFile;
     this.dataServices = dataServices;
+    this.region = region;
   }
 
   public ResourceList generate() {
