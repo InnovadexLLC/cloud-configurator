@@ -90,7 +90,9 @@ public class App {
       String webDomain = cmd.getOptionValue("w");
       String apiDomain = cmd.getOptionValue("a");
 
-      Template template = new Template(prefix, region, apiDomain, webDomain);
+      //Template template = new Template(prefix, region, apiDomain, webDomain);
+
+      Template template = new Template(prefix, webDomain, "", apiDomain, "", "C*", "MQ", "ES");
 
       provider.setRegion(region);
 

@@ -71,7 +71,7 @@ public class AwsProvider implements Provider {
   }
 
   public String generateStackTemplate(final Template template) {
-    ResourceList resourceList = template.generateResourceList();
+    ResourceList resourceList = template.generate();
     JsonObjectBuilder resourceBuilder = Json.createObjectBuilder();
 
     for (Resource resource : resourceList.resources()) {
