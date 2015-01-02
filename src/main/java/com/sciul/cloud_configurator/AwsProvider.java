@@ -292,6 +292,31 @@ public class AwsProvider implements Provider {
         .build();
   }
 
+  @Override
+  public JsonObject createSecurityGroup(SecurityGroup securityGroup) {
+    JsonArrayBuilder ingressRules = Json.createArrayBuilder();
+
+    for (SecurityGroup.IngressRules ir : securityGroup.getIngressRules()) {
+      ingressRules
+          .add(Json.createObjectBuilder()
+                  .add("IpProtocol", ir.getIpProtocol())
+                  .add("FromPort", ir.getFromPort())
+                  .add("ToPort", ir.getToPort())
+                  .add("SourceSecurityGroupId", Json.createObjectBuilder()
+                  .add("Ref", ir.getSourceSecurityGroupId()))
+          );
+    }
+
+    return Json.createObjectBuilder()
+        .add("Type", "AWS::EC2::SecurityGroup")
+        .add("Properties", Json.createObjectBuilder()
+            .add("VpcId", Json.createObjectBuilder()
+                .add("Ref", securityGroup.getVpcId()))
+            .add("GroupDescription", securityGroup.getGroupDescription())
+            .add("SecurityGroupIngress", ingressRules))
+        .build();
+  }
+
   private JsonArrayBuilder getTagBuilder(Resource resource) {
     JsonArrayBuilder tagArrayBuilder = Json.createArrayBuilder();
 

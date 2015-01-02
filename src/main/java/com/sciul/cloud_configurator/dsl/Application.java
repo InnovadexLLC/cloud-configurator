@@ -114,6 +114,7 @@ public class Application {
         .subnet("OPS", "10.0.0.0/24", true, zoneB)       // an operations endpoint
         .end();
 
+
     return resourceList;
   }
 

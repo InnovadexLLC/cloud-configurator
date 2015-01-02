@@ -46,4 +46,6 @@ public interface Provider {
   JsonObject createRoute(Route route);
 
   JsonObject createVPCDHCPOptionsAssociation(VPCDHCPOptionsAssociation association);
+
+  JsonObject createSecurityGroup(SecurityGroup securityGroup);
 }
