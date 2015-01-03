@@ -1,14 +1,21 @@
-package com.sciul.cloud_configurator.dsl;
+package com.sciul.cloud_application.dsl;
 
 import java.io.File;
 
 /**
+ * a proxy service; typically shields an internal
+ * http service
+ *
  * Created by sumeetrohatgi on 12/28/14.
  */
-class ProxyService {
+class ProxyService extends Service {
   private HttpService httpService;
   private String domain;
   private File certificateKeyFile;
+
+  public ProxyService() {
+    addPortExternal("tcp", 443);
+  }
 
   public void setHttpService(HttpService httpService) {
     this.httpService = httpService;

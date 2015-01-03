@@ -1,6 +1,6 @@
 package com.sciul.cloud_configurator;
 
-import com.sciul.cloud_configurator.dsl.Application;
+import com.sciul.cloud_application.dsl.Application;
 import com.sciul.cloud_configurator.dsl.ResourceList;
 import org.springframework.context.annotation.PropertySource;
 
@@ -49,8 +49,8 @@ public class Template {
 
   public ResourceList generate() {
     Application app = Application.create(applicationName)
-        .httpService("APP")
-        .httpService("API");
+        .httpService("APP", 3000)
+        .httpService("API", 8080);
 
     for (String dataService : dataServices) {
       app.dataService(dataService, dataServicePorts.get(dataService));

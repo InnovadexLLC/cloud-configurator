@@ -1,10 +1,10 @@
-package com.sciul.cloud_configurator.dsl;
+package com.sciul.cloud_application.dsl;
 
 import com.sciul.cloud_configurator.CidrUtils;
+import com.sciul.cloud_configurator.dsl.ResourceList;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,18 +17,12 @@ import java.util.Map;
  */
 public class Application {
   private ResourceList resourceList;
-
-  private List<ProxyService> proxyServices;
-  private Map<String, HttpService> httpServices;
-  private List<DataService> dataServices;
+  private List<Service> services = new ArrayList<>();
 
   private final String name;
 
   private Application(String name) {
     this.name = name;
-    proxyServices = new ArrayList<>();
-    httpServices = new HashMap<>();
-    dataServices = new ArrayList<>();
   }
 
   public static Application create(String name) {
@@ -47,48 +41,56 @@ public class Application {
    * @return
    */
   public Application proxyService(String httpAppName, String domain, File certificateKeyFile) {
-    ProxyService proxyService = new ProxyService();
-    HttpService httpService = httpServices.get(httpAppName);
+    for (Service s : services) {
+      if (s.getName().equals(httpAppName) && s instanceof HttpService) {
+        ProxyService proxyService = new ProxyService();
 
-    if (httpService == null) {
-      throw new RuntimeException("please define httpAppName first");
+        proxyService.setHttpService((HttpService)s);
+        proxyService.setDomain(domain);
+        proxyService.setCertificateKeyFile(certificateKeyFile);
+
+        services.add(proxyService);
+        return this;
+      }
     }
 
-    proxyService.setHttpService(httpService);
-    proxyService.setDomain(domain);
-    proxyService.setCertificateKeyFile(certificateKeyFile);
-
-    proxyServices.add(proxyService);
-    return this;
+    throw new IllegalStateException("please define httpAppName first");
   }
 
+  /**
+   * a new data service
+   *
+   * @param dataServiceName
+   * @param inPorts
+   * @return
+   */
   public Application dataService(String dataServiceName, Integer[] inPorts) {
     DataService dataService = new DataService();
 
     dataService.setName(dataServiceName);
-    dataService.setPorts(inPorts);
+    for (Integer port : inPorts) {
+      dataService.addPortExternal("tcp", port);
+    }
 
-    dataServices.add(dataService);
+    services.add(dataService);
+
     return this;
   }
 
   /**
    * dominant type of services available for the cloud today.
-   *
    * @param httpServiceName
+   * @param externalPort
    * @return
    */
-  public Application httpService(String httpServiceName) {
+  public Application httpService(String httpServiceName, Integer externalPort) {
     HttpService httpService = new HttpService();
 
     httpService.setName(httpServiceName);
+    httpService.addPortExternal("tcp", externalPort);
 
-    httpServices.put(httpServiceName, httpService);
+    services.add(httpService);
     return this;
-  }
-
-  public ResourceList build(String region) {
-    return build(region, CidrUtils.build(16).toString());
   }
 
   /**
@@ -97,11 +99,18 @@ public class Application {
    *
    * @return
    */
-  public ResourceList build(String region, String cidrBlock) {
+  public ResourceList build(String region) {
+    return build(region, CidrUtils.build(16).toString());
+  }
+
+  ResourceList build(String region, String cidrBlock) {
     ResourceList resourceList = ResourceList.start(name);
 
-    for (ProxyService p : proxyServices) {
-      resourceList.dns("ELB", p.getHttpService().getName(), p.getDomain());
+    for (Service s : services) {
+      if (s instanceof ProxyService) {
+        ProxyService p = (ProxyService) s;
+        resourceList.dns("ELB", p.getHttpService().getName(), p.getDomain());
+      }
     }
 
     String zoneA = region + "a";
@@ -118,6 +127,10 @@ public class Application {
         .subnet("APP", cidrUtils, zoneA, zoneB)     // all applications get their own subnet
         .subnet("DBS", cidrUtils, zoneA, zoneB)     // a database layer
         .subnet("OPS", cidrUtils, true, zoneB)       // an operations endpoint
+/*        .allow("ELB", true)
+        .allow("APP", false, "ELB", httpPorts)
+        .allow("DBS", false, "APP", dbPorts)
+        .allow("OPS", true)*/
         .end();
 
 
