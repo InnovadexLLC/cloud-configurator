@@ -82,9 +82,8 @@ public class ResourceList {
 
   /**
    * private subnet on a VPC
-   *
    * @param name
-   * @param ciderBlock
+   * @param ciderUtils
    * @param zone
    * @return
    */
@@ -96,7 +95,7 @@ public class ResourceList {
    * public subnet on a VPC
    *
    * @param name
-   * @param ciderBlock
+   * @param ciderUtils
    * @param isPublicConnected
    * @param zone
    * @return
@@ -165,4 +164,13 @@ public class ResourceList {
     ll.add(resource);
   }
 
+  public ResourceList allow(String subnetName, boolean publiclyAccessible, String protocol, List<Integer> ports) {
+
+    return this;
+  }
+
+  public ResourceList allow(String subnetName, String fromSubnetName, String protocol, List<Integer> ports) {
+
+    return this;
+  }
 }

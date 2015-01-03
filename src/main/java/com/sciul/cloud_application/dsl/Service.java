@@ -37,4 +37,30 @@ abstract class Service {
     return this;
   }
 
+  public List<Integer> portListWithin(String protocol) {
+    return portList(protocol, "within");
+  }
+
+  public List<Integer> portListExternal(String protocol) {
+    return portList(protocol, "external");
+  }
+
+  private List<Integer> portList(String protocol, String type) {
+    List<Integer> l = new ArrayList<>();
+    for (Port p : ports) {
+      if (p.getProtocol().equals(protocol) && p.getType().equals(type)) {
+        l.add(p.getPort());
+      }
+    }
+    return l;
+  }
+
+
+  public static final boolean isPortExternal(Port port) {
+    return port.getType().equals("external");
+  }
+
+  public static final boolean isPortWithin(Port port) {
+    return port.getType().equals("within");
+  }
 }

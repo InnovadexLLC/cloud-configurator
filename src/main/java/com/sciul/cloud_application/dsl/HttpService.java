@@ -7,6 +7,4 @@ import java.util.List;
  */
 class HttpService extends Service {
 
-  public HttpService() {
-  }
 }

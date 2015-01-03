@@ -5,6 +5,7 @@ import com.sciul.cloud_configurator.dsl.ResourceList;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -103,13 +104,27 @@ public class Application {
     return build(region, CidrUtils.build(16).toString());
   }
 
-  ResourceList build(String region, String cidrBlock) {
+
+  private ResourceList build(String region, String cidrBlock) {
     ResourceList resourceList = ResourceList.start(name);
+
+    List<Integer> dbPortsWithin = new ArrayList<>();
+    List<Integer> dbPortsExternal = new ArrayList<>();
+    List<Integer> httpPortsExternal = new ArrayList<>();
 
     for (Service s : services) {
       if (s instanceof ProxyService) {
         ProxyService p = (ProxyService) s;
         resourceList.dns("ELB", p.getHttpService().getName(), p.getDomain());
+      }
+
+      if (s instanceof DataService) {
+        dbPortsExternal.addAll(s.portListExternal("tcp"));
+        dbPortsWithin.addAll(s.portListWithin("tcp"));
+      }
+
+      if (s instanceof HttpService) {
+        httpPortsExternal.addAll(s.portListExternal("tcp"));
       }
     }
 
@@ -120,19 +135,20 @@ public class Application {
 
     CidrUtils cidrUtils = CidrUtils.build(cidrBlock).changeMask(24);
 
-    //.subnet("ELB", "10.0.12.0/24", zoneA, zoneB)
     resourceList.subnet("ELB", cidrUtils, true, zoneA, zoneB);
 
-    resourceList
-        .subnet("APP", cidrUtils, zoneA, zoneB)     // all applications get their own subnet
-        .subnet("DBS", cidrUtils, zoneA, zoneB)     // a database layer
-        .subnet("OPS", cidrUtils, true, zoneB)       // an operations endpoint
-/*        .allow("ELB", true)
-        .allow("APP", false, "ELB", httpPorts)
-        .allow("DBS", false, "APP", dbPorts)
-        .allow("OPS", true)*/
-        .end();
+    boolean publicAccess = true;
 
+    resourceList
+        .subnet("APP", cidrUtils, zoneA, zoneB)      // all applications get their own subnet
+        .subnet("DBS", cidrUtils, zoneA, zoneB)      // a database layer
+        .subnet("OPS", cidrUtils, true, zoneB)       // an operations endpoint
+        .allow("ELB", publicAccess, "tcp", Collections.<Integer>emptyList())
+        .allow("APP", "ELB", "tcp", httpPortsExternal)
+        .allow("DBS", "DBS", "tcp", dbPortsWithin)
+        .allow("DBS", "APP", "tcp", dbPortsExternal)
+        .allow("OPS", publicAccess, "tcp", new ArrayList<Integer>() {{ add(22); }})
+        .end();
 
     return resourceList;
   }
