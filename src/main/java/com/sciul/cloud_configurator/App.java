@@ -86,6 +86,11 @@ public class App {
         case "list":
           listExistingApplications(cmd, region);
           break;
+
+        default:
+          logger.warn("no commands specified!");
+          writeHelp(options);
+          break;
       }
 
     } catch (ParseException e) {
@@ -96,8 +101,8 @@ public class App {
 
   private void writeHelp(Options options) {
     HelpFormatter formatter = new HelpFormatter();
-    formatter.printHelp(80, "run.sh -c <update|list|generate> -r <region> -p <prefix> -w <web domain> " +
-            "-a <api domain> [-f <filename>] [-h]",
+    formatter.printHelp(80, "run.sh -c <update|list|generate> -r <region> [-p <prefix> -w <web domain> " +
+            "-a <api domain>] [-f <filename>] [-h]",
         "Configure your cloud environment", options, "");
   }
 
@@ -142,7 +147,7 @@ public class App {
     }
 
     logger.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    logger.debug("dst: {}", dst);
+    logger.info("active applications: {}", dst);
     logger.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
   }
 
@@ -150,7 +155,7 @@ public class App {
     Template template = buildTemplate(cmd, region);
     String templateBody = provider.generateStackTemplate(template);
     if (!cmd.hasOption("f")) {
-      logger.debug("generated template: {}", template);
+      logger.info("generated template: {}", template);
       return;
     }
 

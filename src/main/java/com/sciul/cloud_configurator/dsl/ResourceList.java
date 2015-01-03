@@ -1,6 +1,7 @@
 package com.sciul.cloud_configurator.dsl;
 
 
+import com.sciul.cloud_configurator.CidrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,41 +80,57 @@ public class ResourceList {
     return this;
   }
 
-  public ResourceList subnet(String name, String ciderBlock, String ... zone) {
-    return subnet(name, ciderBlock, false, zone);
+  /**
+   * private subnet on a VPC
+   *
+   * @param name
+   * @param ciderBlock
+   * @param zone
+   * @return
+   */
+  public ResourceList subnet(String name, CidrUtils ciderUtils, String ... zone) {
+    return subnet(name, ciderUtils, false, zone);
   }
 
   /**
-   * define a subnet on a VPC
+   * public subnet on a VPC
+   *
    * @param name
    * @param ciderBlock
    * @param isPublicConnected
    * @param zone
    * @return
    */
-  public ResourceList subnet(String name, String ciderBlock, boolean isPublicConnected, String ... zone) {
+  public ResourceList subnet(String name, CidrUtils ciderUtils, boolean isPublicConnected, String ... zone) {
+    boolean first = true;
     for (String z : zone) {
-      Subnet subnet = new Subnet(name, ciderBlock, z, isPublicConnected, getName() + "-VPC", this);
-      ciderBlock = incrementCidrBlock(ciderBlock);
+      if (first) {
+        first = false;
+      } else {
+        ciderUtils.incrementSubnet();
+      }
+      logger.debug("name: {} cidrBlock: {}", name, ciderUtils);
+      Subnet subnet = new Subnet(name, ciderUtils.toString(), z, isPublicConnected, getName() + "-VPC", this);
       ll.add(subnet);
     }
+    ciderUtils.incrementSubnet();
     return this;
   }
 
-  private String incrementCidrBlock(String cidrBlock) {
-    String[] components = cidrBlock.split("\\.|/");
-    if (components.length != 5) {
-      logger.debug("components: {}, length: {}", (String[])components, components.length);
-      throw new RuntimeException("incorrect cidrBlock passed in, unable to parse!");
-    }
-
-    int index = Integer.parseInt(components[4]) / 8 - 1;
-    components[index] = String.valueOf(Integer.parseInt(components[index]) + 1);
-    return String.format("%s.%s.%s.%s/%s", components[0], components[1], components[2], components[3], components[4]);
+  /**
+   * a new security group
+   *
+   * @param name
+   * @param description
+   * @param vpcId
+   * @return
+   */
+  public SecurityGroup group(String name, String description, String vpcId) {
+    return new SecurityGroup(name, description, getName() + "-VPC", this);
   }
 
   /**
-   * define a new load balancer
+   * TODO: define a new load balancer
    *
    * @param name
    * @return

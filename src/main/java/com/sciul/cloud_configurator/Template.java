@@ -59,7 +59,7 @@ public class Template {
     app.proxyService("APP", webDomain, new File(webKeyFile))
         .proxyService("API", apiDomain, new File(apiKeyFile));
 
-    return app.build(region, "10.0.0.0/16");
+    return app.build(region);
   }
 
   public ResourceList generateResourceList() {
@@ -71,10 +71,10 @@ public class Template {
         .dns("ELB", "APP", webDomain)
         .dns("ELB", "API", apiDomain)
         .vpc("10.0.0.0/16", region)
-        .subnet("ELB", "10.0.12.0/24", zoneA, zoneB)
-        .subnet("APP", "10.0.51.0/24", zoneA, zoneB)
-        .subnet("DB", "10.0.91.0/24", zoneA, zoneB)
-        .subnet("NAT", "10.0.0.0/24", true, zoneB)
+        .subnet("ELB", CidrUtils.build("10.0.12.0/24"), zoneA, zoneB)
+        .subnet("APP", CidrUtils.build("10.0.51.0/24"), zoneA, zoneB)
+        .subnet("DB", CidrUtils.build("10.0.91.0/24"), zoneA, zoneB)
+        .subnet("NAT", CidrUtils.build("10.0.0.0/24"), true, zoneB)
         .end();
   }
 

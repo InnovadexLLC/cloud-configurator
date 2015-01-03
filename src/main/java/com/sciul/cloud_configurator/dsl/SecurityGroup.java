@@ -3,14 +3,43 @@ package com.sciul.cloud_configurator.dsl;
 import com.sciul.cloud_configurator.Provider;
 
 import javax.json.JsonObject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sumeetrohatgi on 12/30/14.
  */
 public class SecurityGroup extends Resource {
-  private IngressRules[] ingressRules;
+  private List<IngressRules> ingressRules;
   private String vpcId;
   private String groupDescription;
+
+  public SecurityGroup(String name, String vpcId, String groupDescription, ResourceList resourceList) {
+    setName(name);
+    this.resourceList = resourceList;
+
+    this.vpcId = vpcId;
+    this.groupDescription = groupDescription;
+
+    this.ingressRules = new ArrayList<IngressRules>();
+  }
+
+  /**
+   * add an ingress rule
+   *
+   * @return
+   */
+  public ResourceList addRule(String ipProtocol, String fromPort, String toPort, String sourceSecurityGroupId) {
+    IngressRules rule = new IngressRules();
+    rule.fromPort = fromPort;
+    rule.ipProtocol = ipProtocol;
+    rule.toPort = toPort;
+    rule.sourceSecurityGroupId = sourceSecurityGroupId;
+
+    ingressRules.add(rule);
+
+    return resourceList;
+  }
 
   @Override
   public JsonObject toJson(Provider provider) {
@@ -23,7 +52,7 @@ public class SecurityGroup extends Resource {
     return this;
   }
 
-  public IngressRules[] getIngressRules() {
+  public Iterable<IngressRules> getIngressRules() {
     return ingressRules;
   }
 
@@ -35,8 +64,7 @@ public class SecurityGroup extends Resource {
     return groupDescription;
   }
 
-  public class IngressRules {
-
+  public final class IngressRules {
     private String ipProtocol;
     private String fromPort;
     private String toPort;

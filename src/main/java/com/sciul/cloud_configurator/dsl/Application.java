@@ -1,5 +1,7 @@
 package com.sciul.cloud_configurator.dsl;
 
+import com.sciul.cloud_configurator.CidrUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,6 +87,10 @@ public class Application {
     return this;
   }
 
+  public ResourceList build(String region) {
+    return build(region, CidrUtils.build(16).toString());
+  }
+
   /**
    * provides the ResourceList that is fed into a cloud provider
    * for configuring the given application.
@@ -103,15 +109,15 @@ public class Application {
 
     resourceList.vpc(cidrBlock, region);
 
+    CidrUtils cidrUtils = CidrUtils.build(cidrBlock).changeMask(24);
+
     //.subnet("ELB", "10.0.12.0/24", zoneA, zoneB)
-    for (ProxyService p : proxyServices) {
-      resourceList.subnet("ELB", cidrBlock, true, zoneA, zoneB);
-    }
+    resourceList.subnet("ELB", cidrUtils, true, zoneA, zoneB);
 
     resourceList
-        .subnet("APP", "10.0.51.0/24", zoneA, zoneB)     // all applications get their own subnet
-        .subnet("DBS", "10.0.91.0/24", zoneA, zoneB)     // a database layer
-        .subnet("OPS", "10.0.0.0/24", true, zoneB)       // an operations endpoint
+        .subnet("APP", cidrUtils, zoneA, zoneB)     // all applications get their own subnet
+        .subnet("DBS", cidrUtils, zoneA, zoneB)     // a database layer
+        .subnet("OPS", cidrUtils, true, zoneB)       // an operations endpoint
         .end();
 
 
