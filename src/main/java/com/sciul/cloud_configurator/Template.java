@@ -48,18 +48,16 @@ public class Template {
   }
 
   public ResourceList generate() {
-    Application app = Application.create(applicationName)
+    Application application = Application.create(applicationName)
         .httpService("APP", 3000)
-        .httpService("API", 8080);
-
-    for (String dataService : dataServices) {
-      app.dataService(dataService, dataServicePorts.get(dataService));
-    }
-
-    app.proxyService("APP", webDomain, new File(webKeyFile))
+        .httpService("API", 8080)
+        .dataService("C*", new Integer[]{3120})
+        .dataService("RMQ", new Integer[]{2333})
+        .dataService("ES", new Integer[] {2322})
+        .proxyService("APP", webDomain, new File(webKeyFile))
         .proxyService("API", apiDomain, new File(apiKeyFile));
 
-    return app.build(region);
+    return application.build(region);
   }
 
   public ResourceList generateResourceList() {
