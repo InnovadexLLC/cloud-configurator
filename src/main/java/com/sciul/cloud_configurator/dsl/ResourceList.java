@@ -17,7 +17,7 @@ import java.util.Map;
  * Created by sumeetrohatgi on 12/23/14.
  */
 public class ResourceList {
-  private ArrayList<Resource> ll = new ArrayList<>();
+  private ArrayList<Resource> resources = new ArrayList<>();
   private Map<String, String> tags = new HashMap<>();
   private static Logger logger = LoggerFactory.getLogger(ResourceList.class);
 
@@ -63,7 +63,7 @@ public class ResourceList {
    */
   public ResourceList dns(String loadBalancer, String name, String hostedZoneName) {
     Dns dns = new Dns(name, hostedZoneName, loadBalancer, this);
-    ll.add(dns);
+    resources.add(dns);
     return this;
   }
 
@@ -76,7 +76,7 @@ public class ResourceList {
    */
   public ResourceList vpc(String ciderBlock, String region) {
     VPC vpc = new VPC(ciderBlock, region, this);
-    ll.add(vpc);
+    resources.add(vpc);
     return this;
   }
 
@@ -110,7 +110,7 @@ public class ResourceList {
       }
       logger.debug("name: {} cidrBlock: {}", name, ciderUtils);
       Subnet subnet = new Subnet(name, ciderUtils.toString(), z, isPublicConnected, getName() + "-VPC", this);
-      ll.add(subnet);
+      resources.add(subnet);
     }
     ciderUtils.incrementSubnet();
     return this;
@@ -148,7 +148,7 @@ public class ResourceList {
   }
 
   public List<Resource> resources() {
-    return ll;
+    return resources;
   }
 
   /**
@@ -161,14 +161,45 @@ public class ResourceList {
   }
 
   void add(Resource resource) {
-    ll.add(resource);
+    resources.add(resource);
   }
 
+  /**
+   * add or modify security group
+   *
+   * @param subnetName name of the subnet
+   * @param publiclyAccessible is it open to public?
+   * @param protocol tcp or udp
+   * @param ports list of ports
+   * @return
+   */
   public ResourceList allow(String subnetName, boolean publiclyAccessible, String protocol, List<Integer> ports) {
+    // have we already added this security group?
+    SecurityGroup sg = null;
+    for (Resource r : resources) {
+      if (r instanceof SecurityGroup && r.getName().equals(subnetName)) {
+        sg = (SecurityGroup)r;
+        break;
+      }
+    }
+
+    if (sg == null) {
+      sg = new SecurityGroup(subnetName, "VPC", subnetName, this);
+      resources.add(sg);
+    }
 
     return this;
   }
 
+  /**
+   * add or modify security group
+   *
+   * @param subnetName
+   * @param fromSubnetName
+   * @param protocol
+   * @param ports
+   * @return
+   */
   public ResourceList allow(String subnetName, String fromSubnetName, String protocol, List<Integer> ports) {
 
     return this;
