@@ -4,10 +4,8 @@ import com.sciul.cloud_configurator.CidrUtils;
 import com.sciul.cloud_configurator.dsl.ResourceList;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Captures a modern web application's configuration
@@ -42,20 +40,28 @@ public class Application {
    * @return
    */
   public Application proxyService(String httpAppName, String domain, File certificateKeyFile) {
-    for (Service s : services) {
-      if (s.getName().equals(httpAppName) && s instanceof HttpService) {
-        ProxyService proxyService = new ProxyService();
 
-        proxyService.setHttpService((HttpService)s);
-        proxyService.setDomain(domain);
-        proxyService.setCertificateKeyFile(certificateKeyFile);
+    List<ProxyService> proxyServiceList = services
+        .stream()
+        .filter(s -> s.getName().equals(httpAppName) && s instanceof HttpService)
+        .map(h -> {
+          ProxyService proxyService1 = new ProxyService();
 
-        services.add(proxyService);
-        return this;
-      }
-    }
+          proxyService1.setHttpService((HttpService) h);
+          proxyService1.setName("PROXY-"+httpAppName);
+          proxyService1.setDomain(domain);
+          proxyService1.setCertificateKeyFile(certificateKeyFile);
 
-    throw new IllegalStateException("please define httpAppName first");
+          return proxyService1;
+        })
+        .collect(Collectors.toList());
+
+    if (proxyServiceList.size() == 0)
+      throw new IllegalStateException("please define httpAppName first");
+
+    services.addAll(proxyServiceList);
+
+    return this;
   }
 
   /**
@@ -69,9 +75,10 @@ public class Application {
     DataService dataService = new DataService();
 
     dataService.setName(dataServiceName);
-    for (Integer port : inPorts) {
-      dataService.addPortExternal("tcp", port);
-    }
+
+    Arrays.asList(inPorts)
+        .stream()
+        .forEach(port -> dataService.addPortExternal("tcp", port));
 
     services.add(dataService);
 
@@ -112,21 +119,22 @@ public class Application {
     List<Integer> dbPortsExternal = new ArrayList<>();
     List<Integer> httpPortsExternal = new ArrayList<>();
 
-    for (Service s : services) {
-      if (s instanceof ProxyService) {
-        ProxyService p = (ProxyService) s;
-        resourceList.dns("ELB", p.getHttpService().getName(), p.getDomain());
-      }
+    services.stream()
+        .forEach(s -> {
+          if (s instanceof ProxyService) {
+            ProxyService p = (ProxyService) s;
+            resourceList.dns("ELB", p.getHttpService().getName(), p.getDomain());
+          }
 
-      if (s instanceof DataService) {
-        dbPortsExternal.addAll(s.portListExternal("tcp"));
-        dbPortsWithin.addAll(s.portListWithin("tcp"));
-      }
+          if (s instanceof DataService) {
+            dbPortsExternal.addAll(s.portListExternal("tcp"));
+            dbPortsWithin.addAll(s.portListWithin("tcp"));
+          }
 
-      if (s instanceof HttpService) {
-        httpPortsExternal.addAll(s.portListExternal("tcp"));
-      }
-    }
+          if (s instanceof HttpService) {
+            httpPortsExternal.addAll(s.portListExternal("tcp"));
+          }
+        });
 
     String zoneA = region + "a";
     String zoneB = region + "b";
@@ -143,6 +151,8 @@ public class Application {
         .subnet("APP", cidrUtils, zoneA, zoneB)      // all applications get their own subnet
         .subnet("DBS", cidrUtils, zoneA, zoneB)      // a database layer
         .subnet("OPS", cidrUtils, true, zoneB)       // an operations endpoint
+        .group("ELB", "ELB", "")
+        .addRule("tcp", "0", "0", "ELB")
         .allow("ELB", publicAccess, "tcp", Collections.<Integer>emptyList())
         .allow("APP", "ELB", "tcp", httpPortsExternal)
         .allow("DBS", "DBS", "tcp", dbPortsWithin)
