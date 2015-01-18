@@ -15,8 +15,8 @@ public class SecurityGroup extends Resource {
   private String groupDescription;
 
   public SecurityGroup(String name, String vpcId, String groupDescription, ResourceList resourceList) {
-    setName(name);
     this.resourceList = resourceList;
+    setName(name);
 
     this.vpcId = vpcId;
     this.groupDescription = groupDescription;
