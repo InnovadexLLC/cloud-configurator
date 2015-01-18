@@ -1,10 +1,13 @@
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'application'
 
 applicationName = 'cloud-config'
-sourceCompatibility = 1.7
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+//#sourceCompatibility = 1.8
 version = '1.0'
 
 buildscript {
@@ -40,6 +43,7 @@ dependencies {
     compile 'cglib:cglib:3.0'
     compile 'org.springframework:spring-core:4.0.6.RELEASE'
     compile 'javax.json:javax.json-api:1.0'
+    compile 'org.apache.jclouds:jclouds-all:1.8.1'
 
     runtime 'org.glassfish:javax.json:1.0.4'
 
