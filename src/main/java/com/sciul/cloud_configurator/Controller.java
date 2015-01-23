@@ -30,9 +30,9 @@ public class Controller {
     return "Hello World!";
   }
 
-  @RequestMapping("/template")
+  @RequestMapping(name = "/template")
   String build(Application application) {
-    application.setName("dev");
+    if (application.getName() == null ) application.setName("dev");
     application.setApiDomain("sciul.com");
     application.setWebDomain("ulclearview.com");
     application.setApiKey("");
