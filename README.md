@@ -1,9 +1,7 @@
 cloud-configurator
 ==================
 
-A language parser program for configuring cloud environments. Preference is convention over configuration.
-
-![travis-ci](https://travis-ci.org/ulini/cloud-configurator.svg?branch=master)
+A program for configuring cloud environments (AWS) for multi-tier webapps/ webapi. Preference is convention over configuration.
 
 ## use case ##
 
@@ -14,6 +12,8 @@ With this project, we are able to define an application using the language of ap
 Currently, we couple these generated artifacts with [Chef](https://www.chef.io/chef/choose-your-version/) to **completely** automate our entire development workflow.
 
 ## status ##
+
+![travis-ci](https://travis-ci.org/ulini/cloud-configurator.svg?branch=master)
 
 Still under development. `read as NOT READY!`
 
