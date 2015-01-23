@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 
 import java.io.*;
+import java.util.HashMap;
 
 @Configuration
 @ComponentScan
@@ -134,7 +135,9 @@ public class App {
     webApplication.setWebKey("");
     webApplication.setApiDomain(apiDomain);
     webApplication.setWebKey("");
-    webApplication.setDataServices(new String[] {"C*", "MQ", "ES"});
+    webApplication.setServices(new HashMap<String, String[]>() {{
+      put("C*", new String[] { "9042" });
+    }});
 
     return webApplication;
   }

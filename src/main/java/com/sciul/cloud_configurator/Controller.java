@@ -1,8 +1,8 @@
 package com.sciul.cloud_configurator;
 
 import com.sciul.cloud_application.models.WebApplication;
-import com.sciul.cloud_configurator.dsl.Provider;
-import com.sciul.cloud_configurator.services.TemplateService;
+import com.sciul.cloud_configurator.services.ApplicationService;
+import com.sciul.cloud_configurator.services.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -25,19 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
   @Autowired
-  private TemplateService templateService;
+  private ApplicationService applicationService;
 
   @Autowired
-  private Provider provider;
-
-  @RequestMapping("/")
-  String home() {
-    return "Hello World!";
-  }
+  private ProviderService providerService;
 
   @RequestMapping(name = "/template", method = RequestMethod.PUT)
   String build(@RequestBody WebApplication webApplication) {
-    return provider.generateStackTemplate(templateService.build(webApplication));
+    return providerService.template(applicationService.build(webApplication));
   }
 
   public static void main(String[] args) throws Exception {

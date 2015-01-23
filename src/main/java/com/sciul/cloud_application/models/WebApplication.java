@@ -1,5 +1,7 @@
 package com.sciul.cloud_application.models;
 
+import java.util.Map;
+
 /**
  * Created by sumeetrohatgi on 1/22/15.
  */
@@ -10,14 +12,14 @@ public class WebApplication {
   private String webDomain;
   private String apiKey;
   private String webKey;
-  private String[] dataServices;
+  private Map<String, String[]> services;
 
-  public String[] getDataServices() {
-    return dataServices;
+  public Map<String, String[]> getServices() {
+    return services;
   }
 
-  public void setDataServices(String[] dataServices) {
-    this.dataServices = dataServices;
+  public void setServices(Map<String, String[]> services) {
+    this.services = services;
   }
 
   public String getName() {
