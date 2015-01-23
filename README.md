@@ -3,6 +3,8 @@ cloud-configurator
 
 A language parser program for configuring cloud environments. Preference is convention over configuration.
 
+![travis-ci](https://travis-ci.org/ulini/cloud-configurator.svg?branch=master)
+
 ## use case ##
 
 We find that building out and maintaining cloud environments is surprisingly hard. There are many solutions available from vendors, but each one comes with a vendor lock in. Our particular needs (and we feel others are in this bucket too), are pretty vanilla. However, managing even a single application with multiple environments becomes tricky!
