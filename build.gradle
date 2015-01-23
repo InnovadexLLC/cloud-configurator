@@ -1,4 +1,16 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE")
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'spring-boot'
 apply plugin: 'idea'
 apply plugin: 'application'
 
@@ -7,50 +19,32 @@ applicationName = 'cloud-config'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-//#sourceCompatibility = 1.8
-version = '1.0'
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-
+jar {
+    baseName = 'cloud-config'
+    version =  '0.0.1-SNAPSHOT'
 }
 
 repositories {
     jcenter()
-    mavenCentral()
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "http://repo.spring.io/milestone" }
 }
-
-jar {
-    manifest {
-        attributes 'Implementation-Title': 'Cloud Configurator',
-                'Implementation-Version': version,
-                'Main-Class': 'com.sciul.cloud_configurator.App'
-    }
-}
-
-idea.module {
-    excludeDirs -= file(buildDir) //1
-    buildDir.listFiles({d,f->f != 'generated-src'} as FilenameFilter).each {excludeDirs += it}} //2
 
 dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     compile 'com.amazonaws:aws-java-sdk:1.9.5'
-    compile 'org.springframework:spring-context:4.0.6.RELEASE'
+    compile("org.springframework.boot:spring-boot-starter-web")
     compile 'ch.qos.logback:logback-classic:1.0.13'
     compile 'commons-cli:commons-cli:1.2'
     compile 'cglib:cglib:3.0'
-    compile 'org.springframework:spring-core:4.0.6.RELEASE'
     compile 'javax.json:javax.json-api:1.0'
-    compile 'org.apache.jclouds:jclouds-all:1.8.1'
 
     runtime 'org.glassfish:javax.json:1.0.4'
 
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
-mainClassName = "com.sciul.cloud_configurator.App"
+mainClassName = "com.sciul.cloud_configurator.Controller"
 
 run {
     if ( project.hasProperty("appArgs") ) {

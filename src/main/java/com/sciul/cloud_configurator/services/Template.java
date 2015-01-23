@@ -1,6 +1,7 @@
-package com.sciul.cloud_configurator;
+package com.sciul.cloud_configurator.services;
 
 import com.sciul.cloud_application.dsl.Application;
+import com.sciul.cloud_configurator.CidrUtils;
 import com.sciul.cloud_configurator.dsl.ResourceList;
 import org.springframework.context.annotation.PropertySource;
 

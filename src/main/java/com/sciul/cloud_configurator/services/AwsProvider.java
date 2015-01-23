@@ -1,4 +1,4 @@
-package com.sciul.cloud_configurator;
+package com.sciul.cloud_configurator.services;
 
 
 import com.amazonaws.AmazonClientException;

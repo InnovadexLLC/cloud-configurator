@@ -2,12 +2,15 @@ package com.sciul.cloud_application.dsl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
  * Created by sumeetrohatgi on 1/3/15.
  */
 abstract class Service {
+  private static final String WITHIN = "within";
+  private static final String EXTERNAL = "external";
   private String name;
   private List<Port> ports = new ArrayList<>();
 
@@ -28,39 +31,37 @@ abstract class Service {
   }
 
   public final Service addPortWithin(String protocol, Integer port) {
-    ports.add(new Port(protocol, port, "within"));
+    ports.add(new Port(protocol, port, WITHIN));
     return this;
   }
 
   public final Service addPortExternal(String protocol, Integer port) {
-    ports.add(new Port(protocol, port, "external"));
+    ports.add(new Port(protocol, port, EXTERNAL));
     return this;
   }
 
   public List<Integer> portListWithin(String protocol) {
-    return portList(protocol, "within");
+    return portList(protocol, WITHIN);
   }
 
   public List<Integer> portListExternal(String protocol) {
-    return portList(protocol, "external");
+    return portList(protocol, EXTERNAL);
   }
 
   private List<Integer> portList(String protocol, String type) {
-    List<Integer> l = new ArrayList<>();
-    for (Port p : ports) {
-      if (p.getProtocol().equals(protocol) && p.getType().equals(type)) {
-        l.add(p.getPort());
-      }
-    }
-    return l;
+    return ports
+        .stream()
+        .filter(p -> p.getProtocol().equals(protocol) && p.getType().equals(type))
+        .map(Port::getPort)
+        .collect(Collectors.toList());
   }
 
 
   public static final boolean isPortExternal(Port port) {
-    return port.getType().equals("external");
+    return port.getType().equals(EXTERNAL);
   }
 
   public static final boolean isPortWithin(Port port) {
-    return port.getType().equals("within");
+    return port.getType().equals(WITHIN);
   }
 }

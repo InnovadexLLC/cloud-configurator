@@ -1,6 +1,8 @@
 package com.sciul.cloud_configurator;
 
 import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
+import com.sciul.cloud_configurator.services.Provider;
+import com.sciul.cloud_configurator.services.Template;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

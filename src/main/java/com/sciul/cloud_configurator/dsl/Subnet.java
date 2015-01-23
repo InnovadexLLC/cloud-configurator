@@ -1,10 +1,8 @@
 package com.sciul.cloud_configurator.dsl;
 
-import com.sciul.cloud_configurator.Provider;
+import com.sciul.cloud_configurator.services.Provider;
 
 import javax.json.JsonObject;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by sumeetrohatgi on 12/24/14.

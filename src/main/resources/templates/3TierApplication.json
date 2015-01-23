@@ -1,0 +1,26 @@
+{
+  "apiVersion": "2015/1/1",
+  "method": "application.create",
+  "params": {
+    "name": "sciQA",
+    "services": [
+      {
+        "type": "data",
+        "name": "c*",
+        "ports": [ 7000, 9042 ]
+      },
+      {
+        "type": "data",
+        "name": "rmq",
+        "ports": [ 4369, 35197, 15672 ]
+      },
+      {
+        "type": "http",
+        "name": "pfm"
+      },
+      {
+        "type": "proxy"
+      }
+    ]
+  }
+}

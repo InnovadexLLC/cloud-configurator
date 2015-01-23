@@ -145,7 +145,7 @@ public class Application {
 
     resourceList.subnet("ELB", cidrUtils, true, zoneA, zoneB);
 
-    boolean publicAccess = true;
+    final boolean publicAccess = true;
 
     resourceList
         .subnet("APP", cidrUtils, zoneA, zoneB)      // all applications get their own subnet

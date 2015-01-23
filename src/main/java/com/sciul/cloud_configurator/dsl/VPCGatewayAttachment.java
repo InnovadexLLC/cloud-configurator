@@ -1,6 +1,6 @@
 package com.sciul.cloud_configurator.dsl;
 
-import com.sciul.cloud_configurator.Provider;
+import com.sciul.cloud_configurator.services.Provider;
 
 import javax.json.JsonObject;
 
