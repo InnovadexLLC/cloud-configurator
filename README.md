@@ -5,7 +5,7 @@ A program for configuring cloud environments (AWS) for multi-tier webapps/ webap
 
 ## use case ##
 
-We find that building out and maintaining cloud environments is surprisingly hard. There are many solutions available from vendors, but each one comes with a vendor lock in. Our particular needs (and we feel others are in this bucket too), are pretty vanilla. However, managing even a single cloud application with dev, qa, stage & production is tricky!
+We find that building out and maintaining cloud environments is surprisingly hard. There are many solutions available from vendors, but each one comes with a vendor lock in (eg: [aws opsworks](http://aws.amazon.com/opsworks/)). Our particular needs (and we feel others are in this bucket too), are pretty vanilla. However, managing even a single cloud application with dev, qa, stage & production pipeline is tricky!
 
 With this project, we are able to define an application using the language of application developers and map it to a cloud providers environment configuration. This cloud configuration can be run at will of the application developer to generate appropriate cloud artifacts.
 
@@ -54,5 +54,8 @@ Low level abstraction for users with more controlled needs over their environmen
 
 An abstraction that allows same program to be used across multiple cloud providers.
 
-For now, AWSProvider is the only one that's provided in the source code. It uses AWS's excellent [CloudFormation](http://aws.amazon.com/cloudformation/) service.
+### aws-provider ###
 
+For now, AWSProvider is the only one that's provided in the source code. It uses AWS's excellent [CloudFormation](http://aws.amazon.com/cloudformation/) service for building out a set of cloud resources.
+
+A new VPC is created for every pipeline stage of a given application.
