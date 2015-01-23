@@ -5,11 +5,11 @@ A program for configuring cloud environments (AWS) for multi-tier webapps/ webap
 
 ## use case ##
 
-We find that building out and maintaining cloud environments is surprisingly hard. There are many solutions available from vendors, but each one comes with a vendor lock in. Our particular needs (and we feel others are in this bucket too), are pretty vanilla. However, managing even a single application with multiple environments becomes tricky!
+We find that building out and maintaining cloud environments is surprisingly hard. There are many solutions available from vendors, but each one comes with a vendor lock in. Our particular needs (and we feel others are in this bucket too), are pretty vanilla. However, managing even a single cloud application with dev, qa, stage & production is tricky!
 
-With this project, we are able to define an application using the language of application developers and map it to a cloud environment configuration. Then we provide built in cloud providers to take this cloud configuration and generate the appropriate cloud artifacts.
+With this project, we are able to define an application using the language of application developers and map it to a cloud providers environment configuration. This cloud configuration can be run at will of the application developer to generate appropriate cloud artifacts.
 
-Currently, we couple these generated artifacts with [Chef](https://www.chef.io/chef/choose-your-version/) to **completely** automate our entire development workflow.
+At UL, **completely** automate our entire development workflow by using [Chef](https://www.chef.io/chef/choose-your-version/) to label (calling it a chef `environment`) a set of cloud resources and run a parametrized (using chef `roles`) set of recipes against them.
 
 ## status ##
 
