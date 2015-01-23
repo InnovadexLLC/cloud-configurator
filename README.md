@@ -1,7 +1,7 @@
 cloud-configurator
 ==================
 
-A program for configuring cloud environments (AWS) for multi-tier webapps/ webapi. Preference is convention over configuration.
+A program for configuring cloud environments (like aws, azure) for multi-tier webapps/ webapi. Preference is to use convention over configuration.
 
 ## use case ##
 
@@ -58,4 +58,4 @@ An abstraction that allows same program to be used across multiple cloud provide
 
 For now, AWSProvider is the only one that's provided in the source code. It uses AWS's excellent [CloudFormation](http://aws.amazon.com/cloudformation/) service for building out a set of cloud resources.
 
-A new VPC is created for every pipeline stage of a given application.
+A new [vpc](http://aws.amazon.com/vpc/) is created for every pipeline stage of a given web application.
