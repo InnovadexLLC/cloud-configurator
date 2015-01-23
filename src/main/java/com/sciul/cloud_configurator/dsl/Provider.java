@@ -1,9 +1,9 @@
-package com.sciul.cloud_configurator.services;
+package com.sciul.cloud_configurator.dsl;
 
 import com.amazonaws.services.cloudformation.model.CreateStackResult;
 import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
 import com.amazonaws.services.cloudformation.model.ListStacksResult;
-import com.sciul.cloud_configurator.dsl.*;
+
 
 import javax.json.JsonObject;
 
@@ -15,11 +15,11 @@ public interface Provider {
 
   DescribeStacksResult describeStacks(String environment);
 
-  CreateStackResult createStack(Template template);
+  CreateStackResult createStack(ResourceList resourceList);
 
   void setRegion(String region);
 
-  String generateStackTemplate(Template template);
+  String generateStackTemplate(ResourceList resourceList);
 
   JsonObject createVPC(VPC vpc);
 

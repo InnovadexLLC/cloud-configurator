@@ -1,15 +1,17 @@
 package com.sciul.cloud_configurator;
 
-import com.sciul.cloud_application.models.Application;
-import com.sciul.cloud_configurator.services.Provider;
-import com.sciul.cloud_configurator.services.Template;
+import com.sciul.cloud_application.models.WebApplication;
+import com.sciul.cloud_configurator.dsl.Provider;
+import com.sciul.cloud_configurator.services.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -23,30 +25,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
   @Autowired
-  Provider provider;
+  private TemplateService templateService;
+
+  @Autowired
+  private Provider provider;
 
   @RequestMapping("/")
   String home() {
     return "Hello World!";
   }
 
-  @RequestMapping(name = "/template")
-  String build(Application application) {
-    if (application.getName() == null ) application.setName("dev");
-    application.setApiDomain("sciul.com");
-    application.setWebDomain("ulclearview.com");
-    application.setApiKey("");
-    application.setWebKey("");
-    application.setDataServices(new String[] { "C*", "MQ" });
-
-    Template template = new Template(application.getName(), application.getRegion(),
-        application.getWebDomain(), application.getWebKey(),
-        application.getApiDomain(), application.getApiKey(),
-        application.getDataServices());
-
-    //Template template = new Template("dev", "us-west-2", "ulclearview.com", "", "sciul.com", "", "C*");
-
-    return provider.generateStackTemplate(template);
+  @RequestMapping(name = "/template", method = RequestMethod.PUT)
+  String build(@RequestBody WebApplication webApplication) {
+    return provider.generateStackTemplate(templateService.build(webApplication));
   }
 
   public static void main(String[] args) throws Exception {

@@ -1,8 +1,9 @@
 package com.sciul.cloud_configurator;
 
 import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
-import com.sciul.cloud_configurator.services.Provider;
-import com.sciul.cloud_configurator.services.Template;
+import com.sciul.cloud_application.dsl.Application;
+import com.sciul.cloud_application.models.WebApplication;
+import com.sciul.cloud_configurator.dsl.Provider;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,7 +109,7 @@ public class App {
         "Configure your cloud environment", options, "");
   }
 
-  private Template buildTemplate(CommandLine cmd, String region) throws MissingArgumentException {
+  private WebApplication buildTemplate(CommandLine cmd, String region) throws MissingArgumentException {
     if (!cmd.hasOption("p")) {
       throw new MissingArgumentException("no prefix specified");
     }
@@ -126,14 +127,22 @@ public class App {
     String apiDomain = cmd.getOptionValue("a");
 
     //Template template = new Template(prefix, region, apiDomain, webDomain);
+    WebApplication webApplication = new WebApplication();
+    webApplication.setName(prefix);
+    webApplication.setRegion(region);
+    webApplication.setWebDomain(webDomain);
+    webApplication.setWebKey("");
+    webApplication.setApiDomain(apiDomain);
+    webApplication.setWebKey("");
+    webApplication.setDataServices(new String[] {"C*", "MQ", "ES"});
 
-    return new Template(prefix, region, webDomain, "", apiDomain, "", "C*", "MQ", "ES");
+    return webApplication;
   }
 
   private void updateApplication(CommandLine cmd, String region) throws MissingArgumentException {
-    Template template = buildTemplate(cmd, region);
+    WebApplication webApplication = buildTemplate(cmd, region);
 
-    provider.createStack(template);
+    provider.createStack(Application.create(webApplication));
 
     logger.debug("****************Stack Creation Started****************");
   }
@@ -154,10 +163,11 @@ public class App {
   }
 
   private void generateApplicationConfiguration(CommandLine cmd, String region) throws MissingArgumentException {
-    Template template = buildTemplate(cmd, region);
-    String templateBody = provider.generateStackTemplate(template);
+    WebApplication webApplication = buildTemplate(cmd, region);
+    String templateBody = provider.generateStackTemplate(Application.create(webApplication));
+
     if (!cmd.hasOption("f")) {
-      logger.info("generated template: {}", template);
+      logger.info("generated template: {}", templateBody);
       return;
     }
 

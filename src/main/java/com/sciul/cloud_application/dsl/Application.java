@@ -1,6 +1,7 @@
 package com.sciul.cloud_application.dsl;
 
-import com.sciul.cloud_configurator.CidrUtils;
+import com.sciul.cloud_application.models.WebApplication;
+import com.sciul.cloud_configurator.dsl.CidrUtils;
 import com.sciul.cloud_configurator.dsl.ResourceList;
 
 import java.io.File;
@@ -161,6 +162,19 @@ public class Application {
         .end();
 
     return resourceList;
+  }
+
+  public static ResourceList create(WebApplication webApplication) {
+    Application application = Application.create(webApplication.getName())
+        .httpService("APP", 3000)
+        .httpService("API", 8080)
+        .dataService("C*", new Integer[]{3120})
+        .dataService("RMQ", new Integer[]{2333})
+        .dataService("ES", new Integer[] {2322})
+        .proxyService("APP", webApplication.getWebDomain(), new File(webApplication.getWebKey()))
+        .proxyService("API", webApplication.getApiDomain(), new File(webApplication.getApiKey()));
+
+    return application.build(webApplication.getRegion());
   }
 
 }

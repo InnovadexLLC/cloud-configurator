@@ -1,4 +1,4 @@
-package com.sciul.cloud_configurator.services;
+package com.sciul.cloud_configurator.dsl;
 
 
 import com.amazonaws.AmazonClientException;
@@ -9,7 +9,6 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
 import com.amazonaws.services.cloudformation.model.*;
-import com.sciul.cloud_configurator.dsl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.PropertySource;
@@ -70,8 +69,7 @@ public class AwsProvider implements Provider {
     clt.setRegion(Region.getRegion(Regions.US_WEST_2));
   }
 
-  public String generateStackTemplate(final Template template) {
-    ResourceList resourceList = template.generate();
+  public String generateStackTemplate(final ResourceList resourceList) {
     JsonObjectBuilder resourceBuilder = Json.createObjectBuilder();
 
     for (Resource resource : resourceList.resources()) {
@@ -86,13 +84,13 @@ public class AwsProvider implements Provider {
     return mainBuilder.build().toString();
   }
 
-  public CreateStackResult createStack(final Template template) {
+  public CreateStackResult createStack(final ResourceList resourceList) {
 
     try {
       CreateStackRequest crq = new CreateStackRequest() {
         {
-          setStackName(template.getName());
-          setTemplateBody(generateStackTemplate(template));
+          setStackName(resourceList.getName());
+          setTemplateBody(generateStackTemplate(resourceList));
         }
       };
 

@@ -3,7 +3,7 @@ package com.sciul.cloud_application.models;
 /**
  * Created by sumeetrohatgi on 1/22/15.
  */
-public class Application {
+public class WebApplication {
   private String name;
   private String region;
   private String apiDomain;
