@@ -1,17 +1,19 @@
 cloud-configurator
 ==================
 
-A language parser program for configuring cloud environments. Preference is convention over configuration.
+A program for configuring cloud environments (like aws, azure) for multi-tier webapps/ webapi. Preference is to use convention over configuration.
 
 ## use case ##
 
-We find that building out and maintaining cloud environments is surprisingly hard. There are many solutions available from vendors, but each one comes with a vendor lock in. Our particular needs (and we feel others are in this bucket too), are pretty vanilla. However, managing even a single application with multiple environments becomes tricky!
+We find that building out and maintaining cloud environments is surprisingly hard. There are many solutions available from vendors, but each one comes with a vendor lock in (eg: [aws opsworks](http://aws.amazon.com/opsworks/)). Our particular needs (and we feel others are in this bucket too), are pretty vanilla. However, managing even a single cloud application with dev, qa, stage & production pipeline is tricky!
 
-With this project, we are able to define an application using the language of application developers and map it to a cloud environment configuration. Then we provide built in cloud providers to take this cloud configuration and generate the appropriate cloud artifacts.
+With this project, we are able to define an application using the language of application developers and map it to a cloud providers environment configuration. This cloud configuration can be run at will of the application developer to generate appropriate cloud artifacts.
 
-Currently, we couple these generated artifacts with [Chef](https://www.chef.io/chef/choose-your-version/) to **completely** automate our entire development workflow.
+At UL, **completely** automate our entire development workflow by using [Chef](https://www.chef.io/chef/choose-your-version/) to label (calling it a chef `environment`) a set of cloud resources and run a parametrized (using chef `roles`) set of recipes against them.
 
 ## status ##
+
+![travis-ci](https://travis-ci.org/ulini/cloud-configurator.svg?branch=master)
 
 Still under development. `read as NOT READY!`
 
@@ -52,5 +54,8 @@ Low level abstraction for users with more controlled needs over their environmen
 
 An abstraction that allows same program to be used across multiple cloud providers.
 
-For now, AWSProvider is the only one that's provided in the source code. It uses AWS's excellent [CloudFormation](http://aws.amazon.com/cloudformation/) service.
+### aws-provider ###
 
+For now, AWSProvider is the only one that's provided in the source code. It uses AWS's excellent [CloudFormation](http://aws.amazon.com/cloudformation/) service for building out a set of cloud resources.
+
+A new [vpc](http://aws.amazon.com/vpc/) is created for every pipeline stage of a given web application.
