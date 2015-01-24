@@ -1,7 +1,7 @@
 package com.sciul.cloud_configurator.services;
 
 import com.sciul.cloud_application.dsl.Application;
-import com.sciul.cloud_application.models.WebApplication;
+import com.sciul.cloud_application.models.CloudBlueprint;
 import com.sciul.cloud_configurator.dsl.ResourceList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,16 +18,16 @@ public class ApplicationServiceImpl implements ApplicationService {
   private static final Logger logger = LoggerFactory.getLogger(ApplicationServiceImpl.class);
 
   @Override
-  public ResourceList build(WebApplication webApplication) {
-    if (webApplication.getName() == null ) webApplication.setName("dev");
-    webApplication.setApiDomain("sciul.com");
-    webApplication.setWebDomain("ulclearview.com");
-    webApplication.setApiKey("");
-    webApplication.setWebKey("");
-    webApplication.setServices(new HashMap<String, String[]>() {{
+  public ResourceList build(CloudBlueprint cloudBlueprint) {
+    if (cloudBlueprint.getName() == null ) cloudBlueprint.setName("dev");
+    cloudBlueprint.setApiDomain("sciul.com");
+    cloudBlueprint.setWebDomain("ulclearview.com");
+    cloudBlueprint.setApiKey("");
+    cloudBlueprint.setWebKey("");
+    cloudBlueprint.setServices(new HashMap<String, String[]>() {{
       put("C*", new String[]{"9042"});
     }});
 
-    return Application.create(webApplication);
+    return Application.create(cloudBlueprint);
   }
 }

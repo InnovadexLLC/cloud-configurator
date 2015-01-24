@@ -1,5 +1,6 @@
 package com.sciul.cloud_configurator.services;
 
+import com.sciul.cloud_application.models.Cloud;
 import com.sciul.cloud_configurator.dsl.ResourceList;
 
 /**
@@ -7,4 +8,5 @@ import com.sciul.cloud_configurator.dsl.ResourceList;
  */
 public interface ProviderService {
   String template(ResourceList resourceList);
+  Cloud apply(ResourceList resourceList);
 }

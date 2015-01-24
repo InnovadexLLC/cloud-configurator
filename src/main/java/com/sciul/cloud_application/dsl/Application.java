@@ -1,6 +1,6 @@
 package com.sciul.cloud_application.dsl;
 
-import com.sciul.cloud_application.models.WebApplication;
+import com.sciul.cloud_application.models.CloudBlueprint;
 import com.sciul.cloud_configurator.dsl.CidrUtils;
 import com.sciul.cloud_configurator.dsl.ResourceList;
 
@@ -164,17 +164,17 @@ public class Application {
     return resourceList;
   }
 
-  public static ResourceList create(WebApplication webApplication) {
-    Application application = Application.create(webApplication.getName())
+  public static ResourceList create(CloudBlueprint cloudBlueprint) {
+    Application application = Application.create(cloudBlueprint.getName())
         .httpService("APP", 3000)
         .httpService("API", 8080)
         .dataService("C*", new Integer[]{3120})
         .dataService("RMQ", new Integer[]{2333})
         .dataService("ES", new Integer[] {2322})
-        .proxyService("APP", webApplication.getWebDomain(), new File(webApplication.getWebKey()))
-        .proxyService("API", webApplication.getApiDomain(), new File(webApplication.getApiKey()));
+        .proxyService("APP", cloudBlueprint.getWebDomain(), new File(cloudBlueprint.getWebKey()))
+        .proxyService("API", cloudBlueprint.getApiDomain(), new File(cloudBlueprint.getApiKey()));
 
-    return application.build(webApplication.getRegion());
+    return application.build(cloudBlueprint.getRegion());
   }
 
 }

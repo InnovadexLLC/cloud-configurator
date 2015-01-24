@@ -1,5 +1,6 @@
 package com.sciul.cloud_configurator.services;
 
+import com.sciul.cloud_application.models.Cloud;
 import com.sciul.cloud_configurator.dsl.Provider;
 import com.sciul.cloud_configurator.dsl.ResourceList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,5 +17,10 @@ public class ProviderServiceImpl implements ProviderService {
   @Override
   public String template(ResourceList resourceList) {
     return provider.generateStackTemplate(resourceList);
+  }
+
+  @Override
+  public Cloud apply(ResourceList resourceList) {
+    return provider.createStack(resourceList);
   }
 }

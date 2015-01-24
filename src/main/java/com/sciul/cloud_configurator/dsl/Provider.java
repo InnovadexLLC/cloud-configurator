@@ -3,6 +3,7 @@ package com.sciul.cloud_configurator.dsl;
 import com.amazonaws.services.cloudformation.model.CreateStackResult;
 import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
 import com.amazonaws.services.cloudformation.model.ListStacksResult;
+import com.sciul.cloud_application.models.Cloud;
 
 
 import javax.json.JsonObject;
@@ -15,7 +16,7 @@ public interface Provider {
 
   DescribeStacksResult describeStacks(String environment);
 
-  CreateStackResult createStack(ResourceList resourceList);
+  Cloud createStack(ResourceList resourceList);
 
   void setRegion(String region);
 

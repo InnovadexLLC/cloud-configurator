@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Created by sumeetrohatgi on 1/22/15.
  */
-public class WebApplication {
+public class CloudBlueprint {
   private String name;
   private String region;
   private String apiDomain;

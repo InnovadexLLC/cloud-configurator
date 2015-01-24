@@ -1,6 +1,7 @@
 package com.sciul.cloud_configurator;
 
-import com.sciul.cloud_application.models.WebApplication;
+import com.sciul.cloud_application.models.Cloud;
+import com.sciul.cloud_application.models.CloudBlueprint;
 import com.sciul.cloud_configurator.services.ApplicationService;
 import com.sciul.cloud_configurator.services.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,13 @@ public class Controller {
   private ProviderService providerService;
 
   @RequestMapping(name = "/template", method = RequestMethod.PUT)
-  String build(@RequestBody WebApplication webApplication) {
-    return providerService.template(applicationService.build(webApplication));
+  String generate(@RequestBody CloudBlueprint cloudBlueprint) {
+    return providerService.template(applicationService.build(cloudBlueprint));
+  }
+
+  @RequestMapping(name = "/cloud", method = RequestMethod.POST)
+  Cloud apply(@RequestBody CloudBlueprint cloudBlueprint) {
+    return providerService.apply(applicationService.build(cloudBlueprint));
   }
 
   public static void main(String[] args) throws Exception {

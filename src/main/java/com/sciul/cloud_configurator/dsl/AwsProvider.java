@@ -9,6 +9,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClient;
 import com.amazonaws.services.cloudformation.model.*;
+import com.sciul.cloud_application.models.Cloud;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.PropertySource;
@@ -84,7 +85,7 @@ public class AwsProvider implements Provider {
     return mainBuilder.build().toString();
   }
 
-  public CreateStackResult createStack(final ResourceList resourceList) {
+  public Cloud createStack(final ResourceList resourceList) {
 
     try {
       CreateStackRequest crq = new CreateStackRequest() {
@@ -96,10 +97,13 @@ public class AwsProvider implements Provider {
 
       logger.debug("template: {}", crq.getTemplateBody());
 
-      CreateStackResult crs = null; //clt.createStack(crq);
+      CreateStackResult crs = clt.createStack(crq);
 
       logger.debug("stack create result: {}", crs);
-      return crs;
+
+      Cloud cloud = new Cloud();
+      cloud.setId(crs.getStackId());
+      return cloud;
     } catch (AmazonServiceException ae) {
       throw new RuntimeException("server error", ae);
     } catch (AmazonClientException ae) {

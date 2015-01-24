@@ -2,7 +2,7 @@ package com.sciul.cloud_configurator;
 
 import com.amazonaws.services.cloudformation.model.DescribeStacksResult;
 import com.sciul.cloud_application.dsl.Application;
-import com.sciul.cloud_application.models.WebApplication;
+import com.sciul.cloud_application.models.CloudBlueprint;
 import com.sciul.cloud_configurator.dsl.Provider;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
@@ -110,7 +110,7 @@ public class App {
         "Configure your cloud environment", options, "");
   }
 
-  private WebApplication buildTemplate(CommandLine cmd, String region) throws MissingArgumentException {
+  private CloudBlueprint buildTemplate(CommandLine cmd, String region) throws MissingArgumentException {
     if (!cmd.hasOption("p")) {
       throw new MissingArgumentException("no prefix specified");
     }
@@ -128,24 +128,24 @@ public class App {
     String apiDomain = cmd.getOptionValue("a");
 
     //Template template = new Template(prefix, region, apiDomain, webDomain);
-    WebApplication webApplication = new WebApplication();
-    webApplication.setName(prefix);
-    webApplication.setRegion(region);
-    webApplication.setWebDomain(webDomain);
-    webApplication.setWebKey("");
-    webApplication.setApiDomain(apiDomain);
-    webApplication.setWebKey("");
-    webApplication.setServices(new HashMap<String, String[]>() {{
+    CloudBlueprint cloudBlueprint = new CloudBlueprint();
+    cloudBlueprint.setName(prefix);
+    cloudBlueprint.setRegion(region);
+    cloudBlueprint.setWebDomain(webDomain);
+    cloudBlueprint.setWebKey("");
+    cloudBlueprint.setApiDomain(apiDomain);
+    cloudBlueprint.setWebKey("");
+    cloudBlueprint.setServices(new HashMap<String, String[]>() {{
       put("C*", new String[] { "9042" });
     }});
 
-    return webApplication;
+    return cloudBlueprint;
   }
 
   private void updateApplication(CommandLine cmd, String region) throws MissingArgumentException {
-    WebApplication webApplication = buildTemplate(cmd, region);
+    CloudBlueprint cloudBlueprint = buildTemplate(cmd, region);
 
-    provider.createStack(Application.create(webApplication));
+    provider.createStack(Application.create(cloudBlueprint));
 
     logger.debug("****************Stack Creation Started****************");
   }
@@ -166,8 +166,8 @@ public class App {
   }
 
   private void generateApplicationConfiguration(CommandLine cmd, String region) throws MissingArgumentException {
-    WebApplication webApplication = buildTemplate(cmd, region);
-    String templateBody = provider.generateStackTemplate(Application.create(webApplication));
+    CloudBlueprint cloudBlueprint = buildTemplate(cmd, region);
+    String templateBody = provider.generateStackTemplate(Application.create(cloudBlueprint));
 
     if (!cmd.hasOption("f")) {
       logger.info("generated template: {}", templateBody);
