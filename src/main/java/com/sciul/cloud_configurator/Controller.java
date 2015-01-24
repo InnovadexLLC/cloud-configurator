@@ -32,13 +32,13 @@ public class Controller {
   private ProviderService providerService;
 
   @RequestMapping(name = "/template", method = RequestMethod.PUT)
-  String generate(@RequestBody CloudBlueprint cloudBlueprint) {
+  String generateTemplate(@RequestBody CloudBlueprint cloudBlueprint) {
     return providerService.template(applicationService.build(cloudBlueprint));
   }
 
   @RequestMapping(name = "/cloud", method = RequestMethod.POST)
-  Cloud apply(@RequestBody CloudBlueprint cloudBlueprint) {
-    return providerService.apply(applicationService.build(cloudBlueprint));
+  Cloud buildCloud(@RequestBody CloudBlueprint cloudBlueprint) {
+    return providerService.build(applicationService.build(cloudBlueprint));
   }
 
   public static void main(String[] args) throws Exception {

@@ -20,7 +20,7 @@ public class ProviderServiceImpl implements ProviderService {
   }
 
   @Override
-  public Cloud apply(ResourceList resourceList) {
+  public Cloud build(ResourceList resourceList) {
     return provider.createStack(resourceList);
   }
 }

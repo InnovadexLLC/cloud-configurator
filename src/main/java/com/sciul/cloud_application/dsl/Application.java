@@ -164,7 +164,7 @@ public class Application {
     return resourceList;
   }
 
-  public static ResourceList create(CloudBlueprint cloudBlueprint) {
+  public static ResourceList buildResourceList(CloudBlueprint cloudBlueprint) {
     Application application = Application.create(cloudBlueprint.getName())
         .httpService("APP", 3000)
         .httpService("API", 8080)

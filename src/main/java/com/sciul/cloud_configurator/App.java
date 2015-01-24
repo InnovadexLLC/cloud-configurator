@@ -145,7 +145,7 @@ public class App {
   private void updateApplication(CommandLine cmd, String region) throws MissingArgumentException {
     CloudBlueprint cloudBlueprint = buildTemplate(cmd, region);
 
-    provider.createStack(Application.create(cloudBlueprint));
+    provider.createStack(Application.buildResourceList(cloudBlueprint));
 
     logger.debug("****************Stack Creation Started****************");
   }
@@ -167,7 +167,7 @@ public class App {
 
   private void generateApplicationConfiguration(CommandLine cmd, String region) throws MissingArgumentException {
     CloudBlueprint cloudBlueprint = buildTemplate(cmd, region);
-    String templateBody = provider.generateStackTemplate(Application.create(cloudBlueprint));
+    String templateBody = provider.generateStackTemplate(Application.buildResourceList(cloudBlueprint));
 
     if (!cmd.hasOption("f")) {
       logger.info("generated template: {}", templateBody);

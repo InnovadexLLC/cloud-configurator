@@ -99,7 +99,7 @@ public class AwsProvider implements Provider {
 
       CreateStackResult crs = clt.createStack(crq);
 
-      logger.debug("stack create result: {}", crs);
+      logger.debug("createStack result: {}", crs);
 
       Cloud cloud = new Cloud();
       cloud.setId(crs.getStackId());

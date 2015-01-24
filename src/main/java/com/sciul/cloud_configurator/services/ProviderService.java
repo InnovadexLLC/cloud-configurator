@@ -8,5 +8,5 @@ import com.sciul.cloud_configurator.dsl.ResourceList;
  */
 public interface ProviderService {
   String template(ResourceList resourceList);
-  Cloud apply(ResourceList resourceList);
+  Cloud build(ResourceList resourceList);
 }
