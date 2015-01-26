@@ -135,8 +135,8 @@ public class App {
     cloudBlueprint.setWebKey("");
     cloudBlueprint.setApiDomain(apiDomain);
     cloudBlueprint.setWebKey("");
-    cloudBlueprint.setServices(new HashMap<String, String[]>() {{
-      put("C*", new String[] { "9042" });
+    cloudBlueprint.setServices(new HashMap<String, Integer[]>() {{
+      put("C*", new Integer[] { 9042 });
     }});
 
     return cloudBlueprint;

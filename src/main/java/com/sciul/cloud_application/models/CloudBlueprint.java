@@ -12,13 +12,13 @@ public class CloudBlueprint {
   private String webDomain;
   private String apiKey;
   private String webKey;
-  private Map<String, String[]> services;
+  private Map<String, Integer[]> services;
 
-  public Map<String, String[]> getServices() {
+  public Map<String, Integer[]> getServices() {
     return services;
   }
 
-  public void setServices(Map<String, String[]> services) {
+  public void setServices(Map<String, Integer[]> services) {
     this.services = services;
   }
 

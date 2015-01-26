@@ -39,7 +39,7 @@ public class Dns extends Resource {
 
     this.refer = envName + "-" + refer + "-" + name.toUpperCase();
     this.resourceList = resourceList;
-    setName("DNS-" + name);
+    setName("Dns" + name);
     type = "CNAME";
     String envPrefix = envName.substring(envName.indexOf('-') + 1).toLowerCase();
     this.domain = envPrefix + "-" + name.toLowerCase() + "." + hostedZoneName;

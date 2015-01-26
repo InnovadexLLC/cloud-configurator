@@ -21,21 +21,21 @@ public class VPC extends Resource {
     this.dnsSupport = dnsSupport;
     this.dnsHostname = dnsHostname;
     this.resourceList = resourceList;
-    setName("VPC");
+    setName("Vpc");
 
-    DHCPOptions dhcpOptions = new DHCPOptions("DPT", region + ".compute.internal", resourceList);
+    DHCPOptions dhcpOptions = new DHCPOptions("Dpt", region + ".compute.internal", resourceList);
     resourceList.add(dhcpOptions);
 
-    VPCDHCPOptionsAssociation association = new VPCDHCPOptionsAssociation("VPC-DPT-E", getName(),
+    VPCDHCPOptionsAssociation association = new VPCDHCPOptionsAssociation("VpcDptEntry", getName(),
         dhcpOptions.getName(), resourceList);
 
     resourceList.add(association);
 
-    InternetGateway gw = new InternetGateway("IGW", resourceList);
+    InternetGateway gw = new InternetGateway("Igw", resourceList);
     resourceList.add(gw);
 
-    resourceList.add(new VPCGatewayAttachment("VPC-GW", getName(), gw.getName(), resourceList));
-    resourceList.add(new NetworkAcl("ACL", getName(), resourceList));
+    resourceList.add(new VPCGatewayAttachment("VpcGw", getName(), gw.getName(), resourceList));
+    resourceList.add(new NetworkAcl("Acl", getName(), resourceList));
   }
 
   public String getDefaultTenancy() {

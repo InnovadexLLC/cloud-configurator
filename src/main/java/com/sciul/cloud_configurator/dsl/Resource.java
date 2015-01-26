@@ -22,7 +22,8 @@ public abstract class Resource {
   }
 
   public void setName(String name) {
-    this.name = resourceList.getName() + "-" + name.toUpperCase();
+    name = name.replace("-","");
+    this.name = resourceList.getName() + name;
     tags.put("Name", this.name);
   }
 

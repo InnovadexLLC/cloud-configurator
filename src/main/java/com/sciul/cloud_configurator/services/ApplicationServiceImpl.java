@@ -24,8 +24,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     cloudBlueprint.setWebDomain("ulclearview.com");
     cloudBlueprint.setApiKey("");
     cloudBlueprint.setWebKey("");
-    cloudBlueprint.setServices(new HashMap<String, String[]>() {{
-      put("C*", new String[]{"9042"});
+    cloudBlueprint.setServices(new HashMap<String, Integer[]>() {{
+      put("C*", new Integer[]{9042});
     }});
 
     return Application.buildResourceList(cloudBlueprint);

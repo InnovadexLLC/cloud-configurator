@@ -17,22 +17,22 @@ public class Subnet extends Resource {
     setCidrBlock(cidrBlock);
     setAvailabilityZone(availabilityZone);
 
-    String subnetName = "SUBNET-" + name + "-" + availabilityZone;
+    String subnetName = "Subnet" + name + "-" + availabilityZone;
     setName(subnetName);
 
     // a new route table
-    String routeTableName = "SUBNET-" + name + "-RTB";
+    String routeTableName = "Subnet" + name + "Rtb";
     RouteTable rt = new RouteTable(routeTableName, vpcName, resourceList);
 
     // associated with the vpc
-    String routeTableAssociation = subnetName + "-RTA";
+    String routeTableAssociation = subnetName + "Rta";
     SubnetRouteTableAssociation rta =
         new SubnetRouteTableAssociation(routeTableAssociation, rt.getName(), getName(), resourceList);
 
 
     // with a default acl
-    String defaultAcl = resourceList.getName() + "-ACL";
-    String networkAcl = subnetName + "-ACL";
+    String defaultAcl = resourceList.getName() + "Acl";
+    String networkAcl = subnetName + "Acl";
     SubnetNetworkAclAssociation naa =
         new SubnetNetworkAclAssociation(networkAcl, getName(), defaultAcl, resourceList);
 
@@ -41,12 +41,12 @@ public class Subnet extends Resource {
     String instanceId = null;
 
     if (publicConnected) {
-      gatewayId = resourceList.getName() + "-IGW";
+      gatewayId = resourceList.getName() + "Igw";
     } else {
       instanceId = "";
     }
 
-    String routeTableEntry = routeTableName + "-E";
+    String routeTableEntry = routeTableName + "RouteEntry";
     Route route = new Route(routeTableEntry, rt.getName(), gatewayId, instanceId, resourceList);
 
     resourceList.add(rt);

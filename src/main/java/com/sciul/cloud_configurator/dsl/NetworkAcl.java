@@ -14,8 +14,8 @@ public class NetworkAcl extends Resource {
     setName(name);
     this.vpcName = vpcName;
 
-    resourceList.add(new NetworkAclEntry("ACL-IN", "0.0.0.0/0", "-1", "allow", "100", getName(), false, resourceList));
-    resourceList.add(new NetworkAclEntry("ACL-OUT", "0.0.0.0/0", "-1", "allow", "100", getName(), true, resourceList));
+    resourceList.add(new NetworkAclEntry("AclIn", "0.0.0.0/0", "-1", "allow", "100", getName(), false, resourceList));
+    resourceList.add(new NetworkAclEntry("AclOut", "0.0.0.0/0", "-1", "allow", "100", getName(), true, resourceList));
   }
 
   @Override

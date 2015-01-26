@@ -108,7 +108,7 @@ public class ResourceList {
         ciderUtils.incrementSubnet();
       }
       logger.debug("name: {} cidrBlock: {}", name, ciderUtils);
-      Subnet subnet = new Subnet(name, ciderUtils.toString(), z, isPublicConnected, getName() + "-VPC", this);
+      Subnet subnet = new Subnet(name, ciderUtils.toString(), z, isPublicConnected, getName() + "Vpc", this);
       resources.add(subnet);
     }
     ciderUtils.incrementSubnet();
@@ -124,7 +124,7 @@ public class ResourceList {
    * @return
    */
   public SecurityGroup group(String name, String description, String vpcId) {
-    return new SecurityGroup(name, description, getName() + "-VPC", this);
+    return new SecurityGroup(name, description, getName() + "Vpc", this);
   }
 
   /**
