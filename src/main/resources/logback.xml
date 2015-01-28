@@ -7,8 +7,11 @@
     </encoder>
   </appender>
   
-  <logger name="com.sciul.cloud_configurator.App" level="DEBUG"/>
+  <logger name="com.sciul.cloud_configurator.CmdlineApp" level="DEBUG"/>
   <logger name="org.springframework" level="INFO"/>
+  <logger name="org.eclipse.jetty" level="INFO"/>
+  <logger name="jndi" level="INFO"/>
+  <logger name="org.thymeleaf" level="INFO"/>
 
   <!--  logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory" level="INFO"/>
   <logger name="org.springframework.core.env.PropertySourcesPropertyResolver" level="INFO"/-->

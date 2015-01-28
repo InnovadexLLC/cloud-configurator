@@ -28,6 +28,8 @@ public class ApplicationServiceImpl implements ApplicationService {
       put("C*", new Integer[]{9042});
     }});
 
+    logger.warn("cloudBlueprint: {}", cloudBlueprint);
+
     return Application.buildResourceList(cloudBlueprint);
   }
 }

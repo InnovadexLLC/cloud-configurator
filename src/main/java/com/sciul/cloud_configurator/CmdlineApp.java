@@ -16,10 +16,10 @@ import java.util.HashMap;
 
 @Configuration
 @ComponentScan
-@PropertySource("classpath:cloud-configure-app.properties")
-public class App {
+@PropertySource("classpath:application.properties")
+public class CmdlineApp {
 
-  private static Logger logger = LoggerFactory.getLogger(App.class);
+  private static Logger logger = LoggerFactory.getLogger(CmdlineApp.class);
 
   private CommandLineParser parser = new BasicParser();
 
@@ -29,8 +29,8 @@ public class App {
   public static void main(String[] args) {
     try {
 
-      ApplicationContext context = new AnnotationConfigApplicationContext(App.class);
-      App obj = (App) context.getBean("configure");
+      ApplicationContext context = new AnnotationConfigApplicationContext(CmdlineApp.class);
+      CmdlineApp obj = (CmdlineApp) context.getBean("configure");
 
       obj.configure(args);
 
@@ -41,8 +41,8 @@ public class App {
   }
 
   @Bean(name = "configure")
-  public App myApp() {
-    return new App();
+  public CmdlineApp myApp() {
+    return new CmdlineApp();
   }
 
   public void configure(String... args) {

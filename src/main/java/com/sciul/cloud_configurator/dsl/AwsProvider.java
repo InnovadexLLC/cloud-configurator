@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by sumeetrohatgi on 11/14/14.
  */
 @Component
-@PropertySource("classpath:cloud-configure-app.properties")
+@PropertySource("classpath:application.properties")
 public class AwsProvider implements Provider {
   private static final String ACCESS_KEY = "AWS_ACCESS_KEY";
   private static final String SECRET_KEY = "AWS_SECRET_KEY";

@@ -5,7 +5,9 @@ buildscript {
         maven { url "http://repo.spring.io/milestone" }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${project.springBootVersion}")
+        classpath "org.springframework:springloaded:${project.springBootVersion}"
+        classpath 'com.bluepapa32:gradle-watch-plugin:0.1.3'
     }
 }
 
@@ -13,6 +15,8 @@ apply plugin: 'java'
 apply plugin: 'spring-boot'
 apply plugin: 'idea'
 apply plugin: 'application'
+apply plugin: 'watch'
+
 
 applicationName = 'cloud-config'
 
@@ -31,9 +35,19 @@ repositories {
 }
 
 dependencies {
-    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    compile 'commons-collections:commons-collections:3.2'
     compile 'com.amazonaws:aws-java-sdk:1.9.5'
-    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-web:${project.springBootVersion}") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+
+    compile "org.springframework.boot:spring-boot-starter-jetty:${project.springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-actuator:${project.springBootVersion}"
+    compile "com.domingosuarez.boot:spring-boot-starter-jade4j:0.2"
+
+    compile 'org.webjars:bootstrap:3.2.0'
+    compile 'org.webjars:font-awesome:4.2.0'
+
     compile 'ch.qos.logback:logback-classic:1.0.13'
     compile 'commons-cli:commons-cli:1.2'
     compile 'cglib:cglib:3.0'
@@ -44,14 +58,20 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
-mainClassName = "com.sciul.cloud_configurator.Controller"
+mainClassName = "com.sciul.cloud_configurator.Application"
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
+    }
+}
 
 run {
     if ( project.hasProperty("appArgs") ) {
         args Eval.me(appArgs)
     }
 }
-
 
 test {
     systemProperties 'property': 'value'
@@ -62,5 +82,12 @@ uploadArchives {
         flatDir {
             dirs 'repos'
         }
+    }
+}
+
+watch {
+    resources {
+        files files('src/main/resources')
+        tasks 'processResources'
     }
 }
