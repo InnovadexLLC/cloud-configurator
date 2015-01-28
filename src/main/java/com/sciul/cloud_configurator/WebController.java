@@ -18,7 +18,7 @@ public class WebController {
   @RequestMapping(value = "/greeting", method = RequestMethod.GET)
   String greeting(@RequestParam(value="name", defaultValue = "World") String name, Model model) {
     model.addAttribute("name", name);
-    return "greeting";
+    return "index";
   }
 
 }

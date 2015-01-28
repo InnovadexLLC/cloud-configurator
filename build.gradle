@@ -20,8 +20,8 @@ apply plugin: 'watch'
 
 applicationName = 'cloud-config'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = project.javaVersion
+targetCompatibility = project.javaVersion
 
 jar {
     baseName = 'cloud-config'
