@@ -32,23 +32,24 @@ public class AwsProvider implements Provider {
   private static final String SECRET_KEY = "AWS_SECRET_KEY";
   private static Logger logger = LoggerFactory.getLogger(AwsProvider.class);
 
-  private AWSCredentials credentials;
-  private AmazonCloudFormationClient clt;
+  private final AWSCredentials credentials = new AWSCredentials() {
+    ProfileCredentialsProvider profileCredentialsProvider = new ProfileCredentialsProvider();
+
+    @Override
+    public String getAWSAccessKeyId() {
+      return profileCredentialsProvider.getCredentials().getAWSAccessKeyId();
+    }
+
+    @Override
+    public String getAWSSecretKey() {
+      return profileCredentialsProvider.getCredentials().getAWSSecretKey();
+    }
+  };
+
+  private AmazonCloudFormationClient clt = new AmazonCloudFormationClient(credentials);
   private String region;
 
-  public AwsProvider() {
-    try {
-
-      credentials = new ProfileCredentialsProvider().getCredentials();
-
-      clt = new AmazonCloudFormationClient(credentials);
-
-    } catch (Exception e) {
-      throw new RuntimeException("Cannot load the credentials from the credential profiles file. "
-          + "Please make sure that your credentials file is at the correct "
-          + "location (~/.aws/credentials), and is in valid format.", e);
-    }
-  }
+  public AwsProvider() {}
 
   public String getRegion() {
     return region;
