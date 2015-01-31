@@ -1,4 +1,4 @@
-package com.sciul.cloud_configurator;
+package com.sciul.cloud_configurator.controller;
 
 import com.sciul.cloud_application.models.Cloud;
 import com.sciul.cloud_application.models.CloudBlueprint;
@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
 
 /**
  * Created by sumeetrohatgi on 1/22/15.

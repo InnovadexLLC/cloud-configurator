@@ -58,8 +58,8 @@ body
 /* Bootstrap overrides */
 #main_navbar.navbar-default
 {
-    background-color: #2bacf5;
-    border-color: #1778dc;
+    background-color: #676960;
+    border-color: #626069;
     color: white;
 }
 #main_navbar.navbar-default .navbar-brand,
@@ -67,7 +67,7 @@ body
 #main_navbar.navbar-default .navbar-brand:active,
 #main_navbar.navbar-default .navbar-brand:focus
 {
-    color: white;
+    color: black;
     font-weight: bold;
 }
 #main_navbar.navbar-default .navbar-toggle
@@ -91,7 +91,7 @@ body
 #main_navbar.navbar-default .navbar-toggle:active .icon-bar,
 #main_navbar.navbar-default .navbar-toggle:focus .icon-bar
 {
-    background-color: #2bacf5;
+    background-color: black;
 }
 #main_navbar.navbar-default .navbar-nav > li > a,
 #main_navbar.navbar-default .navbar-nav > li > a:visited,
@@ -110,6 +110,11 @@ body
 {
     background-color: #2bacf5;
     color: white;
+}
+
+#search_input.sui-input
+{
+    color: black;
 }
 
 

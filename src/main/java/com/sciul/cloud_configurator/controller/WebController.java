@@ -1,4 +1,4 @@
-package com.sciul.cloud_configurator;
+package com.sciul.cloud_configurator.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
