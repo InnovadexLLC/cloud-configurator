@@ -91,3 +91,13 @@ watch {
         tasks 'processResources'
     }
 }
+
+task watchThread() << {
+    Thread.start {
+        project.tasks.watch.execute()
+    }
+}
+
+run.mustRunAfter watchThread
+
+task reloading(dependsOn: [watchThread, run])
