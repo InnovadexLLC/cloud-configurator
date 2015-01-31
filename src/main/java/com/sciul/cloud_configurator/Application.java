@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 @EnableAutoConfiguration
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = "com.sciul")
 public class Application {
   private static Logger logger = LoggerFactory.getLogger(Application.class);
 

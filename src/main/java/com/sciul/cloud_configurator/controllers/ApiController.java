@@ -1,4 +1,4 @@
-package com.sciul.cloud_configurator.controller;
+package com.sciul.cloud_configurator.controllers;
 
 import com.sciul.cloud_application.models.Cloud;
 import com.sciul.cloud_application.models.CloudBlueprint;
@@ -33,7 +33,7 @@ public class ApiController {
     return providerService.build(applicationService.build(cloudBlueprint));
   }
 
-  @RequestMapping(value = "/", method = RequestMethod.GET)
+  @RequestMapping(value = "/test", method = RequestMethod.GET)
   String hello() {
     return "Greetings from Spring Boot!";
   }
