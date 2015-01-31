@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by sumeetrohatgi on 1/22/15.
  */
 @RestController
+@RequestMapping("/api")
 public class ApiController {
 
   private static Logger logger = LoggerFactory.getLogger(ApiController.class);

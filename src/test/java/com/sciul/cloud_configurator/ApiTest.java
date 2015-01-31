@@ -31,7 +31,7 @@ public class ApiTest {
 
   @Test
   public void getHello() throws Exception {
-    mvc.perform(MockMvcRequestBuilders.get("/test").accept(MediaType.APPLICATION_JSON))
+    mvc.perform(MockMvcRequestBuilders.get("/api/test").accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string(is("Greetings from Spring Boot!")));
   }
