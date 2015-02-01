@@ -3,6 +3,7 @@ package com.sciul.cloud_configurator.services;
 import com.sciul.cloud_application.dsl.Application;
 import com.sciul.cloud_application.models.CloudBlueprint;
 import com.sciul.cloud_application.models.Server;
+import com.sciul.cloud_configurator.dsl.ChefApiWrapper;
 import com.sciul.cloud_configurator.dsl.ResourceList;
 import org.jclouds.chef.ChefApi;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public class ApplicationServiceImpl implements ApplicationService {
   private static final Logger logger = LoggerFactory.getLogger(ApplicationServiceImpl.class);
 
   @Autowired
-  private ChefApi chefApi;
+  private ChefApiWrapper chefApiWrapper;
 
   @Override
   public ResourceList build(CloudBlueprint cloudBlueprint) {
@@ -43,7 +44,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 
   @Override
   public List<Server> getServers(String environment) {
-    return chefApi.listNodesInEnvironment(environment)
+    return chefApiWrapper.getChefApi()
+        .listNodesInEnvironment(environment)
         .stream()
         .map(name -> {Server server = new Server(); server.setName(name); return server;})
         .collect(Collectors.toList());

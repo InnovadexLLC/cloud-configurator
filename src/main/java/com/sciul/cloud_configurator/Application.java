@@ -2,6 +2,7 @@ package com.sciul.cloud_configurator;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
+import com.sciul.cloud_configurator.dsl.ChefApiWrapper;
 import org.jclouds.ContextBuilder;
 import org.jclouds.chef.ChefApi;
 import org.jclouds.chef.ChefContext;
@@ -28,19 +29,17 @@ public class Application {
   private static Logger logger = LoggerFactory.getLogger(Application.class);
 
   @Bean
-  public ChefApi buildChefApi() throws IOException {
+  public ChefApiWrapper buildChefApi() {
     String client = "sumeet";
     String pemFile = System.getProperty("user.home") + "/.chef/" + client + ".pem";
-    String credential = Files.toString(new File(pemFile), Charsets.UTF_8);
+    String chefServerUrl = "http://chef.devtools.sciul.com";
 
-    ChefContext context = ContextBuilder.newBuilder("chef")
-        .endpoint("http://chef.devtools.sciul.com")
-        .credentials(client, credential)
-        .buildView(ChefContext.class);
+    ChefApiWrapper chefApiWrapper = new ChefApiWrapper();
+    chefApiWrapper.setChefServerUrl(chefServerUrl);
+    chefApiWrapper.setClient(client);
+    chefApiWrapper.setPemFile(pemFile);
 
-    // The raw API has access to all chef features, as exposed in the Chef REST API
-    ChefApi api = context.unwrapApi(ChefApi.class);
-    return api;
+    return chefApiWrapper;
   }
 
   public static void main(String[] args) throws Exception {
