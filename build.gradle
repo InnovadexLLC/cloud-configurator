@@ -44,6 +44,8 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-jetty:${project.springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-actuator:${project.springBootVersion}"
     compile "com.domingosuarez.boot:spring-boot-starter-jade4j:0.2"
+    compile "com.jcraft:jsch:0.1.51"
+    compile "org.apache.jclouds.api:chef:1.8.1"
 
     compile 'org.webjars:bootstrap:3.2.0'
     compile 'org.webjars:font-awesome:4.2.0'
