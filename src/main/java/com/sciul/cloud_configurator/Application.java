@@ -8,12 +8,14 @@ import org.jclouds.chef.ChefApi;
 import org.jclouds.chef.ChefContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,18 +27,23 @@ import java.util.Arrays;
 @EnableAutoConfiguration
 @Configuration
 @ComponentScan(basePackages = "com.sciul")
+@PropertySource("classpath:application.properties")
 public class Application {
   private static Logger logger = LoggerFactory.getLogger(Application.class);
 
+  @Value("${chef.clientName}")
+  private String chefClientName;
+
+  @Value("${chef.serverUrl}")
+  private String chefServerUrl;
+
   @Bean
   public ChefApiWrapper buildChefApi() {
-    String client = "sumeet";
-    String pemFile = System.getProperty("user.home") + "/.chef/" + client + ".pem";
-    String chefServerUrl = "http://chef.devtools.sciul.com";
+    String pemFile = System.getProperty("user.home") + "/.chef/" + chefClientName + ".pem";
 
     ChefApiWrapper chefApiWrapper = new ChefApiWrapper();
     chefApiWrapper.setChefServerUrl(chefServerUrl);
-    chefApiWrapper.setClient(client);
+    chefApiWrapper.setClient(chefClientName);
     chefApiWrapper.setPemFile(pemFile);
 
     return chefApiWrapper;
