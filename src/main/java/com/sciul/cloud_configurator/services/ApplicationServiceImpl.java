@@ -6,6 +6,8 @@ import com.sciul.cloud_application.models.Server;
 import com.sciul.cloud_configurator.dsl.ChefApiWrapper;
 import com.sciul.cloud_configurator.dsl.ResourceList;
 import org.jclouds.chef.ChefApi;
+import org.jclouds.chef.domain.Node;
+import org.jclouds.domain.JsonBall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -49,5 +52,13 @@ public class ApplicationServiceImpl implements ApplicationService {
         .stream()
         .map(name -> {Server server = new Server(); server.setName(name); return server;})
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Map<String, JsonBall> getServerDetail(String serverName) {
+    Node node =  chefApiWrapper.getChefApi()
+        .getNode(serverName);
+
+    return node.getAutomaticAttributes();
   }
 }
