@@ -1,2 +1,3 @@
-# New old ways #
+# new old ways #
 
+Distributed programming is hard.
