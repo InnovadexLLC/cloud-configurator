@@ -13,6 +13,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'spring-boot'
+apply plugin: 'eclipse-wtp'
 apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'watch'
